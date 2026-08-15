@@ -2,89 +2,57 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Chinese Structure Lab</title>
 <style>
-:root{--bg:#f5f4ef;--ink:#171717;--muted:#777;--soft:#ece9df}
+:root{--bg:#f5f4ef;--ink:#171717;--muted:#8b8b8b;--card:#fff;--soft:#ece9df}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;background:var(--bg);color:var(--ink)}
-button{font:inherit;touch-action:manipulation}
-.app{max-width:760px;margin:auto;min-height:100vh;padding:env(safe-area-inset-top) 16px calc(92px + env(safe-area-inset-bottom))}
-.top{display:flex;justify-content:space-between;align-items:center;padding:18px 2px 8px}.brand{font-size:14px;font-weight:700}.level{font-size:12px;color:var(--muted);background:#ffffff99;padding:7px 10px;border-radius:999px}
-.hero{text-align:center;margin-top:34px}.eyebrow,.mini{font-size:12px;color:#999;letter-spacing:.08em;text-transform:uppercase}.sentence{font-size:40px;font-weight:700;margin:18px 0 10px;cursor:pointer;touch-action:manipulation}.hint,.quiet{font-size:12px;color:#999}.listen{border:0;background:#111;color:white;border-radius:999px;padding:13px 20px;font-weight:700;margin-top:18px;min-width:110px}.listen:active,.tab:active,.door:active{transform:scale(.98);opacity:.7}
-.layer{display:none;max-width:540px;margin:20px auto 0;background:#ffffffbf;border:1px solid #0000000d;border-radius:24px;padding:18px;box-shadow:0 12px 34px #0000000a}.layer.open{display:block}.meaning{font-size:24px;font-weight:700}.ja{font-size:12px;color:#999;margin-top:4px}.pinyin{font-size:21px;margin-top:12px}.note{font-size:13px;color:#666;line-height:1.6;margin-top:8px}.door{width:100%;border:0;background:transparent;display:flex;justify-content:space-between;padding:15px 0 3px;font-weight:700;text-align:left}.wordrow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}.word{background:#f1efe8;border-radius:16px;padding:14px;cursor:pointer;touch-action:manipulation}.han{font-size:28px;font-weight:700}.meta{font-size:13px;color:#666;margin-top:5px}.network{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.chip{background:#efede6;padding:9px 12px;border-radius:999px;font-size:14px}
-.sectionTitle{font-size:14px;font-weight:700;margin:42px 2px 12px}.card{background:#ffffffa8;border:1px solid #0000000d;border-radius:22px;padding:16px}.weeknav{display:flex;justify-content:space-between;align-items:center}.weeknav button{border:0;background:transparent;font-size:24px;padding:8px 14px}.weeklabel{font-size:14px;font-weight:700}.axis{display:grid;grid-template-columns:38px repeat(7,1fr);gap:6px;font-size:10px;color:#999;margin-top:12px;min-width:610px}.timeline{overflow-x:auto}.day{display:grid;grid-template-columns:38px 1fr;gap:8px;align-items:center;margin:8px 0;min-width:610px}.dayname{font-size:12px;color:#666}.track{height:16px;background:#ece9e1;border-radius:999px;position:relative;overflow:hidden}.session{position:absolute;top:2px;height:12px;background:#1c1c1c;border-radius:999px}.total{text-align:center;font-weight:700;margin-top:12px}.sessionInfo{display:none;border-top:1px solid #e4e0d7;margin-top:12px;padding-top:12px;font-size:13px;color:#555}.sessionInfo.open{display:block}
-.view{display:none}.view.active{display:block}.exploreGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}.exploreCard{background:#fff;border-radius:20px;padding:18px;min-height:108px}.exploreCard b{display:block;font-size:18px;margin-bottom:7px}.exploreCard span{font-size:13px;color:#777}
-.bottom{position:fixed;z-index:20;left:0;right:0;bottom:0;background:#f5f4efeb;border-top:1px solid #0000000d;padding:8px 16px calc(8px + env(safe-area-inset-bottom))}.tabs{max-width:760px;margin:auto;display:grid;grid-template-columns:repeat(3,1fr)}.tab{border:0;background:transparent;padding:13px 4px;color:#888}.tab.active{color:#111;font-weight:700}
-.version{text-align:center;color:#aaa;font-size:10px;margin-top:12px}
-@media(max-width:560px){.app{padding-left:14px;padding-right:14px}.sentence{font-size:36px}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif}
+input[type=radio]{position:absolute;opacity:0;pointer-events:none}
+.app{max-width:760px;margin:auto;min-height:100vh;padding:env(safe-area-inset-top) 16px calc(90px + env(safe-area-inset-bottom))}
+.top{display:flex;justify-content:space-between;align-items:center;padding:18px 2px 8px}.brand{font-weight:700;font-size:14px}.level{font-size:12px;color:var(--muted);background:#ffffff99;padding:7px 10px;border-radius:999px}
+.view{display:none}#tabContinue:checked~.app #continueView,#tabExplore:checked~.app #exploreView,#tabGarden:checked~.app #gardenView{display:block}
+.hero{text-align:center;margin-top:38px}.eyebrow{font-size:12px;color:#999;letter-spacing:.08em;text-transform:uppercase}.sentence{font-size:40px;font-weight:700;margin:18px 0 10px}.hint,.quiet{font-size:12px;color:#999}.listen{border:0;background:#111;color:#fff;border-radius:999px;padding:13px 20px;font:inherit;font-weight:700;margin-top:18px;min-width:120px}
+.card,details{max-width:540px;margin:20px auto 0;background:#ffffffc9;border:1px solid #0000000d;border-radius:22px;padding:16px;box-shadow:0 12px 30px #0000000a}details summary{list-style:none;cursor:pointer;font-weight:700;padding:2px 0}details summary::-webkit-details-marker{display:none}.door{display:flex;justify-content:space-between;align-items:center}.door span:last-child{color:#999}.meaning{font-size:24px;font-weight:700;margin-top:14px}.ja{font-size:12px;color:#999;margin-top:4px}.pinyin{font-size:21px;margin-top:12px}.note{font-size:13px;color:#666;line-height:1.6;margin-top:10px}.wordrow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.word{background:#f1efe8;border-radius:16px;padding:14px}.han{font-size:28px;font-weight:700}.meta{font-size:13px;color:#666;margin-top:5px}.network{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.chip{background:#efede6;padding:9px 12px;border-radius:999px;font-size:14px}
+.sectionTitle{font-size:14px;font-weight:700;margin:42px 2px 12px}.exploreGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}.exploreCard{background:#fff;border-radius:20px;padding:18px;min-height:108px}.exploreCard b{display:block;font-size:18px;margin-bottom:7px}.exploreCard span{font-size:13px;color:#777}
+.timeline{overflow-x:auto}.axis,.day{min-width:610px}.axis{display:grid;grid-template-columns:38px repeat(7,1fr);gap:6px;font-size:10px;color:#999;margin-top:12px}.day{display:grid;grid-template-columns:38px 1fr;gap:8px;align-items:center;margin:8px 0}.dayname{font-size:12px;color:#666}.track{height:16px;background:#ece9e1;border-radius:999px;position:relative}.session{position:absolute;top:2px;height:12px;background:#1c1c1c;border-radius:999px}.weeknav{display:flex;justify-content:space-between;align-items:center}.weeknav a{color:#555;text-decoration:none;font-size:22px;padding:8px}.weeklabel{font-size:14px;font-weight:700}.total{text-align:center;font-weight:700;margin-top:12px}
+.bottom{position:fixed;left:0;right:0;bottom:0;z-index:20;background:#f5f4efeb;border-top:1px solid #0000000d;padding:8px 16px calc(8px + env(safe-area-inset-bottom))}.tabs{max-width:760px;margin:auto;display:grid;grid-template-columns:repeat(3,1fr)}.tabs label{text-align:center;padding:13px 4px;color:#888;cursor:pointer}#tabContinue:checked~.bottom label[for=tabContinue],#tabExplore:checked~.bottom label[for=tabExplore],#tabGarden:checked~.bottom label[for=tabGarden]{color:#111;font-weight:700}
+.version{text-align:center;color:#aaa;font-size:10px;margin-top:18px}
+@media(max-width:560px){.app{padding-left:14px;padding-right:14px}.sentence{font-size:36px}.exploreGrid{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
+<input id="tabContinue" name="tabs" type="radio" checked>
+<input id="tabExplore" name="tabs" type="radio">
+<input id="tabGarden" name="tabs" type="radio">
 <div class="app">
  <div class="top"><div class="brand">Chinese Structure Lab</div><div class="level">A1 · Day 1</div></div>
- <section id="learnView" class="view active">
-  <div class="hero"><div class="eyebrow">Listen first</div><div id="sentence" class="sentence" role="button">你好。</div><div class="hint">Tap the sentence, or listen first.</div><button id="listenBtn" class="listen" type="button">▶ Listen</button><div class="quiet" style="margin-top:16px">No quiz. No score. Just notice what you can.</div></div>
-  <div id="meaningLayer" class="layer"><div class="meaning">Hello.</div><div class="ja">こんにちは。</div><button class="door" type="button" data-target="soundLayer"><span>Hear the shape</span><span>›</span></button></div>
-  <div id="soundLayer" class="layer"><div class="mini">Sound</div><div class="pinyin">nǐ hǎo</div><div class="note">In natural speech, the first third tone changes toward a rising tone: <b>ní hǎo</b>.</div><button class="door" type="button" data-target="wordLayer"><span>Open the words</span><span>›</span></button></div>
-  <div id="wordLayer" class="layer"><div class="mini">Words</div><div class="wordrow"><div class="word" data-word="ni"><div class="han">你</div><div class="meta">nǐ · you</div></div><div class="word" data-word="hao"><div class="han">好</div><div class="meta">hǎo · good / well</div></div></div><button class="door" type="button" data-target="structureLayer"><span>See the sentence pattern</span><span>›</span></button></div>
-  <div id="niLayer" class="layer"><div class="mini">Character</div><div class="han">你</div><div class="pinyin">nǐ</div><div class="meaning" style="font-size:20px;margin-top:8px">you</div><div class="ja">あなた</div><div class="network"><span class="chip">你好</span><span class="chip">你们</span><span class="chip">你的</span><span class="chip">你呢？</span></div></div>
-  <div id="haoLayer" class="layer"><div class="mini">Character anatomy</div><div class="han">好</div><div class="pinyin">hǎo</div><div class="note">Components: 女 + 子. The modern meaning comes first; character history is optional.</div><div class="network"><span class="chip">很好</span><span class="chip">好吃</span><span class="chip">好看</span><span class="chip">爱好</span></div></div>
-  <div id="structureLayer" class="layer"><div class="mini">Sentence architecture</div><div style="font-size:18px;margin-top:10px"><b>你</b> + <b>好</b></div><div class="note">A fixed greeting. The structure is here only if you want the next door.</div></div>
-  <div class="sectionTitle">This week</div>
-  <div class="card"><div class="weeknav"><button id="prevWeek" type="button">‹</button><div id="weekLabel" class="weeklabel">Aug 10 – 16</div><button id="nextWeek" type="button">›</button></div><div class="timeline"><div class="axis"><span></span><span>6</span><span>9</span><span>12</span><span>15</span><span>18</span><span>21</span><span>24</span></div><div id="days"></div></div><div id="totalTime" class="total">3h 42m</div><div id="sessionInfo" class="sessionInfo"></div></div>
+ <section id="continueView" class="view">
+  <div class="hero"><div class="eyebrow">Listen first</div><div class="sentence">你好。</div><div class="hint">Listen, then open only what you want.</div><button class="listen" type="button" onclick="speakChinese(this)">▶ Listen</button><div id="audioStatus" class="quiet" style="margin-top:14px">Tap to hear the sentence.</div></div>
+  <details open><summary><div class="door"><span>Meaning</span><span>›</span></div></summary><div class="meaning">Hello.</div><div class="ja">こんにちは。</div></details>
+  <details><summary><div class="door"><span>Hear the shape</span><span>›</span></div></summary><div class="pinyin">nǐ hǎo</div><div class="note">In natural speech, the first third tone changes toward a rising tone: <b>ní hǎo</b>.</div></details>
+  <details><summary><div class="door"><span>Open the words</span><span>›</span></div></summary><div class="wordrow"><details class="word"><summary><div class="han">你</div><div class="meta">nǐ · you</div></summary><div class="note">you · あなた</div><div class="network"><span class="chip">你们</span><span class="chip">你的</span><span class="chip">你呢？</span></div></details><details class="word"><summary><div class="han">好</div><div class="meta">hǎo · good</div></summary><div class="note">Components: 女 + 子</div><div class="network"><span class="chip">很好</span><span class="chip">好吃</span><span class="chip">好看</span></div></details></div></details>
+  <details><summary><div class="door"><span>See the sentence pattern</span><span>›</span></div></summary><div class="note"><b>你 + 好</b><br>A fixed greeting. Use it first; analyze it only if you want.</div></details>
+  <div class="sectionTitle">This week</div><div class="card"><div class="weeknav"><a href="#">‹</a><div class="weeklabel">Aug 10 – 16</div><a href="#">›</a></div><div class="timeline"><div class="axis"><span></span><span>6</span><span>9</span><span>12</span><span>15</span><span>18</span><span>21</span><span>24</span></div><div class="day"><div class="dayname">Mon</div><div class="track"><div class="session" style="left:6%;width:3%"></div></div></div><div class="day"><div class="dayname">Tue</div><div class="track"><div class="session" style="left:26%;width:3%"></div></div></div><div class="day"><div class="dayname">Wed</div><div class="track"><div class="session" style="left:3%;width:5%"></div></div></div><div class="day"><div class="dayname">Thu</div><div class="track"><div class="session" style="left:6%;width:2%"></div></div></div><div class="day"><div class="dayname">Fri</div><div class="track"><div class="session" style="left:67%;width:4%"></div></div></div><div class="day"><div class="dayname">Sat</div><div class="track"><div class="session" style="left:1%;width:6%"></div></div></div><div class="day"><div class="dayname">Sun</div><div class="track"></div></div></div><div class="total">3h 42m</div></div>
  </section>
  <section id="exploreView" class="view"><div class="sectionTitle" style="margin-top:30px">Explore</div><div class="exploreGrid"><div class="exploreCard"><b>Daily life</b><span>Greetings, family, home, time</span></div><div class="exploreCard"><b>Food</b><span>Cafés, restaurants, ordering</span></div><div class="exploreCard"><b>Travel</b><span>Station, hotel, directions</span></div><div class="exploreCard"><b>Stories</b><span>Short scenes that grow with you</span></div><div class="exploreCard"><b>Listen</b><span>Quiet learning, no speaking needed</span></div><div class="exploreCard"><b>Grammar</b><span>Hidden until you want it</span></div></div></section>
- <section id="gardenView" class="view"><div class="sectionTitle" style="margin-top:30px">Chinese Garden</div><div class="card"><div class="mini">Growing from 学</div><div class="network"><span class="chip">学</span><span class="chip">学习</span><span class="chip">学生</span><span class="chip">学校</span><span class="chip">大学</span><span class="chip">科学</span></div><div class="note">The garden does not score you. It quietly shows the Chinese world you have started to recognize.</div></div></section>
- <div class="version">prototype 0.1.1</div>
+ <section id="gardenView" class="view"><div class="sectionTitle" style="margin-top:30px">Chinese Garden</div><div class="card"><div class="network"><span class="chip">学</span><span class="chip">学习</span><span class="chip">学生</span><span class="chip">学校</span><span class="chip">大学</span><span class="chip">科学</span></div><div class="note">No score. This simply shows the Chinese world you have started to recognize.</div></div></section>
+ <div class="version">prototype 0.1.2 · HTML-first</div>
 </div>
-<div class="bottom"><div class="tabs"><button class="tab active" type="button" data-view="learnView">Continue</button><button class="tab" type="button" data-view="exploreView">Explore</button><button class="tab" type="button" data-view="gardenView">Garden</button></div></div>
+<div class="bottom"><div class="tabs"><label for="tabContinue">Continue</label><label for="tabExplore">Explore</label><label for="tabGarden">Garden</label></div></div>
 <script>
-(function(){
- function byId(id){return document.getElementById(id)}
- function addClass(el,c){if(el&&(' '+el.className+' ').indexOf(' '+c+' ')<0){el.className+=(el.className?' ':'')+c}}
- function removeClass(el,c){if(el){el.className=(' '+el.className+' ').replace(' '+c+' ',' ').replace(/^\s+|\s+$/g,'')}}
- function toggle(el,c){if(!el)return;if((' '+el.className+' ').indexOf(' '+c+' ')>=0)removeClass(el,c);else addClass(el,c)}
- function showMeaning(){addClass(byId('meaningLayer'),'open')}
- function speak(){
-   showMeaning();
-   try{
-    if(window.speechSynthesis && window.SpeechSynthesisUtterance){
-      window.speechSynthesis.cancel();
-      var u=new SpeechSynthesisUtterance('你好');u.lang='zh-CN';u.rate=0.82;window.speechSynthesis.speak(u);
-    }
-   }catch(e){}
- }
- byId('listenBtn').onclick=speak;
- byId('sentence').onclick=showMeaning;
- var doors=document.getElementsByClassName('door');
- for(var i=0;i<doors.length;i++){doors[i].onclick=function(){toggle(byId(this.getAttribute('data-target')),'open')}}
- var words=document.getElementsByClassName('word');
- for(var j=0;j<words.length;j++){words[j].onclick=function(){toggle(byId(this.getAttribute('data-word')+'Layer'),'open')}}
- var tabs=document.getElementsByClassName('tab');
- for(var k=0;k<tabs.length;k++){tabs[k].onclick=function(){
-   var allTabs=document.getElementsByClassName('tab');for(var a=0;a<allTabs.length;a++)removeClass(allTabs[a],'active');
-   var views=document.getElementsByClassName('view');for(var b=0;b<views.length;b++)removeClass(views[b],'active');
-   addClass(this,'active');addClass(byId(this.getAttribute('data-view')),'active');window.scrollTo(0,0);
- }}
- var weeks=[
-  {label:'Jul 27 – Aug 2',total:'2h 18m',days:[['Mon',7,7.35],['Tue',19.6,20],['Wed',6.5,7],['Thu'],['Fri',18,18.6],['Sat',8,8.7],['Sun']]},
-  {label:'Aug 3 – 9',total:'3h 05m',days:[['Mon',6.7,7.2],['Tue',12.4,12.9],['Wed',6.3,7.1],['Thu',7,7.3],['Fri',18.3,19],['Sat',6.5,7.4],['Sun',20,20.3]]},
-  {label:'Aug 10 – 16',total:'3h 42m',days:[['Mon',7.1,7.57],['Tue',10.7,11.1],['Wed',6.5,7.4],['Thu',7,7.35],['Fri',18.1,18.8],['Sat',6.2,7.2],['Sun']]}
- ];
- var wi=2;
- function pct(h){return ((h-6)/18)*100}
- function fmt(x){var h=Math.floor(x),m=Math.round((x-h)*60);return (h<10?'0':'')+h+':'+(m<10?'0':'')+m}
- function renderWeek(){
-   var w=weeks[wi];byId('weekLabel').innerHTML=w.label;byId('totalTime').innerHTML=w.total;removeClass(byId('sessionInfo'),'open');
-   var html='';for(var d=0;d<w.days.length;d++){var x=w.days[d];html+='<div class="day"><div class="dayname">'+x[0]+'</div><div class="track">';if(x.length>1){html+='<div class="session" data-day="'+x[0]+'" data-a="'+x[1]+'" data-b="'+x[2]+'" style="left:'+pct(x[1])+'%;width:'+(pct(x[2])-pct(x[1]))+'%"></div>'}html+='</div></div>'}byId('days').innerHTML=html;
-   var ss=document.getElementsByClassName('session');for(var s=0;s<ss.length;s++){ss[s].onclick=function(){var aa=parseFloat(this.getAttribute('data-a')),bb=parseFloat(this.getAttribute('data-b'));byId('sessionInfo').innerHTML='<b>'+this.getAttribute('data-day')+' · '+fmt(aa)+'–'+fmt(bb)+' · '+Math.round((bb-aa)*60)+' min</b><br>Listening → Reading → Word exploration';addClass(byId('sessionInfo'),'open')}}
- }
- byId('prevWeek').onclick=function(){if(wi>0)wi--;renderWeek()};
- byId('nextWeek').onclick=function(){if(wi<weeks.length-1)wi++;renderWeek()};
- renderWeek();
-})();
+function speakChinese(btn){
+ var s=document.getElementById('audioStatus');
+ if(s){s.textContent='Playing 你好…'}
+ try{
+  if('speechSynthesis' in window && 'SpeechSynthesisUtterance' in window){
+   window.speechSynthesis.cancel();
+   var u=new SpeechSynthesisUtterance('你好');u.lang='zh-CN';u.rate=.82;
+   u.onend=function(){if(s)s.textContent='Tap again anytime.'};
+   window.speechSynthesis.speak(u);
+  }else{if(s)s.textContent='Audio is unavailable in this browser.'}
+ }catch(e){if(s)s.textContent='Audio could not start here.'}
+}
 </script>
 </body>
 </html>
