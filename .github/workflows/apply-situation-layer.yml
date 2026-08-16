@@ -15,27 +15,30 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Connect persistent storage and Situation Layer to pages
+      - name: Connect persistent storage, feedback and Situation Layer to pages
         shell: bash
         run: |
           python3 - <<'PY'
           from pathlib import Path
 
           storage = '<script src="./storage-core.js"></script>'
+          feedback = '<script src="./feedback-layer.js"></script>'
           situation = '<script src="./situation-layer.js"></script>'
-          no_situation = {'index.html','explore.html','course-map.html','memory.html','garden.html'}
+          no_situation = {'index.html','explore.html','course-map.html','memory.html','garden.html','tester.html'}
           changed=[]
 
           for p in Path('.').glob('*.html'):
               text=p.read_text(encoding='utf-8')
               original=text
 
-              # Storage is intentionally global. It migrates old localStorage data,
-              # preserves legacy keys, and gives every future page the same durable history layer.
               if storage not in text and '</body>' in text:
                   text=text.replace('</body>',storage+'</body>',1)
 
-              # Example pages additionally receive the shared emoji Situation Layer.
+              # Feedback is intentionally global so both short-term testers and long-term learners
+              # can report friction at the exact moment it happens. It never sends learning history.
+              if feedback not in text and '</body>' in text:
+                  text=text.replace('</body>',feedback+'</body>',1)
+
               if p.name not in no_situation and situation not in text and '</body>' in text:
                   text=text.replace('</body>',situation+'</body>',1)
 
@@ -56,5 +59,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add '*.html'
-          git commit -m "Apply durable storage and situation layers to all pages [skip shared-layers]"
+          git commit -m "Apply storage, feedback and situation layers [skip shared-layers]"
           git push
