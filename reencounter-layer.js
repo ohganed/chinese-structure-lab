@@ -20,6 +20,42 @@ var PATTERNS=[
  {id:'bi',label:'比を使う比較',test:function(t){return/比/.test(t)}},
  {id:'guo',label:'経験の「过」',test:function(t){return/过/.test(t)}}
 ];
+var SENSES={
+ '要':function(t){
+   t=normalize(t);
+   if(/要是/.test(t))return{id:'if',label:'要是 = if'};
+   if(/不要/.test(t))return{id:'negative-want',label:'不要 = don’t want / don’t'};
+   if(/要.+了$/.test(t)||/快要/.test(t))return{id:'about-to',label:'要 = about to'};
+   if(/要去|要来|要回|要上班|要学习|要工作|要看|要做|要吃|要喝|要买|要换|要找|要说|要走|要睡/.test(t))return{id:'intend',label:'要 = intend / going to'};
+   if(/需要|得要/.test(t))return{id:'need',label:'要 = need'};
+   if(/我要|你要|他要|她要|我们要|他们要/.test(t))return{id:'want',label:'要 = want / would like'};
+   return{id:'general',label:'要'};
+ },
+ '想':function(t){
+   t=normalize(t);
+   if(/想起|想起来/.test(t))return{id:'remember',label:'想起 = remember'};
+   if(/想念/.test(t))return{id:'miss',label:'想念 = miss'};
+   if(/想想|想一想|想了想/.test(t))return{id:'think',label:'想 = think'};
+   if(/想去|想来|想回|想吃|想喝|想买|想看|想做|想学|想说|想问|想找|想换/.test(t))return{id:'would-like',label:'想 = would like to'};
+   return{id:'think',label:'想 = think / want to'};
+ },
+ '会':function(t){
+   t=normalize(t);
+   if(/不会|会不会/.test(t))return{id:'ability-question',label:'会 = know how / can'};
+   if(/会说|会写|会读|会开|会游泳|会做|会用|会唱|会弹/.test(t))return{id:'learned-ability',label:'会 = learned ability'};
+   if(/明天会|以后会|可能会|一定会|应该会|还会|就会|会下雨|会变|会发生|会越来越/.test(t))return{id:'prediction',label:'会 = will / likely to'};
+   return{id:'general',label:'会'};
+ },
+ '过':function(t){
+   t=normalize(t);
+   if(/不过/.test(t))return{id:'however',label:'不过 = however'};
+   if(/过去/.test(t))return{id:'past-go',label:'过去'};
+   if(/过来/.test(t))return{id:'come-over',label:'过来'};
+   if(/过年|过生日|过周末|过日子/.test(t))return{id:'spend-pass',label:'过 = spend / pass'};
+   if(/[看去吃喝坐做学住听说买见来写读游].*过/.test(t)||/去过|吃过|看过|喝过|坐过|做过|学过|住过|听过|说过|买过|见过|来过/.test(t))return{id:'experience',label:'过 = past experience'};
+   return{id:'general',label:'过'};
+ }
+};
 function profile(){try{return window.CSLStorage&&CSLStorage.load?CSLStorage.load():null}catch(e){return null}}
 function fuzzyItems(){var p=profile(),out=[];if(!p||!p.learning||!p.learning.sentences)return out;Object.keys(p.learning.sentences).forEach(function(id){var s=p.learning.sentences[id];if(s&&s.fuzzy&&(s.legacyText||s.text)){out.push({id:id,text:(s.legacyText||s.text).trim(),extras:s.extras||{}})}});return out}
 function currentTexts(){var els=document.querySelectorAll('.zh,#zh,[data-zh],.sentence,.cn,.chinese');var out=[];els.forEach(function(el){var t=(el.textContent||'').trim();if(t&&/[\u3400-\u9fff]/.test(t))out.push({el:el,text:t})});return out}
@@ -28,7 +64,7 @@ function hanOnly(t){return normalize(t).replace(/[^\u3400-\u9fff]/g,'')}
 function addStyle(){if(document.getElementById(STYLE))return;var s=document.createElement('style');s.id=STYLE;s.textContent='#'+TOAST+'{position:fixed;left:50%;transform:translateX(-50%);bottom:84px;z-index:9996;background:#eef0e9ee;border:1px solid #0001;border-radius:18px;padding:10px 14px;max-width:min(86vw,520px);font:650 12px -apple-system,BlinkMacSystemFont,sans-serif;color:#596158;box-shadow:0 7px 24px #0001;opacity:0;pointer-events:none;transition:opacity .25s ease}#'+TOAST+'.on{opacity:1}.csl-reencounter-mark{display:inline-block;margin-top:7px;background:#eef0e9;border-radius:999px;padding:6px 9px;font:650 11px -apple-system,BlinkMacSystemFont,sans-serif;color:#65705f}';document.head.appendChild(s)}
 function toast(text){addStyle();var t=document.getElementById(TOAST);if(!t){t=document.createElement('div');t.id=TOAST;document.body.appendChild(t)}t.textContent=text;t.classList.add('on');setTimeout(function(){t.classList.remove('on')},4200)}
 function mark(el,text){if(!el||!el.parentNode||el.parentNode.querySelector('.csl-reencounter-mark'))return;var m=document.createElement('span');m.className='csl-reencounter-mark';m.textContent=text;el.insertAdjacentElement('afterend',m)}
-function priorEvent(type,itemId,feature){var p=profile(),events=p&&p.learning&&Array.isArray(p.learning.events)?p.learning.events:[];for(var i=events.length-1;i>=0&&i>events.length-2500;i--){var e=events[i],d=e&&e.data||{};if(e&&e.type===type&&d.sourceSentenceId===itemId&&d.feature===feature&&d.page===PAGE)return true}return false}
+function priorEvent(type,itemId,feature,extra){var p=profile(),events=p&&p.learning&&Array.isArray(p.learning.events)?p.learning.events:[];for(var i=events.length-1;i>=0&&i>events.length-2500;i--){var e=events[i],d=e&&e.data||{};if(e&&e.type===type&&d.sourceSentenceId===itemId&&d.feature===feature&&d.page===PAGE&&(!extra||d.sensePair===extra))return true}return false}
 function addEvent(type,data){try{if(window.CSLStorage&&CSLStorage.addEvent)CSLStorage.addEvent(type,data)}catch(e){}}
 function updateExact(item,el){var ex=item.extras||{},pages=Array.isArray(ex.seenPages)?ex.seenPages.slice():[],last=ex.lastContextPage||null,already=pages.indexOf(PAGE)>=0;if(!already)pages.push(PAGE);var different=!!last&&last!==PAGE&&!already;var count=Number(ex.reencounterCount)||0;if(different)count++;
 try{if(window.CSLStorage&&CSLStorage.patchSentence)CSLStorage.patchSentence(item.text,{extras:{seenPages:pages.slice(-24),lastContextPage:PAGE,reencounterCount:count,lastReencounterAt:different?new Date().toISOString():(ex.lastReencounterAt||null)}} ,item.id)}catch(e){}
@@ -38,7 +74,9 @@ function lexicalMatch(a,b){var ah=hanOnly(a),bh=hanOnly(b);if(!ah||!bh)return nu
 for(var n=3;n>=2;n--){var g=ngrams(ah,n),ks=Object.keys(g);for(var i=0;i<ks.length;i++){var x=ks[i];if(bh.indexOf(x)>=0){if(!best||x.length>best.length)best=x}}if(best)return best}
 var chars={};for(var j=0;j<ah.length;j++)chars[ah[j]]=1;var candidates=Object.keys(chars).filter(function(c){return bh.indexOf(c)>=0&&SINGLE_OK[c]&&!STOP[c]});return candidates.length?candidates[0]:null}
 function constructionMatch(a,b){for(var i=0;i<PATTERNS.length;i++){var p=PATTERNS[i];if(p.test(a)&&p.test(b))return p}return null}
-function updateFeature(item,el,kind,feature,label,currentText){var type=kind==='construction'?'construction_reencounter':'lexical_reencounter';if(priorEvent(type,item.id,feature))return false;var message=kind==='construction'?'「'+label+'」の形が、別の文で戻ってきました。':'「'+feature+'」が、別の文で戻ってきました。';mark(el,'また会いました · '+(kind==='construction'?label:feature));toast(message);addEvent(type,{sourceSentenceId:item.id,sourceText:item.text,feature:feature,label:label||feature,page:PAGE,currentText:currentText});return true}
+function senseOf(feature,text){return SENSES[feature]?SENSES[feature](text):null}
+function updateSemantic(item,el,feature,currentText){var a=senseOf(feature,item.text),b=senseOf(feature,currentText);if(!a||!b)return false;var pair=a.id+'>'+b.id;if(priorEvent('semantic_reencounter',item.id,feature,pair))return false;var shifted=a.id!==b.id&&a.id!=='general'&&b.id!=='general';var label=shifted?'意味が少し変わって再会':'同じ意味で再会';var message=shifted?'「'+feature+'」が、前とは少し違う意味で戻ってきました。':'「'+feature+'」が、別の文でも同じ働きで戻ってきました。';mark(el,'また会いました · '+feature);toast(message);addEvent('semantic_reencounter',{sourceSentenceId:item.id,sourceText:item.text,feature:feature,page:PAGE,currentText:currentText,sourceSense:a.id,sourceSenseLabel:a.label,currentSense:b.id,currentSenseLabel:b.label,sensePair:pair,shifted:shifted});return true}
+function updateFeature(item,el,kind,feature,label,currentText){if(kind==='lexical'&&SENSES[feature]&&updateSemantic(item,el,feature,currentText))return true;var type=kind==='construction'?'construction_reencounter':'lexical_reencounter';if(priorEvent(type,item.id,feature))return false;var message=kind==='construction'?'「'+label+'」の形が、別の文で戻ってきました。':'「'+feature+'」が、別の文で戻ってきました。';mark(el,'また会いました · '+(kind==='construction'?label:feature));toast(message);addEvent(type,{sourceSentenceId:item.id,sourceText:item.text,feature:feature,label:label||feature,page:PAGE,currentText:currentText});return true}
 var lastSignature='';function scan(){var fuzzy=fuzzyItems();if(!fuzzy.length)return;var texts=currentTexts();if(!texts.length)return;var sig=texts.map(function(x){return x.text}).join('|');if(sig===lastSignature)return;lastSignature=sig;
 for(var i=0;i<fuzzy.length;i++){var f=fuzzy[i],nf=normalize(f.text);if(!nf)continue;for(var j=0;j<texts.length;j++){var cur=texts[j],nc=normalize(cur.text);if(!nc)continue;if(nc===nf){if(updateExact(f,cur.el))return;continue}var cm=constructionMatch(f.text,cur.text);if(cm&&updateFeature(f,cur.el,'construction',cm.id,cm.label,cur.text))return;var lm=lexicalMatch(f.text,cur.text);if(lm&&updateFeature(f,cur.el,'lexical',lm,lm,cur.text))return}}}
 setTimeout(scan,350);var mo=new MutationObserver(function(){clearTimeout(window.__cslReencounterTimer);window.__cslReencounterTimer=setTimeout(scan,180)});mo.observe(document.body,{childList:true,subtree:true,characterData:true});
