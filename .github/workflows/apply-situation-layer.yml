@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Connect platform bridge, audio/haptics, storage, feedback, time guide, reencounter and Situation Layer to pages
+      - name: Connect platform, memory, audio/haptics, storage and learning layers to pages
         shell: bash
         run: |
           python3 - <<'PY'
@@ -24,6 +24,7 @@ jobs:
           platform = '<script src="./platform-bridge.js"></script>'
           audio_haptics = '<script src="./audio-haptics-layer.js"></script>'
           storage = '<script src="./storage-core.js"></script>'
+          learning_memory = '<script src="./learning-memory-engine.js"></script>'
           feedback = '<script src="./feedback-layer.js"></script>'
           session_guide = '<script src="./session-guide.js"></script>'
           reencounter = '<script src="./reencounter-layer.js"></script>'
@@ -37,35 +38,22 @@ jobs:
               text=p.read_text(encoding='utf-8')
               original=text
 
-              # Platform Bridge is the stable boundary between lesson code and
-              # browser/native services. A future Swift shell can implement the
-              # same interface through WKWebView without rewriting lesson pages.
               if platform not in text and '</body>' in text:
                   text=text.replace('</body>',platform+'</body>',1)
-
-              # Audio & haptics sit on top of Platform Bridge. Existing pages that
-              # expose global speak(text, rate) are adopted without changing UI.
               if audio_haptics not in text and '</body>' in text:
                   text=text.replace('</body>',audio_haptics+'</body>',1)
-
               if storage not in text and '</body>' in text:
                   text=text.replace('</body>',storage+'</body>',1)
-
-              # Feedback is intentionally global so both short-term testers and long-term learners
-              # can report friction at the exact moment it happens. It never sends learning history.
+              # Derived memory is deliberately after storage. It reads existing
+              # append-only events and sentence records; it never destroys them.
+              if learning_memory not in text and '</body>' in text:
+                  text=text.replace('</body>',learning_memory+'</body>',1)
               if feedback not in text and '</body>' in text:
                   text=text.replace('</body>',feedback+'</body>',1)
-
-              # A time-based Doorway is a gentle session intention, never a forced timer.
-              # The guide follows the learner across normal pages and offers a natural stopping point.
               if p.name not in no_session_guide and session_guide not in text and '</body>' in text:
                   text=text.replace('</body>',session_guide+'</body>',1)
-
-              # Reencounter is quiet and contextual: it only appears when a sentence previously
-              # marked fuzzy actually returns on another learning page.
               if p.name not in no_reencounter and reencounter not in text and '</body>' in text:
                   text=text.replace('</body>',reencounter+'</body>',1)
-
               if p.name not in no_situation and situation not in text and '</body>' in text:
                   text=text.replace('</body>',situation+'</body>',1)
 
@@ -86,5 +74,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add '*.html'
-          git commit -m "Apply platform, audio-haptics, storage, feedback, time guide, reencounter and situation layers [skip shared-layers]"
+          git commit -m "Apply platform, learning-memory, audio-haptics, storage, feedback, time guide, reencounter and situation layers [skip shared-layers]"
           git push
