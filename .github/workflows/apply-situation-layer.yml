@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Connect persistent storage, feedback, time guide and Situation Layer to pages
+      - name: Connect persistent storage, feedback, time guide, reencounter and Situation Layer to pages
         shell: bash
         run: |
           python3 - <<'PY'
@@ -24,9 +24,11 @@ jobs:
           storage = '<script src="./storage-core.js"></script>'
           feedback = '<script src="./feedback-layer.js"></script>'
           session_guide = '<script src="./session-guide.js"></script>'
+          reencounter = '<script src="./reencounter-layer.js"></script>'
           situation = '<script src="./situation-layer.js"></script>'
           no_situation = {'index.html','explore.html','course-map.html','memory.html','garden.html','tester.html'}
           no_session_guide = {'tester.html'}
+          no_reencounter = {'doorways.html','explore.html','course-map.html','memory.html','garden.html','tester.html'}
           changed=[]
 
           for p in Path('.').glob('*.html'):
@@ -45,6 +47,11 @@ jobs:
               # The guide follows the learner across normal pages and offers a natural stopping point.
               if p.name not in no_session_guide and session_guide not in text and '</body>' in text:
                   text=text.replace('</body>',session_guide+'</body>',1)
+
+              # Reencounter is quiet and contextual: it only appears when a sentence previously
+              # marked fuzzy actually returns on another learning page.
+              if p.name not in no_reencounter and reencounter not in text and '</body>' in text:
+                  text=text.replace('</body>',reencounter+'</body>',1)
 
               if p.name not in no_situation and situation not in text and '</body>' in text:
                   text=text.replace('</body>',situation+'</body>',1)
@@ -66,5 +73,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add '*.html'
-          git commit -m "Apply storage, feedback, time guide and situation layers [skip shared-layers]"
+          git commit -m "Apply storage, feedback, time guide, reencounter and situation layers [skip shared-layers]"
           git push
