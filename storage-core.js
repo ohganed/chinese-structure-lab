@@ -1,136 +1,31 @@
 (function(){
-  'use strict';
-  var ROOT_KEY='csl_profile_v1';
-  var CURRENT_SCHEMA=1;
-  var LEGACY_KEYS=['csl_ui_language','csl_large_text','csl_encounters','csl_unclear','csl_scene_index','csl_sessions','csl_path_last_day'];
-
-  function safeParse(v,fallback){try{return v==null?fallback:JSON.parse(v);}catch(e){return fallback;}}
-  function clone(x){return safeParse(JSON.stringify(x),x);}
-  function now(){return new Date().toISOString();}
-
-  function snapshotLegacy(){
-    var snap={createdAt:now(),keys:{}};
-    LEGACY_KEYS.forEach(function(k){var v=localStorage.getItem(k);if(v!==null)snap.keys[k]=v;});
-    if(Object.keys(snap.keys).length){
-      var list=safeParse(localStorage.getItem('csl_migration_backups_v1'),[]);
-      list.unshift(snap); list=list.slice(0,3);
-      localStorage.setItem('csl_migration_backups_v1',JSON.stringify(list));
-    }
-  }
-
-  function emptyProfile(){return {
-    schemaVersion:CURRENT_SCHEMA,
-    createdAt:now(),
-    updatedAt:now(),
-    preferences:{language:'en',largeText:false},
-    progress:{sceneIndex:0,pathLastDay:null},
-    learning:{sentences:{},sessions:[],events:[]},
-    aliases:{sentenceTextToId:{}},
-    extensions:{}
-  };}
-
-  function legacySentenceId(text){return 'legacy:'+text;}
-
-  function migrateLegacyInto(profile){
-    var changed=false;
-    var lang=localStorage.getItem('csl_ui_language');
-    if(lang){profile.preferences.language=lang;changed=true;}
-    var large=localStorage.getItem('csl_large_text');
-    if(large!==null){profile.preferences.largeText=large==='1';changed=true;}
-    var scene=localStorage.getItem('csl_scene_index');
-    if(scene!==null&&!isNaN(parseInt(scene,10))){profile.progress.sceneIndex=parseInt(scene,10);changed=true;}
-    var day=localStorage.getItem('csl_path_last_day');
-    if(day!==null){profile.progress.pathLastDay=day;changed=true;}
-
-    var encounters=safeParse(localStorage.getItem('csl_encounters'),{});
-    var unclear=safeParse(localStorage.getItem('csl_unclear'),{});
-    Object.keys(encounters||{}).forEach(function(text){
-      var id=profile.aliases.sentenceTextToId[text]||legacySentenceId(text);
-      profile.aliases.sentenceTextToId[text]=id;
-      profile.learning.sentences[id]=profile.learning.sentences[id]||{id:id,legacyText:text,encounters:0,fuzzy:false,firstSeenAt:null,lastSeenAt:null,extras:{}};
-      profile.learning.sentences[id].encounters=Math.max(profile.learning.sentences[id].encounters||0,Number(encounters[text])||0);
-      changed=true;
-    });
-    Object.keys(unclear||{}).forEach(function(text){
-      var id=profile.aliases.sentenceTextToId[text]||legacySentenceId(text);
-      profile.aliases.sentenceTextToId[text]=id;
-      profile.learning.sentences[id]=profile.learning.sentences[id]||{id:id,legacyText:text,encounters:0,fuzzy:false,firstSeenAt:null,lastSeenAt:null,extras:{}};
-      profile.learning.sentences[id].fuzzy=!!unclear[text];
-      changed=true;
-    });
-    var sessions=safeParse(localStorage.getItem('csl_sessions'),[]);
-    if(Array.isArray(sessions)&&sessions.length){
-      var existing=profile.learning.sessions||[];
-      if(!existing.length){profile.learning.sessions=clone(sessions);changed=true;}
-    }
-    return changed;
-  }
-
-  function preserveShape(p){
-    var base=emptyProfile();
-    p=p&&typeof p==='object'?p:{};
-    base.schemaVersion=Number(p.schemaVersion)||1;
-    base.createdAt=p.createdAt||base.createdAt;
-    base.updatedAt=p.updatedAt||base.updatedAt;
-    base.preferences=Object.assign(base.preferences,p.preferences||{});
-    base.progress=Object.assign(base.progress,p.progress||{});
-    base.learning=Object.assign(base.learning,p.learning||{});
-    base.learning.sentences=Object.assign({},(p.learning&&p.learning.sentences)||{});
-    base.learning.sessions=Array.isArray(base.learning.sessions)?base.learning.sessions:[];
-    base.learning.events=Array.isArray(base.learning.events)?base.learning.events:[];
-    base.aliases=Object.assign(base.aliases,p.aliases||{});
-    base.aliases.sentenceTextToId=Object.assign({},(p.aliases&&p.aliases.sentenceTextToId)||{});
-    base.extensions=Object.assign({},p.extensions||{});
-    Object.keys(p).forEach(function(k){if(!(k in base))base.extensions['legacyRoot:'+k]=p[k];});
-    return base;
-  }
-
-  function save(p){p.updatedAt=now();localStorage.setItem(ROOT_KEY,JSON.stringify(p));syncLegacy(p);return p;}
-
-  function syncLegacy(p){
-    localStorage.setItem('csl_ui_language',p.preferences.language||'en');
-    localStorage.setItem('csl_large_text',p.preferences.largeText?'1':'0');
-    localStorage.setItem('csl_scene_index',String(p.progress.sceneIndex||0));
-    if(p.progress.pathLastDay!=null)localStorage.setItem('csl_path_last_day',String(p.progress.pathLastDay));
-    var enc={},unc={};
-    Object.keys(p.learning.sentences||{}).forEach(function(id){var s=p.learning.sentences[id];var text=s.legacyText||s.text;if(!text)return;enc[text]=s.encounters||0;if(s.fuzzy)unc[text]=true;});
-    localStorage.setItem('csl_encounters',JSON.stringify(enc));
-    localStorage.setItem('csl_unclear',JSON.stringify(unc));
-    localStorage.setItem('csl_sessions',JSON.stringify(p.learning.sessions||[]));
-  }
-
-  function load(){
-    var raw=localStorage.getItem(ROOT_KEY),p;
-    if(!raw){snapshotLegacy();p=emptyProfile();migrateLegacyInto(p);return save(p);}
-    p=preserveShape(safeParse(raw,{}));
-    migrateLegacyInto(p);
-    return save(p);
-  }
-
-  function resolveSentenceId(text,preferredId){
-    var p=load();
-    if(preferredId){
-      if(text)p.aliases.sentenceTextToId[text]=preferredId;
-      if(text){var legacyId=legacySentenceId(text);if(p.learning.sentences[legacyId]&&!p.learning.sentences[preferredId]){p.learning.sentences[preferredId]=p.learning.sentences[legacyId];p.learning.sentences[preferredId].id=preferredId;}}
-      save(p);return preferredId;
-    }
-    if(text&&p.aliases.sentenceTextToId[text])return p.aliases.sentenceTextToId[text];
-    var id=legacySentenceId(text||'');if(text){p.aliases.sentenceTextToId[text]=id;save(p);}return id;
-  }
-
-  function patchSentence(text,patch,preferredId){
-    var p=load(),id=resolveSentenceId(text,preferredId);p=load();
-    var old=p.learning.sentences[id]||{id:id,legacyText:text,encounters:0,fuzzy:false,firstSeenAt:null,lastSeenAt:null,extras:{}};
-    var next=Object.assign({},old,patch||{});next.extras=Object.assign({},old.extras||{},(patch&&patch.extras)||{});if(text&&!next.legacyText)next.legacyText=text;
-    p.learning.sentences[id]=next;save(p);return clone(next);
-  }
-
-  function addEvent(type,data){var p=load();p.learning.events.push({id:'ev:'+Date.now()+':'+Math.random().toString(36).slice(2,8),type:type,at:now(),data:clone(data||{})});if(p.learning.events.length>5000)p.learning.events=p.learning.events.slice(-5000);save(p);}
-  function addSession(session){var p=load();p.learning.sessions.push(Object.assign({id:'session:'+Date.now(),savedAt:now()},clone(session||{})));save(p);}
-  function setPreference(key,value){var p=load();p.preferences[key]=value;save(p);}
-  function setProgress(key,value){var p=load();p.progress[key]=value;save(p);}
-  function exportData(){return JSON.stringify({format:'ChineseStructureLabBackup',exportedAt:now(),profile:load(),legacyBackups:safeParse(localStorage.getItem('csl_migration_backups_v1'),[])},null,2);}
-
-  window.CSLStorage={schemaVersion:CURRENT_SCHEMA,load:load,save:save,resolveSentenceId:resolveSentenceId,patchSentence:patchSentence,addEvent:addEvent,addSession:addSession,setPreference:setPreference,setProgress:setProgress,exportData:exportData};
-  load();
+'use strict';
+var ROOT_KEY='csl_profile_v1',CURRENT_SCHEMA=2,DEVICE_KEY='csl_device_id';
+var LEGACY_KEYS=['csl_ui_language','csl_large_text','csl_encounters','csl_unclear','csl_scene_index','csl_sessions','csl_path_last_day'];
+function safeParse(v,f){try{return v==null?f:JSON.parse(v)}catch(e){return f}}
+function clone(x){return safeParse(JSON.stringify(x),x)}
+function now(){return new Date().toISOString()}
+function deviceId(){var id=localStorage.getItem(DEVICE_KEY);if(!id){id='dev:'+Date.now().toString(36)+':'+Math.random().toString(36).slice(2,9);localStorage.setItem(DEVICE_KEY,id)}return id}
+function snapshotLegacy(){var snap={createdAt:now(),keys:{}};LEGACY_KEYS.forEach(function(k){var v=localStorage.getItem(k);if(v!==null)snap.keys[k]=v});if(Object.keys(snap.keys).length){var a=safeParse(localStorage.getItem('csl_migration_backups_v1'),[]);a.unshift(snap);localStorage.setItem('csl_migration_backups_v1',JSON.stringify(a.slice(0,3)))}}
+function emptyProfile(){var d=deviceId();return{schemaVersion:CURRENT_SCHEMA,createdAt:now(),updatedAt:now(),preferences:{language:'en',largeText:false},progress:{sceneIndex:0,pathLastDay:null},learning:{sentences:{},sessions:[],events:[]},aliases:{sentenceTextToId:{}},sync:{deviceId:d,devices:{},lastImportAt:null},extensions:{}}}
+function legacySentenceId(t){return'legacy:'+t}
+function ensureSentenceShape(s,id,text){s=s&&typeof s==='object'?s:{};s.id=s.id||id;s.legacyText=s.legacyText||text||'';s.encounters=Number(s.encounters)||0;s.encountersByDevice=Object.assign({},s.encountersByDevice||{});s.fuzzy=!!s.fuzzy;s.firstSeenAt=s.firstSeenAt||null;s.lastSeenAt=s.lastSeenAt||null;s.extras=Object.assign({},s.extras||{});return s}
+function sumMap(m){return Object.keys(m||{}).reduce(function(a,k){return a+(Number(m[k])||0)},0)}
+function migrateLegacyInto(p){var d=deviceId(),lang=localStorage.getItem('csl_ui_language'),large=localStorage.getItem('csl_large_text'),scene=localStorage.getItem('csl_scene_index'),day=localStorage.getItem('csl_path_last_day');if(lang)p.preferences.language=lang;if(large!==null)p.preferences.largeText=large==='1';if(scene!==null&&!isNaN(parseInt(scene,10)))p.progress.sceneIndex=parseInt(scene,10);if(day!==null)p.progress.pathLastDay=day;
+var enc=safeParse(localStorage.getItem('csl_encounters'),{}),unc=safeParse(localStorage.getItem('csl_unclear'),{});Object.keys(enc||{}).forEach(function(text){var id=p.aliases.sentenceTextToId[text]||legacySentenceId(text);p.aliases.sentenceTextToId[text]=id;var s=ensureSentenceShape(p.learning.sentences[id],id,text);var total=sumMap(s.encountersByDevice);var legacy=Number(enc[text])||0;if(!Object.keys(s.encountersByDevice).length&&s.encounters>0){s.encountersByDevice['legacy-import']=s.encounters;total=s.encounters}if(legacy>total)s.encountersByDevice[d]=(Number(s.encountersByDevice[d])||0)+(legacy-total);s.encounters=sumMap(s.encountersByDevice);p.learning.sentences[id]=s});Object.keys(unc||{}).forEach(function(text){var id=p.aliases.sentenceTextToId[text]||legacySentenceId(text);p.aliases.sentenceTextToId[text]=id;var s=ensureSentenceShape(p.learning.sentences[id],id,text);s.fuzzy=!!unc[text];p.learning.sentences[id]=s});var sessions=safeParse(localStorage.getItem('csl_sessions'),[]);if(Array.isArray(sessions)&&sessions.length&&!p.learning.sessions.length)p.learning.sessions=clone(sessions)}
+function preserveShape(p){var b=emptyProfile();p=p&&typeof p==='object'?p:{};b.schemaVersion=Number(p.schemaVersion)||1;b.createdAt=p.createdAt||b.createdAt;b.updatedAt=p.updatedAt||b.updatedAt;b.preferences=Object.assign(b.preferences,p.preferences||{});b.progress=Object.assign(b.progress,p.progress||{});b.learning=Object.assign(b.learning,p.learning||{});b.learning.sentences=Object.assign({},(p.learning&&p.learning.sentences)||{});Object.keys(b.learning.sentences).forEach(function(id){b.learning.sentences[id]=ensureSentenceShape(b.learning.sentences[id],id,b.learning.sentences[id].legacyText)});b.learning.sessions=Array.isArray(b.learning.sessions)?b.learning.sessions:[];b.learning.events=Array.isArray(b.learning.events)?b.learning.events:[];b.aliases=Object.assign(b.aliases,p.aliases||{});b.aliases.sentenceTextToId=Object.assign({},(p.aliases&&p.aliases.sentenceTextToId)||{});b.sync=Object.assign(b.sync,p.sync||{});b.sync.deviceId=deviceId();b.sync.devices=Object.assign({},(p.sync&&p.sync.devices)||{});b.extensions=Object.assign({},p.extensions||{});Object.keys(p).forEach(function(k){if(!(k in b))b.extensions['legacyRoot:'+k]=p[k]});return b}
+function syncLegacy(p){localStorage.setItem('csl_ui_language',p.preferences.language||'en');localStorage.setItem('csl_large_text',p.preferences.largeText?'1':'0');localStorage.setItem('csl_scene_index',String(p.progress.sceneIndex||0));if(p.progress.pathLastDay!=null)localStorage.setItem('csl_path_last_day',String(p.progress.pathLastDay));var enc={},unc={};Object.keys(p.learning.sentences||{}).forEach(function(id){var s=p.learning.sentences[id],text=s.legacyText||s.text;if(!text)return;enc[text]=sumMap(s.encountersByDevice)||s.encounters||0;if(s.fuzzy)unc[text]=true});localStorage.setItem('csl_encounters',JSON.stringify(enc));localStorage.setItem('csl_unclear',JSON.stringify(unc));localStorage.setItem('csl_sessions',JSON.stringify(p.learning.sessions||[]))}
+function save(p){p=preserveShape(p);p.schemaVersion=CURRENT_SCHEMA;p.updatedAt=now();p.sync.devices[p.sync.deviceId]=Object.assign({},p.sync.devices[p.sync.deviceId]||{},{lastSeenAt:p.updatedAt});localStorage.setItem(ROOT_KEY,JSON.stringify(p));syncLegacy(p);return p}
+function load(){var raw=localStorage.getItem(ROOT_KEY),p;if(!raw){snapshotLegacy();p=emptyProfile();migrateLegacyInto(p);return save(p)}p=preserveShape(safeParse(raw,{}));migrateLegacyInto(p);return save(p)}
+function resolveSentenceId(text,preferredId){var p=load();if(preferredId){if(text)p.aliases.sentenceTextToId[text]=preferredId;var old=text?legacySentenceId(text):null;if(old&&p.learning.sentences[old]&&!p.learning.sentences[preferredId]){p.learning.sentences[preferredId]=p.learning.sentences[old];p.learning.sentences[preferredId].id=preferredId}save(p);return preferredId}if(text&&p.aliases.sentenceTextToId[text])return p.aliases.sentenceTextToId[text];var id=legacySentenceId(text||'');if(text){p.aliases.sentenceTextToId[text]=id;save(p)}return id}
+function patchSentence(text,patch,preferredId){var p=load(),id=resolveSentenceId(text,preferredId);p=load();var old=ensureSentenceShape(p.learning.sentences[id],id,text),next=Object.assign({},old,patch||{});next.extras=Object.assign({},old.extras||{},(patch&&patch.extras)||{});next.encountersByDevice=Object.assign({},old.encountersByDevice||{},(patch&&patch.encountersByDevice)||{});if(typeof next.encounters==='number'&&next.encounters>sumMap(next.encountersByDevice)){var d=deviceId();next.encountersByDevice[d]=(Number(next.encountersByDevice[d])||0)+(next.encounters-sumMap(next.encountersByDevice))}next.encounters=sumMap(next.encountersByDevice)||next.encounters||0;p.learning.sentences[id]=next;save(p);return clone(next)}
+function addEvent(type,data){var p=load();p.learning.events.push({id:'ev:'+deviceId()+':'+Date.now()+':'+Math.random().toString(36).slice(2,7),deviceId:deviceId(),type:type,at:now(),data:clone(data||{})});if(p.learning.events.length>10000)p.learning.events=p.learning.events.slice(-10000);save(p)}
+function addSession(s){var p=load();p.learning.sessions.push(Object.assign({id:'session:'+deviceId()+':'+Date.now(),deviceId:deviceId(),savedAt:now()},clone(s||{})));save(p)}
+function setPreference(k,v){var p=load();p.preferences[k]=v;save(p)}function setProgress(k,v){var p=load();p.progress[k]=v;save(p)}
+function keyedUnion(a,b,key){var m={};(a||[]).concat(b||[]).forEach(function(x){if(!x)return;var k=x[key]||JSON.stringify(x);if(!m[k])m[k]=x});return Object.keys(m).map(function(k){return m[k]})}
+function mergeProfile(local,remote){local=preserveShape(local);remote=preserveShape(remote);var out=clone(local);out.createdAt=(local.createdAt&&remote.createdAt)?(local.createdAt<remote.createdAt?local.createdAt:remote.createdAt):(local.createdAt||remote.createdAt);out.aliases.sentenceTextToId=Object.assign({},remote.aliases.sentenceTextToId||{},local.aliases.sentenceTextToId||{});var ids={};Object.keys(local.learning.sentences||{}).concat(Object.keys(remote.learning.sentences||{})).forEach(function(id){ids[id]=1});Object.keys(ids).forEach(function(id){var a=ensureSentenceShape(local.learning.sentences[id],id,''),b=ensureSentenceShape(remote.learning.sentences[id],id,'');var s=Object.assign({},b,a);s.legacyText=a.legacyText||b.legacyText;s.encountersByDevice=Object.assign({},b.encountersByDevice||{},a.encountersByDevice||{});s.encounters=sumMap(s.encountersByDevice)||Math.max(a.encounters||0,b.encounters||0);s.fuzzy=!!(a.fuzzy||b.fuzzy);s.firstSeenAt=[a.firstSeenAt,b.firstSeenAt].filter(Boolean).sort()[0]||null;s.lastSeenAt=[a.lastSeenAt,b.lastSeenAt].filter(Boolean).sort().slice(-1)[0]||null;s.extras=Object.assign({},b.extras||{},a.extras||{});out.learning.sentences[id]=s});out.learning.sessions=keyedUnion(local.learning.sessions,remote.learning.sessions,'id');out.learning.events=keyedUnion(local.learning.events,remote.learning.events,'id');out.sync.devices=Object.assign({},remote.sync.devices||{},local.sync.devices||{});if(remote.sync.deviceId)out.sync.devices[remote.sync.deviceId]=Object.assign({},out.sync.devices[remote.sync.deviceId]||{},{lastSeenAt:remote.updatedAt||now()});out.sync.deviceId=deviceId();out.sync.lastImportAt=now();out.extensions=Object.assign({},remote.extensions||{},local.extensions||{});return save(out)}
+function exportObject(){return{format:'ChineseStructureLabBackup',formatVersion:2,exportedAt:now(),sourceDeviceId:deviceId(),profile:load(),legacyBackups:safeParse(localStorage.getItem('csl_migration_backups_v1'),[])}}
+function exportData(){return JSON.stringify(exportObject(),null,2)}
+function importData(text){var obj=typeof text==='string'?safeParse(text,null):text;if(!obj||obj.format!=='ChineseStructureLabBackup'||!obj.profile)throw new Error('Invalid Chinese Structure Lab backup');var merged=mergeProfile(load(),obj.profile);return{profile:merged,sourceDeviceId:obj.sourceDeviceId||null,sentences:Object.keys(merged.learning.sentences||{}).length,sessions:(merged.learning.sessions||[]).length}}
+window.CSLStorage={schemaVersion:CURRENT_SCHEMA,deviceId:deviceId,load:load,save:save,resolveSentenceId:resolveSentenceId,patchSentence:patchSentence,addEvent:addEvent,addSession:addSession,setPreference:setPreference,setProgress:setProgress,exportObject:exportObject,exportData:exportData,importData:importData,mergeProfile:mergeProfile};load();
 })();
