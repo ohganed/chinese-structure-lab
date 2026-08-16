@@ -42,6 +42,7 @@ jobs:
             '<script src="./intervention-budget-engine.js"></script>',
             '<script src="./learner-agency-engine.js"></script>',
             '<script src="./learning-rhythm-engine.js"></script>',
+            '<script src="./cognitive-load-guard.js"></script>',
             '<script src="./interactive-cues.js"></script>',
             '<script src="./senior-accessibility.js"></script>',
             '<script src="./a1-pedagogy-layer.js"></script>',
@@ -73,5 +74,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add '*.html'
-          git commit -m "Apply learning rhythm and learner-agency layers [skip shared-layers]"
+          git commit -m "Apply cognitive-load guard and rhythm-aware layers [skip shared-layers]"
           git push
