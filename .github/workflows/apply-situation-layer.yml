@@ -27,6 +27,7 @@ jobs:
             '<script src="./learning-memory-engine.js"></script>',
             '<script src="./learner-model-engine.js"></script>',
             '<script src="./reencounter-planner.js"></script>',
+            '<script src="./situation-graph-engine.js"></script>',
             '<script src="./learning-os-core.js"></script>',
             '<script src="./interactive-cues.js"></script>',
             '<script src="./senior-accessibility.js"></script>',
@@ -42,8 +43,8 @@ jobs:
           for p in Path('.').glob('*.html'):
               text=p.read_text(encoding='utf-8');original=text
               for layer in layers:
-                  if layer not in text and '</body>' in text:text.replace('</body>',layer+'</body>',1)
-                  if layer not in text and '</body>' in text:text=text.replace('</body>',layer+'</body>',1)
+                  if layer not in text and '</body>' in text:
+                      text=text.replace('</body>',layer+'</body>',1)
               if p.name not in no_session_guide and session_guide not in text and '</body>' in text:text=text.replace('</body>',session_guide+'</body>',1)
               if p.name not in no_reencounter and reencounter not in text and '</body>' in text:text=text.replace('</body>',reencounter+'</body>',1)
               if p.name not in no_situation and situation not in text and '</body>' in text:text=text.replace('</body>',situation+'</body>',1)
@@ -58,5 +59,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add '*.html'
-          git commit -m "Apply Learning OS, accessibility and shared layers [skip shared-layers]"
+          git commit -m "Apply Situation Graph, Learning OS and shared layers [skip shared-layers]"
           git push
