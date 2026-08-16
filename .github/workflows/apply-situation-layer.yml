@@ -32,6 +32,7 @@ jobs:
             '<script src="./interactive-cues.js"></script>',
             '<script src="./senior-accessibility.js"></script>',
             '<script src="./a1-pedagogy-layer.js"></script>',
+            '<script src="./curriculum-pedagogy-layer.js"></script>',
             '<script src="./feedback-layer.js"></script>'
           ]
           session_guide='<script src="./session-guide.js"></script>'
@@ -59,5 +60,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add '*.html'
-          git commit -m "Apply A1 pedagogy, Situation Graph, Learning OS and shared layers [skip shared-layers]"
+          git commit -m "Apply all-level pedagogy, Situation Graph, Learning OS and shared layers [skip shared-layers]"
           git push
