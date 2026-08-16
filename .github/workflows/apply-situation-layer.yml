@@ -15,40 +15,35 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Connect platform, memory, learner model and shared learning layers to pages
+      - name: Connect platform, memory, learner model, planner and shared learning layers to pages
         shell: bash
         run: |
           python3 - <<'PY'
           from pathlib import Path
-
-          platform = '<script src="./platform-bridge.js"></script>'
-          audio_haptics = '<script src="./audio-haptics-layer.js"></script>'
-          storage = '<script src="./storage-core.js"></script>'
-          learning_memory = '<script src="./learning-memory-engine.js"></script>'
-          learner_model = '<script src="./learner-model-engine.js"></script>'
-          feedback = '<script src="./feedback-layer.js"></script>'
-          session_guide = '<script src="./session-guide.js"></script>'
-          reencounter = '<script src="./reencounter-layer.js"></script>'
-          situation = '<script src="./situation-layer.js"></script>'
-          no_situation = {'index.html','explore.html','course-map.html','memory.html','garden.html','tester.html'}
-          no_session_guide = {'tester.html'}
-          no_reencounter = {'doorways.html','explore.html','course-map.html','memory.html','garden.html','tester.html'}
+          layers=[
+            '<script src="./platform-bridge.js"></script>',
+            '<script src="./audio-haptics-layer.js"></script>',
+            '<script src="./storage-core.js"></script>',
+            '<script src="./learning-memory-engine.js"></script>',
+            '<script src="./learner-model-engine.js"></script>',
+            '<script src="./reencounter-planner.js"></script>',
+            '<script src="./feedback-layer.js"></script>'
+          ]
+          session_guide='<script src="./session-guide.js"></script>'
+          reencounter='<script src="./reencounter-layer.js"></script>'
+          situation='<script src="./situation-layer.js"></script>'
+          no_situation={'index.html','explore.html','course-map.html','memory.html','garden.html','tester.html'}
+          no_session_guide={'tester.html'}
+          no_reencounter={'doorways.html','explore.html','course-map.html','memory.html','garden.html','tester.html'}
           changed=[]
-
           for p in Path('.').glob('*.html'):
-              text=p.read_text(encoding='utf-8')
-              original=text
-              for layer in (platform,audio_haptics,storage,learning_memory,learner_model,feedback):
-                  if layer not in text and '</body>' in text:
-                      text=text.replace('</body>',layer+'</body>',1)
-              if p.name not in no_session_guide and session_guide not in text and '</body>' in text:
-                  text=text.replace('</body>',session_guide+'</body>',1)
-              if p.name not in no_reencounter and reencounter not in text and '</body>' in text:
-                  text=text.replace('</body>',reencounter+'</body>',1)
-              if p.name not in no_situation and situation not in text and '</body>' in text:
-                  text=text.replace('</body>',situation+'</body>',1)
-              if text!=original:
-                  p.write_text(text,encoding='utf-8');changed.append(p.name)
+              text=p.read_text(encoding='utf-8');original=text
+              for layer in layers:
+                  if layer not in text and '</body>' in text:text=text.replace('</body>',layer+'</body>',1)
+              if p.name not in no_session_guide and session_guide not in text and '</body>' in text:text=text.replace('</body>',session_guide+'</body>',1)
+              if p.name not in no_reencounter and reencounter not in text and '</body>' in text:text=text.replace('</body>',reencounter+'</body>',1)
+              if p.name not in no_situation and situation not in text and '</body>' in text:text=text.replace('</body>',situation+'</body>',1)
+              if text!=original:p.write_text(text,encoding='utf-8');changed.append(p.name)
           print('Connected shared layers to:',', '.join(changed) if changed else 'nothing new')
           PY
 
@@ -59,5 +54,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add '*.html'
-          git commit -m "Apply platform, memory, learner-model and shared learning layers [skip shared-layers]"
+          git commit -m "Apply memory, learner-model, planner and shared learning layers [skip shared-layers]"
           git push
