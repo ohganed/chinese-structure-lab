@@ -1,0 +1,19 @@
+(function(){
+'use strict';
+var PAGE=(location.pathname.split('/').pop()||'index.html');
+var IGNORE={'doorways.html':1,'explore.html':1,'course-map.html':1,'memory.html':1,'garden.html':1,'tester.html':1};
+if(IGNORE[PAGE])return;
+var STYLE='csl-reencounter-style',TOAST='csl-reencounter-toast';
+function profile(){try{return window.CSLStorage&&CSLStorage.load?CSLStorage.load():null}catch(e){return null}}
+function fuzzyItems(){var p=profile(),out=[];if(!p||!p.learning||!p.learning.sentences)return out;Object.keys(p.learning.sentences).forEach(function(id){var s=p.learning.sentences[id];if(s&&s.fuzzy&&(s.legacyText||s.text)){out.push({id:id,text:(s.legacyText||s.text).trim(),extras:s.extras||{}})}});return out}
+function currentTexts(){var els=document.querySelectorAll('.zh,#zh,[data-zh],.sentence,.cn,.chinese');var out=[];els.forEach(function(el){var t=(el.textContent||'').trim();if(t)out.push({el:el,text:t})});return out}
+function normalize(t){return(t||'').replace(/\s+/g,'').replace(/[。！？!?，,；;：:]/g,'')}
+function addStyle(){if(document.getElementById(STYLE))return;var s=document.createElement('style');s.id=STYLE;s.textContent='#'+TOAST+'{position:fixed;left:50%;transform:translateX(-50%);bottom:84px;z-index:9996;background:#eef0e9ee;border:1px solid #0001;border-radius:18px;padding:10px 14px;max-width:min(86vw,520px);font:650 12px -apple-system,BlinkMacSystemFont,sans-serif;color:#596158;box-shadow:0 7px 24px #0001;opacity:0;pointer-events:none;transition:opacity .25s ease}#'+TOAST+'.on{opacity:1}.csl-reencounter-mark{display:inline-block;margin-top:7px;background:#eef0e9;border-radius:999px;padding:6px 9px;font:650 11px -apple-system,BlinkMacSystemFont,sans-serif;color:#65705f}';document.head.appendChild(s)}
+function toast(text){addStyle();var t=document.getElementById(TOAST);if(!t){t=document.createElement('div');t.id=TOAST;document.body.appendChild(t)}t.textContent=text;t.classList.add('on');setTimeout(function(){t.classList.remove('on')},4200)}
+function update(item,el){var ex=item.extras||{},pages=Array.isArray(ex.seenPages)?ex.seenPages.slice():[],last=ex.lastContextPage||null,already=pages.indexOf(PAGE)>=0;if(!already)pages.push(PAGE);var different=!!last&&last!==PAGE&&!already;var count=Number(ex.reencounterCount)||0;if(different)count++;
+try{if(window.CSLStorage&&CSLStorage.patchSentence)CSLStorage.patchSentence(item.text,{extras:{seenPages:pages.slice(-24),lastContextPage:PAGE,reencounterCount:count,lastReencounterAt:different?new Date().toISOString():(ex.lastReencounterAt||null)}} ,item.id)}catch(e){}
+if(different){if(el&&!el.parentNode.querySelector('.csl-reencounter-mark')){var m=document.createElement('span');m.className='csl-reencounter-mark';m.textContent='また会いました';el.insertAdjacentElement('afterend',m)}toast('前に少し曖昧だった中国語が、別の場面で戻ってきました。');try{if(window.CSLStorage&&CSLStorage.addEvent)CSLStorage.addEvent('natural_reencounter',{sentenceId:item.id,text:item.text,page:PAGE,previousPage:last})}catch(e){}}
+}
+var lastSignature='';function scan(){var fuzzy=fuzzyItems();if(!fuzzy.length)return;var texts=currentTexts();if(!texts.length)return;var sig=texts.map(function(x){return x.text}).join('|');if(sig===lastSignature)return;lastSignature=sig;for(var i=0;i<fuzzy.length;i++){var f=fuzzy[i],nf=normalize(f.text);if(!nf)continue;for(var j=0;j<texts.length;j++){if(normalize(texts[j].text)===nf){update(f,texts[j].el);return}}}}
+setTimeout(scan,350);var mo=new MutationObserver(function(){clearTimeout(window.__cslReencounterTimer);window.__cslReencounterTimer=setTimeout(scan,180)});mo.observe(document.body,{childList:true,subtree:true,characterData:true});
+})();
