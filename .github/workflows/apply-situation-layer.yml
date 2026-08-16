@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Connect persistent storage, feedback and Situation Layer to pages
+      - name: Connect persistent storage, feedback, time guide and Situation Layer to pages
         shell: bash
         run: |
           python3 - <<'PY'
@@ -23,8 +23,10 @@ jobs:
 
           storage = '<script src="./storage-core.js"></script>'
           feedback = '<script src="./feedback-layer.js"></script>'
+          session_guide = '<script src="./session-guide.js"></script>'
           situation = '<script src="./situation-layer.js"></script>'
           no_situation = {'index.html','explore.html','course-map.html','memory.html','garden.html','tester.html'}
+          no_session_guide = {'tester.html'}
           changed=[]
 
           for p in Path('.').glob('*.html'):
@@ -38,6 +40,11 @@ jobs:
               # can report friction at the exact moment it happens. It never sends learning history.
               if feedback not in text and '</body>' in text:
                   text=text.replace('</body>',feedback+'</body>',1)
+
+              # A time-based Doorway is a gentle session intention, never a forced timer.
+              # The guide follows the learner across normal pages and offers a natural stopping point.
+              if p.name not in no_session_guide and session_guide not in text and '</body>' in text:
+                  text=text.replace('</body>',session_guide+'</body>',1)
 
               if p.name not in no_situation and situation not in text and '</body>' in text:
                   text=text.replace('</body>',situation+'</body>',1)
@@ -59,5 +66,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add '*.html'
-          git commit -m "Apply storage, feedback and situation layers [skip shared-layers]"
+          git commit -m "Apply storage, feedback, time guide and situation layers [skip shared-layers]"
           git push
