@@ -35,6 +35,7 @@ jobs:
             '<script src="./retrieval-need-engine.js"></script>',
             '<script src="./opportunity-matching-engine.js"></script>',
             '<script src="./adaptive-presentation-engine.js"></script>',
+            '<script src="./presentation-policy-layer.js"></script>',
             '<script src="./learning-os-core.js"></script>',
             '<script src="./interactive-cues.js"></script>',
             '<script src="./senior-accessibility.js"></script>',
@@ -67,5 +68,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add '*.html'
-          git commit -m "Apply adaptive presentation and learning layers [skip shared-layers]"
+          git commit -m "Apply presentation policy and adaptive learning layers [skip shared-layers]"
           git push
