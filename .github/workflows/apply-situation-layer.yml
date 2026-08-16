@@ -31,6 +31,7 @@ jobs:
             '<script src="./persistent-world-engine.js"></script>',
             '<script src="./language-graph-engine.js"></script>',
             '<script src="./meaning-sense-graph-engine.js"></script>',
+            '<script src="./encounter-quality-engine.js"></script>',
             '<script src="./learning-os-core.js"></script>',
             '<script src="./interactive-cues.js"></script>',
             '<script src="./senior-accessibility.js"></script>',
@@ -63,5 +64,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add '*.html'
-          git commit -m "Apply meaning-sense, language graph and Learning OS layers [skip shared-layers]"
+          git commit -m "Apply encounter-quality and graph learning layers [skip shared-layers]"
           git push
