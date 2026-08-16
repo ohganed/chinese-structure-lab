@@ -6,6 +6,25 @@ function q(s){return document.querySelector(s)}
 function currentSentence(){var el=q('#zh')||q('.zh');return el?el.textContent.trim():''}
 function pageContext(){return{page:location.pathname.split('/').pop()||'index.html',title:document.title,sentence:currentSentence(),url:location.href,at:new Date().toISOString()}}
 function saveDraft(data){var a=[];try{a=JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){}a.push(data);localStorage.setItem(KEY,JSON.stringify(a.slice(-100)))}
+function ensureDoorwaysLink(){
+  var page=location.pathname.split('/').pop()||'index.html';
+  if(page!=='index.html'&&page!=='')return;
+  var tabs=q('.tabs');
+  if(!tabs||tabs.querySelector('a[href="./doorways.html"]'))return;
+  var explore=tabs.querySelector('a[href="./explore.html"]');
+  if(!explore)return;
+  var garden=tabs.querySelector('a[href="./garden.html"]');
+  if(garden)garden.remove();
+  var a=document.createElement('a');
+  a.href='./doorways.html';
+  a.setAttribute('data-en','Doorways');
+  a.setAttribute('data-ja','入口');
+  var mode=localStorage.getItem('csl_ui_language')||'en';
+  a.textContent=mode==='ja'?'入口':'Doorways';
+  tabs.insertBefore(a,explore);
+  tabs.style.gridTemplateColumns='repeat(3,1fr)';
+}
+ensureDoorwaysLink();
 var st=document.createElement('style');st.textContent='#cslFeedbackButton{position:fixed;right:14px;bottom:84px;z-index:9998;border:0;border-radius:999px;background:#171717;color:#fff;padding:10px 13px;font:700 12px -apple-system,BlinkMacSystemFont,sans-serif;box-shadow:0 6px 20px #0002}#cslFeedbackPanel{display:none;position:fixed;inset:0;z-index:9999;background:#0005;padding:18px;align-items:flex-end;justify-content:center}#cslFeedbackPanel.on{display:flex}.cslfb{width:min(620px,100%);background:#f7f5ef;border-radius:26px;padding:18px;max-height:82vh;overflow:auto;font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:#171717}.cslfb h3{margin:2px 0 4px;font-size:22px}.cslfb p{font-size:12px;color:#777;line-height:1.55}.cslfb .types{display:flex;gap:7px;flex-wrap:wrap;margin:14px 0}.cslfb .type{border:0;border-radius:999px;padding:10px 12px;background:#ece9e1;font-weight:700}.cslfb .type.on{background:#171717;color:#fff}.cslfb textarea{width:100%;min-height:100px;border:1px solid #ddd7ca;border-radius:16px;padding:12px;font:inherit;background:#fff}.cslfb .row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.cslfb .btn{border:0;border-radius:16px;padding:13px;font-weight:750}.cslfb .send{background:#171717;color:#fff}.cslfb .cancel{background:#e9e6de}.cslfb .status{font-size:12px;color:#596354;margin-top:9px;display:none}';document.head.appendChild(st);
 var b=document.createElement('button');b.id='cslFeedbackButton';b.textContent='Feedback';document.body.appendChild(b);
 var p=document.createElement('div');p.id='cslFeedbackPanel';p.innerHTML='<div class="cslfb"><h3>気づいたことを教えてください</h3><p>学習履歴は送信しません。現在のページ名と、表示中の中国語があればそれだけを添えます。</p><div class="types"><button class="type" data-v="迷った">迷った</button><button class="type" data-v="分かりにくい">分かりにくい</button><button class="type" data-v="中国語が変かも">中国語が変かも</button><button class="type" data-v="こうしてほしい">こうしてほしい</button><button class="type" data-v="良かった">良かった</button></div><textarea id="cslfbNote" placeholder="短くても大丈夫です"></textarea><div class="row"><button class="btn cancel" id="cslfbCancel">閉じる</button><button class="btn send" id="cslfbSend">共有する</button></div><div class="status" id="cslfbStatus"></div></div>';document.body.appendChild(p);
