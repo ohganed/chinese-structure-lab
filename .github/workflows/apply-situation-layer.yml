@@ -15,12 +15,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Connect persistent storage, feedback, time guide, reencounter and Situation Layer to pages
+      - name: Connect platform bridge, persistent storage, feedback, time guide, reencounter and Situation Layer to pages
         shell: bash
         run: |
           python3 - <<'PY'
           from pathlib import Path
 
+          platform = '<script src="./platform-bridge.js"></script>'
           storage = '<script src="./storage-core.js"></script>'
           feedback = '<script src="./feedback-layer.js"></script>'
           session_guide = '<script src="./session-guide.js"></script>'
@@ -34,6 +35,11 @@ jobs:
           for p in Path('.').glob('*.html'):
               text=p.read_text(encoding='utf-8')
               original=text
+
+              # Platform Bridge must load before all shared layers. Today it uses browser APIs;
+              # a future Swift shell can provide the same interface through WKWebView.
+              if platform not in text and '</body>' in text:
+                  text=text.replace('</body>',platform+'</body>',1)
 
               if storage not in text and '</body>' in text:
                   text=text.replace('</body>',storage+'</body>',1)
@@ -73,5 +79,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add '*.html'
-          git commit -m "Apply storage, feedback, time guide, reencounter and situation layers [skip shared-layers]"
+          git commit -m "Apply platform, storage, feedback, time guide, reencounter and situation layers [skip shared-layers]"
           git push
