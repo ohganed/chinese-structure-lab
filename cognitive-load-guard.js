@@ -1,0 +1,12 @@
+(function(){
+'use strict';
+/* Cognitive Load Guard v1
+   Estimates interface/session load and asks adaptive systems to become quieter.
+   It never diagnoses cognition, ability, fatigue, or health. */
+var VERSION=1,EXT='cognitiveLoadGuardV1';
+function S(){return window.CSLStorage||null}function R(){return window.CSLLearningRhythm||null}function now(){return new Date().toISOString()}function safe(f){try{return f()}catch(e){return null}}function clamp(x){return Math.max(0,Math.min(1,x))}
+function visibleCount(){try{return Array.from(document.querySelectorAll('button,a,[role="button"],details[open],.word,.chunk,.card,.panel')).filter(function(el){var s=getComputedStyle(el);return s.display!=='none'&&s.visibility!=='hidden'&&el.getClientRects().length}).length}catch(e){return 0}}
+function build(){var rhythm=safe(function(){return R()&&R().get()}),p=safe(function(){return S()&&S().load()}),events=p&&p.learning&&p.learning.events||[],cut=Date.now()-10*60*1000,recent=events.filter(function(e){var t=Date.parse(e.at||'');return !isNaN(t)&&t>=cut}).length,ui=visibleCount(),open=0;try{open=document.querySelectorAll('details[open],[aria-expanded="true"]').length}catch(e){}var score=clamp(Math.min(.38,recent*.025)+Math.min(.32,ui*.008)+Math.min(.22,open*.055)+(rhythm&&rhythm.mode==='deep-exploration'?.06:0));var band=score<.34?'low':score<.62?'moderate':'high';var guidance=band==='high'?'quiet-mode':band==='moderate'?'avoid-extra-prompts':'normal';return{version:VERSION,builtAt:now(),estimatedInterfaceLoad:score,band:band,guidance:guidance,signals:{eventsLast10Minutes:recent,visibleInteractiveOrContentUnits:ui,openExpansions:open,rhythm:rhythm&&rhythm.mode||'unknown'},policy:{interfaceLoadOnly:true,neverDiagnoseLearner:true,neverAbility:true,neverHealthInference:true,highLoadMeansLessSystemIntervention:true,learnerCanStillExplore:true}}}
+function save(g){var s=S();if(!s||!s.load||!s.save)return g;var p=s.load();p.extensions=p.extensions||{};p.extensions[EXT]=g;s.save(p);return g}function get(){return save(build())}function permitsExtra(){return get().band!=='high'}
+window.CSLCognitiveLoadGuard={version:VERSION,get:get,refresh:get,permitsExtra:permitsExtra};setTimeout(function(){try{var g=get();if(window.CSLPlatform&&CSLPlatform.emit)CSLPlatform.emit('cognitive-load-ready',{version:VERSION,band:g.band,guidance:g.guidance})}catch(e){}},4250);
+})();
