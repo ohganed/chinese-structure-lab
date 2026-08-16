@@ -38,6 +38,7 @@ jobs:
             '<script src="./presentation-policy-layer.js"></script>',
             '<script src="./learning-os-core.js"></script>',
             '<script src="./contradiction-quality-auditor.js"></script>',
+            '<script src="./evidence-confidence-engine.js"></script>',
             '<script src="./interactive-cues.js"></script>',
             '<script src="./senior-accessibility.js"></script>',
             '<script src="./a1-pedagogy-layer.js"></script>',
@@ -69,5 +70,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add '*.html'
-          git commit -m "Apply underground quality auditor and learning layers [skip shared-layers]"
+          git commit -m "Apply evidence-confidence and audited learning layers [skip shared-layers]"
           git push
