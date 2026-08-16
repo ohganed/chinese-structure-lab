@@ -15,13 +15,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Connect platform bridge, persistent storage, feedback, time guide, reencounter and Situation Layer to pages
+      - name: Connect platform bridge, audio/haptics, storage, feedback, time guide, reencounter and Situation Layer to pages
         shell: bash
         run: |
           python3 - <<'PY'
           from pathlib import Path
 
           platform = '<script src="./platform-bridge.js"></script>'
+          audio_haptics = '<script src="./audio-haptics-layer.js"></script>'
           storage = '<script src="./storage-core.js"></script>'
           feedback = '<script src="./feedback-layer.js"></script>'
           session_guide = '<script src="./session-guide.js"></script>'
@@ -36,10 +37,16 @@ jobs:
               text=p.read_text(encoding='utf-8')
               original=text
 
-              # Platform Bridge must load before all shared layers. Today it uses browser APIs;
-              # a future Swift shell can provide the same interface through WKWebView.
+              # Platform Bridge is the stable boundary between lesson code and
+              # browser/native services. A future Swift shell can implement the
+              # same interface through WKWebView without rewriting lesson pages.
               if platform not in text and '</body>' in text:
                   text=text.replace('</body>',platform+'</body>',1)
+
+              # Audio & haptics sit on top of Platform Bridge. Existing pages that
+              # expose global speak(text, rate) are adopted without changing UI.
+              if audio_haptics not in text and '</body>' in text:
+                  text=text.replace('</body>',audio_haptics+'</body>',1)
 
               if storage not in text and '</body>' in text:
                   text=text.replace('</body>',storage+'</body>',1)
@@ -79,5 +86,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add '*.html'
-          git commit -m "Apply platform, storage, feedback, time guide, reencounter and situation layers [skip shared-layers]"
+          git commit -m "Apply platform, audio-haptics, storage, feedback, time guide, reencounter and situation layers [skip shared-layers]"
           git push
