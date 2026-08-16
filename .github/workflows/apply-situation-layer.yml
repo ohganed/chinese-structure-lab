@@ -28,6 +28,7 @@ jobs:
             '<script src="./learner-model-engine.js"></script>',
             '<script src="./reencounter-planner.js"></script>',
             '<script src="./situation-graph-engine.js"></script>',
+            '<script src="./persistent-world-engine.js"></script>',
             '<script src="./learning-os-core.js"></script>',
             '<script src="./interactive-cues.js"></script>',
             '<script src="./senior-accessibility.js"></script>',
@@ -60,5 +61,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add '*.html'
-          git commit -m "Apply all-level pedagogy, Situation Graph, Learning OS and shared layers [skip shared-layers]"
+          git commit -m "Apply persistent world, pedagogy, Learning OS and shared layers [skip shared-layers]"
           git push
