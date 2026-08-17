@@ -2,7 +2,7 @@ name: Apply Shared Layers
 
 on:
   push:
-    branches: [main, underground-integration-v1]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -63,7 +63,6 @@ jobs:
           for p in Path('.').glob('*.html'):
               text=p.read_text(encoding='utf-8');original=text
               for layer in layers:
-                  if layer not in text and '</body>' in text:text.replace('</body>',layer+'</body>',1)
                   if layer not in text and '</body>' in text:text=text.replace('</body>',layer+'</body>',1)
               if p.name not in no_session_guide and session_guide not in text and '</body>' in text:text=text.replace('</body>',session_guide+'</body>',1)
               if p.name not in no_reencounter and reencounter not in text and '</body>' in text:text=text.replace('</body>',reencounter+'</body>',1)
@@ -86,14 +85,19 @@ jobs:
           missing=[x for x in required if not Path(x).exists()]
           if missing: raise SystemExit('Missing underground files: '+', '.join(missing))
           bus=Path('underground-integration-bus.js').read_text()
-          checks=['CSLUndergroundGovernor','CSLInterventionBudget','CSLDecisionTrace','CSLLearnerAgency']
+          checks=['CSLUndergroundGovernor','CSLInterventionBudget','CSLDecisionTrace','CSLLearnerAgency','duplicate-intervention-suppressed']
           absent=[x for x in checks if x not in bus]
-          if absent: raise SystemExit('Integration bus missing APIs: '+', '.join(absent))
+          if absent: raise SystemExit('Integration bus missing APIs/safety guards: '+', '.join(absent))
           test=Path('underground-runtime-self-test.js').read_text()
           probes=['CSLStorage','CSLAdaptivePresentation','CSLEvidenceConfidence','CSLInterventionBudget','CSLLearnerAgency','CSLLearningRhythm','CSLCognitiveLoadGuard','CSLUndergroundGovernor','CSLDecisionTrace','CSLUndergroundIntegration']
           absent=[x for x in probes if x not in test]
           if absent: raise SystemExit('Self-test missing probes: '+', '.join(absent))
-          print('Integration wiring and self-test static checks passed.')
+          for p in Path('.').glob('*.html'):
+              text=p.read_text(encoding='utf-8')
+              for src in ('underground-integration-bus.js','underground-runtime-self-test.js'):
+                  count=text.count(src)
+                  if count!=1: raise SystemExit(f'{p}: expected exactly one {src}, found {count}')
+          print('Integration wiring, duplicate suppression, and script uniqueness checks passed.')
           PY
 
       - name: Commit generated connections
