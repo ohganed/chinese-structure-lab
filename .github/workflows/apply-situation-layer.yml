@@ -2,7 +2,7 @@ name: Apply Shared Layers
 
 on:
   push:
-    branches: [main]
+    branches: [main, underground-integration-v1]
   workflow_dispatch:
 
 permissions:
@@ -45,6 +45,8 @@ jobs:
             '<script src="./cognitive-load-guard.js"></script>',
             '<script src="./underground-governor.js"></script>',
             '<script src="./decision-trace-ledger.js"></script>',
+            '<script src="./underground-integration-bus.js"></script>',
+            '<script src="./underground-runtime-self-test.js"></script>',
             '<script src="./interactive-cues.js"></script>',
             '<script src="./senior-accessibility.js"></script>',
             '<script src="./a1-pedagogy-layer.js"></script>',
@@ -69,6 +71,35 @@ jobs:
           print('Connected shared layers to:',', '.join(changed) if changed else 'nothing new')
           PY
 
+      - name: Validate underground JavaScript syntax
+        shell: bash
+        run: |
+          for f in *.js; do node --check "$f"; done
+
+      - name: Validate integration wiring
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          required=['storage-core.js','learner-model-engine.js','opportunity-matching-engine.js','adaptive-presentation-engine.js','presentation-policy-layer.js','evidence-confidence-engine.js','intervention-budget-engine.js','learner-agency-engine.js','learning-rhythm-engine.js','cognitive-load-guard.js','underground-governor.js','decision-trace-ledger.js','underground-integration-bus.js','underground-runtime-self-test.js']
+          missing=[x for x in required if not Path(x).exists()]
+          if missing: raise SystemExit('Missing underground files: '+', '.join(missing))
+          bus=Path('underground-integration-bus.js').read_text()
+          checks=['CSLUndergroundGovernor','CSLInterventionBudget','CSLDecisionTrace','CSLLearnerAgency','duplicate-intervention-suppressed']
+          absent=[x for x in checks if x not in bus]
+          if absent: raise SystemExit('Integration bus missing APIs/safety guards: '+', '.join(absent))
+          test=Path('underground-runtime-self-test.js').read_text()
+          probes=['CSLStorage','CSLAdaptivePresentation','CSLEvidenceConfidence','CSLInterventionBudget','CSLLearnerAgency','CSLLearningRhythm','CSLCognitiveLoadGuard','CSLUndergroundGovernor','CSLDecisionTrace','CSLUndergroundIntegration']
+          absent=[x for x in probes if x not in test]
+          if absent: raise SystemExit('Self-test missing probes: '+', '.join(absent))
+          for p in Path('.').glob('*.html'):
+              text=p.read_text(encoding='utf-8')
+              for src in ('underground-integration-bus.js','underground-runtime-self-test.js'):
+                  count=text.count(src)
+                  if count!=1: raise SystemExit(f'{p}: expected exactly one {src}, found {count}')
+          print('Integration wiring, duplicate suppression, and script uniqueness checks passed.')
+          PY
+
       - name: Commit generated connections
         shell: bash
         run: |
@@ -76,5 +107,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add '*.html'
-          git commit -m "Apply decision trace and governed learning layers [skip shared-layers]"
+          git commit -m "Apply runtime-tested underground layers [skip shared-layers]"
           git push
