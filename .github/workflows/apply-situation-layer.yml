@@ -2,7 +2,7 @@ name: Apply Shared Layers
 
 on:
   push:
-    branches: [main]
+    branches: [main, underground-integration-v1]
   workflow_dispatch:
 
 permissions:
