@@ -46,6 +46,7 @@ jobs:
             '<script src="./underground-governor.js"></script>',
             '<script src="./decision-trace-ledger.js"></script>',
             '<script src="./underground-integration-bus.js"></script>',
+            '<script src="./underground-runtime-self-test.js"></script>',
             '<script src="./interactive-cues.js"></script>',
             '<script src="./senior-accessibility.js"></script>',
             '<script src="./a1-pedagogy-layer.js"></script>',
@@ -62,6 +63,7 @@ jobs:
           for p in Path('.').glob('*.html'):
               text=p.read_text(encoding='utf-8');original=text
               for layer in layers:
+                  if layer not in text and '</body>' in text:text.replace('</body>',layer+'</body>',1)
                   if layer not in text and '</body>' in text:text=text.replace('</body>',layer+'</body>',1)
               if p.name not in no_session_guide and session_guide not in text and '</body>' in text:text=text.replace('</body>',session_guide+'</body>',1)
               if p.name not in no_reencounter and reencounter not in text and '</body>' in text:text=text.replace('</body>',reencounter+'</body>',1)
@@ -80,14 +82,18 @@ jobs:
         run: |
           python3 - <<'PY'
           from pathlib import Path
-          required=['storage-core.js','learner-model-engine.js','opportunity-matching-engine.js','adaptive-presentation-engine.js','presentation-policy-layer.js','evidence-confidence-engine.js','intervention-budget-engine.js','learner-agency-engine.js','learning-rhythm-engine.js','cognitive-load-guard.js','underground-governor.js','decision-trace-ledger.js','underground-integration-bus.js']
+          required=['storage-core.js','learner-model-engine.js','opportunity-matching-engine.js','adaptive-presentation-engine.js','presentation-policy-layer.js','evidence-confidence-engine.js','intervention-budget-engine.js','learner-agency-engine.js','learning-rhythm-engine.js','cognitive-load-guard.js','underground-governor.js','decision-trace-ledger.js','underground-integration-bus.js','underground-runtime-self-test.js']
           missing=[x for x in required if not Path(x).exists()]
           if missing: raise SystemExit('Missing underground files: '+', '.join(missing))
           bus=Path('underground-integration-bus.js').read_text()
           checks=['CSLUndergroundGovernor','CSLInterventionBudget','CSLDecisionTrace','CSLLearnerAgency']
           absent=[x for x in checks if x not in bus]
           if absent: raise SystemExit('Integration bus missing APIs: '+', '.join(absent))
-          print('Integration wiring static checks passed.')
+          test=Path('underground-runtime-self-test.js').read_text()
+          probes=['CSLStorage','CSLAdaptivePresentation','CSLEvidenceConfidence','CSLInterventionBudget','CSLLearnerAgency','CSLLearningRhythm','CSLCognitiveLoadGuard','CSLUndergroundGovernor','CSLDecisionTrace','CSLUndergroundIntegration']
+          absent=[x for x in probes if x not in test]
+          if absent: raise SystemExit('Self-test missing probes: '+', '.join(absent))
+          print('Integration wiring and self-test static checks passed.')
           PY
 
       - name: Commit generated connections
@@ -97,5 +103,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add '*.html'
-          git commit -m "Apply integrated underground layers [skip shared-layers]"
+          git commit -m "Apply runtime-tested underground layers [skip shared-layers]"
           git push
