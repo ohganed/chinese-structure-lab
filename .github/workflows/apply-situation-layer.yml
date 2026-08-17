@@ -2,7 +2,7 @@ name: Apply Shared Layers
 
 on:
   push:
-    branches: [main, counterfactual-simulator-v1]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
