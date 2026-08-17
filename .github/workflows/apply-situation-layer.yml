@@ -2,7 +2,7 @@ name: Apply Shared Layers
 
 on:
   push:
-    branches: [main, underground-integration-v1]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -46,6 +46,7 @@ jobs:
             '<script src="./underground-governor.js"></script>',
             '<script src="./decision-trace-ledger.js"></script>',
             '<script src="./underground-integration-bus.js"></script>',
+            '<script src="./counterfactual-simulator.js"></script>',
             '<script src="./underground-runtime-self-test.js"></script>',
             '<script src="./interactive-cues.js"></script>',
             '<script src="./senior-accessibility.js"></script>',
@@ -81,23 +82,30 @@ jobs:
         run: |
           python3 - <<'PY'
           from pathlib import Path
-          required=['storage-core.js','learner-model-engine.js','opportunity-matching-engine.js','adaptive-presentation-engine.js','presentation-policy-layer.js','evidence-confidence-engine.js','intervention-budget-engine.js','learner-agency-engine.js','learning-rhythm-engine.js','cognitive-load-guard.js','underground-governor.js','decision-trace-ledger.js','underground-integration-bus.js','underground-runtime-self-test.js']
+          required=['storage-core.js','learner-model-engine.js','opportunity-matching-engine.js','adaptive-presentation-engine.js','presentation-policy-layer.js','evidence-confidence-engine.js','intervention-budget-engine.js','learner-agency-engine.js','learning-rhythm-engine.js','cognitive-load-guard.js','underground-governor.js','decision-trace-ledger.js','underground-integration-bus.js','counterfactual-simulator.js','underground-runtime-self-test.js']
           missing=[x for x in required if not Path(x).exists()]
           if missing: raise SystemExit('Missing underground files: '+', '.join(missing))
           bus=Path('underground-integration-bus.js').read_text()
           checks=['CSLUndergroundGovernor','CSLInterventionBudget','CSLDecisionTrace','CSLLearnerAgency','duplicate-intervention-suppressed']
           absent=[x for x in checks if x not in bus]
           if absent: raise SystemExit('Integration bus missing APIs/safety guards: '+', '.join(absent))
+          cf=Path('counterfactual-simulator.js').read_text()
+          required_cf=['CSLCounterfactualSimulator','simulationOnly','noBudgetSpend','noUIChange','noHistoryMutation','noTraceWrite']
+          absent=[x for x in required_cf if x not in cf]
+          if absent: raise SystemExit('Counterfactual simulator missing safeguards: '+', '.join(absent))
+          forbidden=['CSLInterventionBudget.request','CSLDecisionTrace.record','CSLStorage.save','document.body.append','innerHTML=']
+          present=[x for x in forbidden if x in cf]
+          if present: raise SystemExit('Counterfactual simulator contains forbidden side-effect paths: '+', '.join(present))
           test=Path('underground-runtime-self-test.js').read_text()
-          probes=['CSLStorage','CSLAdaptivePresentation','CSLEvidenceConfidence','CSLInterventionBudget','CSLLearnerAgency','CSLLearningRhythm','CSLCognitiveLoadGuard','CSLUndergroundGovernor','CSLDecisionTrace','CSLUndergroundIntegration']
+          probes=['CSLStorage','CSLAdaptivePresentation','CSLEvidenceConfidence','CSLInterventionBudget','CSLLearnerAgency','CSLLearningRhythm','CSLCognitiveLoadGuard','CSLUndergroundGovernor','CSLDecisionTrace','CSLUndergroundIntegration','CSLCounterfactualSimulator']
           absent=[x for x in probes if x not in test]
           if absent: raise SystemExit('Self-test missing probes: '+', '.join(absent))
           for p in Path('.').glob('*.html'):
               text=p.read_text(encoding='utf-8')
-              for src in ('underground-integration-bus.js','underground-runtime-self-test.js'):
+              for src in ('underground-integration-bus.js','counterfactual-simulator.js','underground-runtime-self-test.js'):
                   count=text.count(src)
                   if count!=1: raise SystemExit(f'{p}: expected exactly one {src}, found {count}')
-          print('Integration wiring, duplicate suppression, and script uniqueness checks passed.')
+          print('Integration wiring, counterfactual safety, and script uniqueness checks passed.')
           PY
 
       - name: Commit generated connections
@@ -107,5 +115,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add '*.html'
-          git commit -m "Apply runtime-tested underground layers [skip shared-layers]"
+          git commit -m "Apply counterfactual simulator safely [skip shared-layers]"
           git push
