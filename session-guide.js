@@ -3,11 +3,13 @@
 var KEY='csl_active_time_session_v1';
 var raw=localStorage.getItem(KEY),s=null;try{s=raw?JSON.parse(raw):null}catch(e){}
 if(!s||!s.startedAt||!s.minutes)return;
+var path=(location.pathname||'').split('/').pop();
+if(Number(s.minutes)===3&&path==='three-minute.html')return;
 var start=Date.parse(s.startedAt);if(!isFinite(start)){localStorage.removeItem(KEY);return}
 var duration=Math.max(1,Number(s.minutes)||1)*60000;
 var elapsed=Date.now()-start;
 if(elapsed>duration+6*60*60*1000){localStorage.removeItem(KEY);return}
-var target=Math.max(1,Number(s.targetMoments)||({1:2,3:4,10:8,20:14,45:24}[Number(s.minutes)]||8));
+var target=Math.max(1,Number(s.targetMoments)||({1:2,3:3,10:8,20:14,45:24}[Number(s.minutes)]||8));
 var density=s.density||((s.minutes<=1)?'tiny':(s.minutes<=3)?'light':(s.minutes<=10)?'normal':(s.minutes<=20)?'wide':'deep');
 s.targetMoments=target;s.density=density;s.moments=Number(s.moments)||0;try{localStorage.setItem(KEY,JSON.stringify(s))}catch(e){}
 document.body.classList.add('csl-session-'+density);
