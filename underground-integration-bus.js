@@ -4,10 +4,13 @@
    Connects existing underground engines without taking learner control.
    Event-driven recalculation, normalized snapshots, governor arbitration,
    budget consumption only after an allowed proposal, and decision tracing. */
-var VERSION=4,EXT='undergroundIntegrationV1',timer=null,lastFingerprint='';
+var VERSION=4,EXT='undergroundIntegrationV1',PROFILE_KEY='csl_profile_v1',timer=null,lastFingerprint='';
 function safe(fn){try{return fn()}catch(e){return null}}
 function now(){return new Date().toISOString()}
 function storage(){return window.CSLStorage||null}
+function parse(v){try{return v?JSON.parse(v):null}catch(e){return null}}
+function primary(p){if(!p||typeof p!=='object')return null;return{schemaVersion:p.schemaVersion||null,preferences:p.preferences||{},progress:p.progress||{},learning:p.learning||{},aliases:p.aliases||{}}}
+function primaryChanged(e){if(!e||e.key!==PROFILE_KEY)return false;var before=primary(parse(e.oldValue)),after=primary(parse(e.newValue));if(!before&&!after)return false;return JSON.stringify(before)!==JSON.stringify(after)}
 function read(name,method){return safe(function(){var x=window[name];return x&&x[method||'get']?x[method||'get']():null})}
 function normalized(){
  var adaptive=read('CSLAdaptivePresentation'),confidence=read('CSLEvidenceConfidence'),agency=read('CSLLearnerAgency'),budget=read('CSLInterventionBudget','status'),load=read('CSLCognitiveLoadGuard'),rhythm=read('CSLLearningRhythm'),opp=read('CSLOpportunityMatching'),audit=read('CSLQualityAuditor'),support=read('CSLSupportRegulation'),deep=read('CSLDeepUnderground'),constitution=read('CSLUndergroundConstitution');
@@ -27,7 +30,7 @@ function run(reason){var snap=normalized(),decision=read('CSLUndergroundGovernor
  var result={version:VERSION,ranAt:now(),reason:reason||'manual',snapshot:snap,decision:decision,budget:budgetResult,agencyApplied:agency.agencyApplied||null,deepSupportApplied:deepSupport.applied};trace(decision,result);safe(function(){if(window.CSLPlatform&&CSLPlatform.emit)CSLPlatform.emit('underground-integration',{action:decision.action,reason:result.reason})});return result}
 function schedule(reason){clearTimeout(timer);timer=setTimeout(function(){run(reason)},160)}
 ['learning-event','encounter-recorded','sentence-viewed','word-touched','audio-played','pinyin-toggled','meaning-revealed','structure-opened','unclear-changed','scene-changed','accessibility-changed','learner-choice','platform-ready'].forEach(function(n){window.addEventListener('csl:'+n,function(){schedule(n)})});
-window.addEventListener('storage',function(){schedule('storage-change')});
-window.CSLUndergroundIntegration={version:VERSION,run:run,snapshot:normalized,schedule:schedule};
+window.addEventListener('storage',function(e){if(primaryChanged(e))schedule('primary-storage-change')});
+window.CSLUndergroundIntegration={version:VERSION,run:run,snapshot:normalized,schedule:schedule,primaryStorageChange:primaryChanged};
 setTimeout(function(){run('startup')},5000);
 })();

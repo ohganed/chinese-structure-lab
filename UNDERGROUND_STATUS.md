@@ -72,3 +72,11 @@ The following rules are non-negotiable:
 `underground-governor.js` v2 and `underground-integration-bus.js` v4 consult
 Floor 50 before an adaptive opportunity can spend attention budget. A failure
 therefore suppresses automatic intervention; it does not lock or punish the learner.
+
+## Efficiency safeguards
+
+- Interactive cues update classes idempotently, so their DOM observer settles instead
+  of waking itself repeatedly.
+- Cross-tab storage events wake the underground only when primary learning data,
+  preferences, progress, or aliases change. Derived underground snapshots and audit
+  writes do not bounce recalculation between open tabs.
