@@ -1,4 +1,4 @@
-# Chinese Structure Lab — Underground Status
+# Chinese Structure Lab — Underground Status (50 floors)
 
 ## Floor 23: Interaction Ledger
 
@@ -41,3 +41,34 @@ records. It does not delete or redefine prior data.
 its no-correctness, no-grades, and no-typed-text safeguards remain declared.
 The shared-layer workflow connects exactly one ledger script to every HTML page
 and validates JavaScript syntax and wiring.
+
+## Floors 24–50
+
+| Floors | System | Purpose |
+|---|---|---|
+| 24–29 | Temporal Pattern | Normalize duplicate surface signals, separate recent and long-term evidence, compare trends, and cap confidence. |
+| 30–35 | Support Regulation | Estimate support demand, fade support only when evidence permits, return it immediately when requested, and keep audio/pinyin/meaning recoverable. |
+| 36–41 | Curriculum Balance | Watch modality, context, vocabulary, structure, difficulty mix, novelty, and re-encounter diversity without treating coverage as mastery. |
+| 42–47 | Continuity & Resilience | Restore the last place, preserve open loops without task pressure, detect session boundaries, verify schema/history, and protect offline privacy. |
+| 48 | Deep Snapshot | Aggregate floors 24–47 into one read-only underground snapshot. |
+| 49 | Invariant Auditor | Verify that the underground is healthy before it receives any adaptive authority. |
+| 50 | Underground Constitution | Freeze automatic adaptation when an invariant fails while leaving ordinary learner controls available. |
+
+## Floor 50 constitution
+
+The following rules are non-negotiable:
+
+- learner agency outranks inference
+- no grades or correctness judgement
+- no forced review, streak, absence penalty, or welcome-back praise
+- no deletion or reinterpretation of learning history
+- no typed-text or identity collection
+- no hiding meaning, pinyin, or other recovery controls
+- no direct UI control from the underground
+- doing nothing is always a valid decision
+- every permitted adaptation is bounded and reversible
+- accessibility overrides adaptation
+
+`underground-governor.js` v2 and `underground-integration-bus.js` v4 consult
+Floor 50 before an adaptive opportunity can spend attention budget. A failure
+therefore suppresses automatic intervention; it does not lock or punish the learner.

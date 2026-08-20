@@ -44,6 +44,13 @@ jobs:
             '<script src="./learner-agency-engine.js"></script>',
             '<script src="./learning-rhythm-engine.js"></script>',
             '<script src="./cognitive-load-guard.js"></script>',
+            '<script src="./temporal-pattern-engine.js"></script>',
+            '<script src="./support-regulation-engine.js"></script>',
+            '<script src="./curriculum-balance-engine.js"></script>',
+            '<script src="./continuity-resilience-engine.js"></script>',
+            '<script src="./underground-floor-registry.js"></script>',
+            '<script src="./deep-underground-orchestrator.js"></script>',
+            '<script src="./underground-constitution.js"></script>',
             '<script src="./underground-governor.js"></script>',
             '<script src="./decision-trace-ledger.js"></script>',
             '<script src="./underground-integration-bus.js"></script>',
@@ -77,13 +84,14 @@ jobs:
         shell: bash
         run: |
           for f in *.js; do node --check "$f"; done
+          node tests/deep-underground-smoke.js
 
       - name: Validate integration wiring
         shell: bash
         run: |
           python3 - <<'PY'
           from pathlib import Path
-          required=['storage-core.js','interaction-ledger.js','learner-model-engine.js','opportunity-matching-engine.js','adaptive-presentation-engine.js','presentation-policy-layer.js','evidence-confidence-engine.js','intervention-budget-engine.js','learner-agency-engine.js','learning-rhythm-engine.js','cognitive-load-guard.js','underground-governor.js','decision-trace-ledger.js','underground-integration-bus.js','counterfactual-simulator.js','underground-runtime-self-test.js']
+          required=['storage-core.js','interaction-ledger.js','learner-model-engine.js','opportunity-matching-engine.js','adaptive-presentation-engine.js','presentation-policy-layer.js','evidence-confidence-engine.js','intervention-budget-engine.js','learner-agency-engine.js','learning-rhythm-engine.js','cognitive-load-guard.js','temporal-pattern-engine.js','support-regulation-engine.js','curriculum-balance-engine.js','continuity-resilience-engine.js','underground-floor-registry.js','deep-underground-orchestrator.js','underground-constitution.js','underground-governor.js','decision-trace-ledger.js','underground-integration-bus.js','counterfactual-simulator.js','underground-runtime-self-test.js']
           missing=[x for x in required if not Path(x).exists()]
           if missing: raise SystemExit('Missing underground files: '+', '.join(missing))
           bus=Path('underground-integration-bus.js').read_text()
@@ -97,6 +105,17 @@ jobs:
           forbidden_ledger=['input.value','textarea.value','contenteditable','localStorage.clear']
           present=[x for x in forbidden_ledger if x in ledger]
           if present: raise SystemExit('Interaction ledger contains forbidden collection/destructive paths: '+', '.join(present))
+          deep_files=['temporal-pattern-engine.js','support-regulation-engine.js','curriculum-balance-engine.js','continuity-resilience-engine.js','deep-underground-orchestrator.js','underground-constitution.js']
+          deep_text='\n'.join(Path(x).read_text() for x in deep_files)
+          required_deep=['CSLTemporalPattern','CSLSupportRegulation','CSLCurriculumBalance','CSLContinuityResilience','CSLDeepUnderground','CSLUndergroundConstitution','noGrades','noForcedReview','noHistoryDeletion','FREEZE_ADAPTATION']
+          absent=[x for x in required_deep if x not in deep_text]
+          if absent: raise SystemExit('Deep underground missing APIs/safeguards: '+', '.join(absent))
+          forbidden_deep=['document.body','innerHTML=','CSLInterventionBudget.request','localStorage.clear']
+          present=[x for x in forbidden_deep if x in deep_text]
+          if present: raise SystemExit('Deep underground contains forbidden UI/budget/destructive paths: '+', '.join(present))
+          registry=Path('underground-floor-registry.js').read_text()
+          if 'total:50' not in registry or 'CSLUndergroundFloors' not in registry:
+              raise SystemExit('Underground floor registry does not guarantee 50 floors')
           cf=Path('counterfactual-simulator.js').read_text()
           required_cf=['CSLCounterfactualSimulator','simulationOnly','noBudgetSpend','noUIChange','noHistoryMutation','noTraceWrite']
           absent=[x for x in required_cf if x not in cf]
@@ -105,12 +124,12 @@ jobs:
           present=[x for x in forbidden if x in cf]
           if present: raise SystemExit('Counterfactual simulator contains forbidden side-effect paths: '+', '.join(present))
           test=Path('underground-runtime-self-test.js').read_text()
-          probes=['CSLStorage','CSLInteractionLedger','CSLAdaptivePresentation','CSLEvidenceConfidence','CSLInterventionBudget','CSLLearnerAgency','CSLLearningRhythm','CSLCognitiveLoadGuard','CSLUndergroundGovernor','CSLDecisionTrace','CSLUndergroundIntegration','CSLCounterfactualSimulator']
+          probes=['CSLStorage','CSLInteractionLedger','CSLTemporalPattern','CSLSupportRegulation','CSLCurriculumBalance','CSLContinuityResilience','CSLUndergroundFloors','CSLDeepUnderground','CSLUndergroundConstitution','CSLAdaptivePresentation','CSLEvidenceConfidence','CSLInterventionBudget','CSLLearnerAgency','CSLLearningRhythm','CSLCognitiveLoadGuard','CSLUndergroundGovernor','CSLDecisionTrace','CSLUndergroundIntegration','CSLCounterfactualSimulator']
           absent=[x for x in probes if x not in test]
           if absent: raise SystemExit('Self-test missing probes: '+', '.join(absent))
           for p in Path('.').glob('*.html'):
               text=p.read_text(encoding='utf-8')
-              for src in ('interaction-ledger.js','underground-integration-bus.js','counterfactual-simulator.js','underground-runtime-self-test.js'):
+              for src in ('interaction-ledger.js','temporal-pattern-engine.js','support-regulation-engine.js','curriculum-balance-engine.js','continuity-resilience-engine.js','underground-floor-registry.js','deep-underground-orchestrator.js','underground-constitution.js','underground-integration-bus.js','counterfactual-simulator.js','underground-runtime-self-test.js'):
                   count=text.count(src)
                   if count!=1: raise SystemExit(f'{p}: expected exactly one {src}, found {count}')
           print('Integration wiring, counterfactual safety, and script uniqueness checks passed.')
