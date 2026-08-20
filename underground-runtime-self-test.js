@@ -1,15 +1,16 @@
 (function(){
 'use strict';
-/* Underground Runtime Self-Test v2
+/* Underground Runtime Self-Test v3
    Non-destructive health check for the learning underground.
    It verifies presence and safe read paths; it does not spend budget or alter UI. */
-var VERSION=2,EXT='undergroundRuntimeSelfTestV1';
+var VERSION=3,EXT='undergroundRuntimeSelfTestV1';
 function now(){return new Date().toISOString()}function safe(fn){try{return{ok:true,value:fn()}}catch(e){return{ok:false,error:String(e&&e.message||e)}}}
 function exists(name,method){var x=window[name];return!!(x&&(!method||typeof x[method]==='function'))}
 function check(name,pass,detail){return{name:name,pass:!!pass,detail:detail||null}}
 function run(){var checks=[];
  checks.push(check('storage',exists('CSLStorage','load'),'CSLStorage.load'));
  checks.push(check('learning-memory',!!window.CSLLearningMemory,'CSLLearningMemory'));
+ checks.push(check('interaction-ledger',exists('CSLInteractionLedger','snapshot'),'CSLInteractionLedger.snapshot'));
  checks.push(check('adaptive-presentation',exists('CSLAdaptivePresentation','get'),'CSLAdaptivePresentation.get'));
  checks.push(check('evidence-confidence',exists('CSLEvidenceConfidence','get'),'CSLEvidenceConfidence.get'));
  checks.push(check('intervention-budget',exists('CSLInterventionBudget','status')&&exists('CSLInterventionBudget','request'),'status + request'));
@@ -23,6 +24,7 @@ function run(){var checks=[];
  var snap=safe(function(){return window.CSLUndergroundIntegration.snapshot()});checks.push(check('integration-snapshot',snap.ok&&!!snap.value,snap.ok?'readable':snap.error));
  var budget=safe(function(){return window.CSLInterventionBudget.status()});checks.push(check('budget-read-nondestructive',budget.ok&&budget.value&&budget.value.budget&&typeof budget.value.budget.remaining==='number',budget.ok?'remaining readable':budget.error));
  var agency=safe(function(){return window.CSLLearnerAgency.get()});checks.push(check('agency-read',agency.ok&&agency.value&&agency.value.policy&&agency.value.policy.learnerChoiceOutranksInference===true,agency.ok?'policy present':agency.error));
+ var ledger=safe(function(){return window.CSLInteractionLedger.snapshot()});checks.push(check('interaction-privacy',ledger.ok&&ledger.value&&ledger.value.policy&&ledger.value.policy.noCorrectness===true&&ledger.value.policy.noTypedText===true&&ledger.value.policy.noGrades===true,ledger.ok?'privacy safeguards present':ledger.error));
  var cf=safe(function(){return window.CSLCounterfactualSimulator.simulate()});checks.push(check('counterfactual-read',cf.ok&&cf.value&&cf.value.policy&&cf.value.policy.simulationOnly===true&&cf.value.policy.noBudgetSpend===true,cf.ok?'simulation safeguards present':cf.error));
  var failed=checks.filter(function(c){return!c.pass}),status=failed.length?'degraded':'healthy';var report={version:VERSION,ranAt:now(),status:status,total:checks.length,passed:checks.length-failed.length,failed:failed.length,checks:checks,policy:{nonDestructive:true,noBudgetSpend:true,noUIChange:true,noLearnerGrade:true}};
  var s=window.CSLStorage;safe(function(){if(!s||!s.load||!s.save)return;var p=s.load();p.extensions=p.extensions||{};p.extensions[EXT]=report;s.save(p)});

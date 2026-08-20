@@ -25,7 +25,7 @@ function run(reason){var snap=normalized(),decision=read('CSLUndergroundGovernor
  } else {lastFingerprint=fingerprint;}
  var result={version:VERSION,ranAt:now(),reason:reason||'manual',snapshot:snap,decision:decision,budget:budgetResult,agencyApplied:agency.agencyApplied||null};trace(decision,result);safe(function(){if(window.CSLPlatform&&CSLPlatform.emit)CSLPlatform.emit('underground-integration',{action:decision.action,reason:result.reason})});return result}
 function schedule(reason){clearTimeout(timer);timer=setTimeout(function(){run(reason)},160)}
-['learning-event','encounter-recorded','sentence-viewed','audio-played','pinyin-toggled','meaning-revealed','unclear-changed','scene-changed','accessibility-changed','learner-choice','platform-ready'].forEach(function(n){window.addEventListener('csl:'+n,function(){schedule(n)})});
+['learning-event','encounter-recorded','sentence-viewed','word-touched','audio-played','pinyin-toggled','meaning-revealed','structure-opened','unclear-changed','scene-changed','accessibility-changed','learner-choice','platform-ready'].forEach(function(n){window.addEventListener('csl:'+n,function(){schedule(n)})});
 window.addEventListener('storage',function(){schedule('storage-change')});
 window.CSLUndergroundIntegration={version:VERSION,run:run,snapshot:normalized,schedule:schedule};
 setTimeout(function(){run('startup')},5000);

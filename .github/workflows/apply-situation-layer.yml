@@ -24,6 +24,7 @@ jobs:
             '<script src="./platform-bridge.js"></script>',
             '<script src="./audio-haptics-layer.js"></script>',
             '<script src="./storage-core.js"></script>',
+            '<script src="./interaction-ledger.js"></script>',
             '<script src="./learning-memory-engine.js"></script>',
             '<script src="./learner-model-engine.js"></script>',
             '<script src="./reencounter-planner.js"></script>',
@@ -82,13 +83,20 @@ jobs:
         run: |
           python3 - <<'PY'
           from pathlib import Path
-          required=['storage-core.js','learner-model-engine.js','opportunity-matching-engine.js','adaptive-presentation-engine.js','presentation-policy-layer.js','evidence-confidence-engine.js','intervention-budget-engine.js','learner-agency-engine.js','learning-rhythm-engine.js','cognitive-load-guard.js','underground-governor.js','decision-trace-ledger.js','underground-integration-bus.js','counterfactual-simulator.js','underground-runtime-self-test.js']
+          required=['storage-core.js','interaction-ledger.js','learner-model-engine.js','opportunity-matching-engine.js','adaptive-presentation-engine.js','presentation-policy-layer.js','evidence-confidence-engine.js','intervention-budget-engine.js','learner-agency-engine.js','learning-rhythm-engine.js','cognitive-load-guard.js','underground-governor.js','decision-trace-ledger.js','underground-integration-bus.js','counterfactual-simulator.js','underground-runtime-self-test.js']
           missing=[x for x in required if not Path(x).exists()]
           if missing: raise SystemExit('Missing underground files: '+', '.join(missing))
           bus=Path('underground-integration-bus.js').read_text()
           checks=['CSLUndergroundGovernor','CSLInterventionBudget','CSLDecisionTrace','CSLLearnerAgency','duplicate-intervention-suppressed']
           absent=[x for x in checks if x not in bus]
           if absent: raise SystemExit('Integration bus missing APIs/safety guards: '+', '.join(absent))
+          ledger=Path('interaction-ledger.js').read_text()
+          required_ledger=['CSLInteractionLedger','CSLStorage.addEvent','learnerInitiated','noCorrectness','noGrades','noTypedText','localProfileOnly']
+          absent=[x for x in required_ledger if x not in ledger]
+          if absent: raise SystemExit('Interaction ledger missing APIs/safeguards: '+', '.join(absent))
+          forbidden_ledger=['input.value','textarea.value','contenteditable','localStorage.clear']
+          present=[x for x in forbidden_ledger if x in ledger]
+          if present: raise SystemExit('Interaction ledger contains forbidden collection/destructive paths: '+', '.join(present))
           cf=Path('counterfactual-simulator.js').read_text()
           required_cf=['CSLCounterfactualSimulator','simulationOnly','noBudgetSpend','noUIChange','noHistoryMutation','noTraceWrite']
           absent=[x for x in required_cf if x not in cf]
@@ -97,12 +105,12 @@ jobs:
           present=[x for x in forbidden if x in cf]
           if present: raise SystemExit('Counterfactual simulator contains forbidden side-effect paths: '+', '.join(present))
           test=Path('underground-runtime-self-test.js').read_text()
-          probes=['CSLStorage','CSLAdaptivePresentation','CSLEvidenceConfidence','CSLInterventionBudget','CSLLearnerAgency','CSLLearningRhythm','CSLCognitiveLoadGuard','CSLUndergroundGovernor','CSLDecisionTrace','CSLUndergroundIntegration','CSLCounterfactualSimulator']
+          probes=['CSLStorage','CSLInteractionLedger','CSLAdaptivePresentation','CSLEvidenceConfidence','CSLInterventionBudget','CSLLearnerAgency','CSLLearningRhythm','CSLCognitiveLoadGuard','CSLUndergroundGovernor','CSLDecisionTrace','CSLUndergroundIntegration','CSLCounterfactualSimulator']
           absent=[x for x in probes if x not in test]
           if absent: raise SystemExit('Self-test missing probes: '+', '.join(absent))
           for p in Path('.').glob('*.html'):
               text=p.read_text(encoding='utf-8')
-              for src in ('underground-integration-bus.js','counterfactual-simulator.js','underground-runtime-self-test.js'):
+              for src in ('interaction-ledger.js','underground-integration-bus.js','counterfactual-simulator.js','underground-runtime-self-test.js'):
                   count=text.count(src)
                   if count!=1: raise SystemExit(f'{p}: expected exactly one {src}, found {count}')
           print('Integration wiring, counterfactual safety, and script uniqueness checks passed.')

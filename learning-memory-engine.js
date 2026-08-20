@@ -1,9 +1,9 @@
 (function(){
 'use strict';
-/* Chinese Structure Lab · Learning Memory Engine v1
+/* Chinese Structure Lab · Learning Memory Engine v2
    Derived memory only: raw append-only events remain the source of truth.
    No existing learning history is deleted or rewritten. */
-var ENGINE_VERSION=1;
+var ENGINE_VERSION=2;
 var EXT_KEY='learningMemoryV1';
 function storage(){return window.CSLStorage||null}
 function now(){return new Date().toISOString()}
@@ -13,14 +13,19 @@ function inc(map,key,n){if(!key)return;map[key]=(Number(map[key])||0)+(n==null?1
 function touch(map,key,at,extra){if(!key)return;var x=map[key]||{count:0,firstSeenAt:null,lastSeenAt:null};x.count++;x.firstSeenAt=x.firstSeenAt||at;x.lastSeenAt=at||x.lastSeenAt;if(extra)Object.keys(extra).forEach(function(k){x[k]=extra[k]});map[key]=x}
 function rebuild(profile){
   profile=profile||{};var learning=obj(profile.learning),events=arr(learning.events),sentences=obj(learning.sentences);
-  var m={engineVersion:ENGINE_VERSION,builtAt:now(),sourceEventCount:events.length,sourceSentenceCount:Object.keys(sentences).length,summary:{encounters:0,fuzzySentences:0,audioNatural:0,audioSlow:0,reencounters:0,semanticShifts:0},sentences:{},words:{},constructions:{},senses:{},contexts:{},signals:{}};
+  var m={engineVersion:ENGINE_VERSION,builtAt:now(),sourceEventCount:events.length,sourceSentenceCount:Object.keys(sentences).length,summary:{encounters:0,fuzzySentences:0,audioNatural:0,audioSlow:0,wordTouches:0,meaningReveals:0,pinyinTouches:0,structureOpens:0,sceneMoves:0,reencounters:0,semanticShifts:0},sentences:{},words:{},constructions:{},senses:{},contexts:{},signals:{}};
   Object.keys(sentences).forEach(function(id){var s=obj(sentences[id]),count=Number(s.encounters)||0;m.summary.encounters+=count;if(s.fuzzy)m.summary.fuzzySentences++;m.sentences[id]={text:s.legacyText||s.text||'',encounters:count,fuzzy:!!s.fuzzy,firstSeenAt:s.firstSeenAt||null,lastSeenAt:s.lastSeenAt||null,reencounterCount:Number(obj(s.extras).reencounterCount)||0};});
   events.forEach(function(e){if(!e||!e.type)return;var d=obj(e.data),at=e.at||null;inc(m.signals,e.type);if(d.page)touch(m.contexts,d.page,at);
     if(e.type==='natural_reencounter'){m.summary.reencounters++;}
     if(e.type==='lexical_reencounter'){m.summary.reencounters++;touch(m.words,d.feature,at,{lastText:d.currentText||''});}
     if(e.type==='construction_reencounter'){m.summary.reencounters++;touch(m.constructions,d.feature,at,{label:d.label||d.feature,lastText:d.currentText||''});}
     if(e.type==='semantic_reencounter'){m.summary.reencounters++;touch(m.words,d.feature,at,{lastText:d.currentText||''});var k=(d.feature||'?')+':'+(d.currentSense||'general');touch(m.senses,k,at,{word:d.feature||'',sense:d.currentSense||'general',label:d.currentSenseLabel||''});if(d.shifted)m.summary.semanticShifts++;}
-    if(e.type==='audio_play'||e.type==='audio'){var rate=Number(d.rate);if(rate>0&&rate<=0.55)m.summary.audioSlow++;else m.summary.audioNatural++;}
+    if(e.type==='audio_play'||e.type==='audio'||e.type==='audio_played'){var rate=Number(d.rate);if(d.rateBand==='slow'||(rate>0&&rate<=0.55))m.summary.audioSlow++;else m.summary.audioNatural++;}
+    if(e.type==='word_touch'){m.summary.wordTouches++;touch(m.words,d.word||d.feature,at,{lastText:d.sentence||d.sentenceText||''});}
+    if(e.type==='word_meaning_revealed'||e.type==='meaning_revealed'||e.type==='sentence_meaning_revealed')m.summary.meaningReveals++;
+    if(e.type==='pinyin_toggled')m.summary.pinyinTouches++;
+    if(e.type==='structure_opened')m.summary.structureOpens++;
+    if(e.type==='scene_changed')m.summary.sceneMoves++;
   });
   return m;
 }
