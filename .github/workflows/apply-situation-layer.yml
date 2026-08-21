@@ -87,6 +87,7 @@ jobs:
           node tests/deep-underground-smoke.js
           node tests/underground-efficiency-smoke.js
           node tests/curriculum-expansion-smoke.js
+          node tests/word-detail-smoke.js
 
       - name: Validate integration wiring
         shell: bash
