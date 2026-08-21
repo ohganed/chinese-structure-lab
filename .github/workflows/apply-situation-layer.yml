@@ -86,6 +86,7 @@ jobs:
           for f in *.js; do node --check "$f"; done
           node tests/deep-underground-smoke.js
           node tests/underground-efficiency-smoke.js
+          node tests/curriculum-expansion-smoke.js
 
       - name: Validate integration wiring
         shell: bash
