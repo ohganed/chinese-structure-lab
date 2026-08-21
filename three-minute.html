@@ -11,6 +11,9 @@
 <body>
 <div class="app"><div class="top"><a class="back" href="./doorways.html">‹ 入口</a><div class="pill">約3分 · 3場面</div></div><div class="hero"><div class="tiny">THREE CONNECTED MOMENTS</div><h1>3つの場面を歩く</h1><p>別の入口で出会った中国語も、ここでは小さな物語の一部として戻ってきます。</p></div><div class="card" id="card"><div id="play"><div class="progress" id="progress"></div><div class="flow"><div class="emoji" id="emoji"></div><div class="sceneTitle" id="title"></div><div class="sceneText" id="text"></div></div><div class="words" id="words"></div><div class="sentence"><div class="zh" id="zh"></div><div class="py" id="py"></div><div class="meaning" id="meaning"></div><div class="audio"><button class="natural" onclick="speak(.9)">▶ Natural</button><button class="slow" onclick="speak(.4)">Slow · 0.4×</button></div></div><button class="next" id="next" onclick="advance()">次の場面 ›</button><div class="hint">正解・不正解はありません。場面の流れだけ追っても大丈夫です。</div></div><div class="done" id="done"><div class="big">🌿</div><h2>3つの場面がつながりました。</h2><p>今日出会った文は、疲れている日・旅行・買い物・Listeningなど別の入口でもまた戻ってきます。</p><a href="./doorways.html">入口へ戻る</a></div></div></div>
 <script src="./sentence-bank.js"></script>
+<script src="./sentence-bank-expansion-01.js"></script>
+<script src="./sentence-bank-expansion-02.js"></script>
+<script src="./sentence-bank-expansion-03.js"></script>
 <script>
 var BANK=window.CSLSentenceBank;
 var ROUTES=[
@@ -20,6 +23,12 @@ var ROUTES=[
 {id:'health',ids:['csl-a1-health-001','csl-a1-health-002','csl-a1-social-006']},
 {id:'home',ids:['csl-a1-home-001','csl-a1-home-005','csl-a1-home-003']}
 ];
+/* Twenty extra connected routes make the 3-minute doorway five times wider.
+   They are derived from stable IDs, while each session remains only 3 scenes. */
+['daily','food','travel','shopping','social','work','health','service','hotel','plans'].forEach(function(tag){
+  var ids=BANK.query({tags:[tag,'three-minute']}).filter(function(x){return /-20[1-9]$|-210$/.test(x.id)}).map(function(x){return x.id});
+  if(ids.length>=9){ROUTES.push({id:tag+'-new-1',ids:ids.slice(0,3)});ROUTES.push({id:tag+'-new-2',ids:ids.slice(6,9)})}
+});
 var KEY='csl_active_time_session_v1',s=null;try{s=JSON.parse(localStorage.getItem(KEY)||'null')}catch(e){}if(!s||Number(s.minutes)!==3)s={minutes:3,startedAt:new Date().toISOString(),targetMoments:3,density:'light',moments:0};
 if(!s.miniRoute){var last=localStorage.getItem('csl_last_3min_route')||'',choices=ROUTES.filter(function(r){return r.id!==last}),pick=choices[Math.floor(Math.random()*choices.length)]||ROUTES[0];s.miniRoute=pick.id;s.miniIndex=0;try{localStorage.setItem('csl_last_3min_route',pick.id)}catch(e){}}
 var route=ROUTES.filter(function(r){return r.id===s.miniRoute})[0]||ROUTES[0],scenes=route.ids.map(function(id){return BANK.get(id)}).filter(Boolean),i=Math.max(0,Math.min(2,Number(s.miniIndex)||0));
