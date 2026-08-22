@@ -1,0 +1,40 @@
+[
+  {
+    "id": "fr-a1-001",
+    "level": "A1",
+    "theme": "daily-life",
+    "register": "neutral",
+    "sentence": "Je vais au travail en bus.",
+    "translation_ja": "私はバスで仕事に行きます。",
+    "audio": {"natural": "", "clear": "", "slow": ""},
+    "sound_groups": [
+      {"text": "Je vais au travail", "ipa": "ʒə vɛ o tʁa.vaj"},
+      {"text": "en bus", "ipa": "ɑ̃ bys"}
+    ],
+    "words": [
+      {"surface": "Je", "lemma": "je", "ipa": "ʒə", "meaning_ja": "私（主語）", "pos": "代名詞", "role": "話し手を表す主語", "detail_ja": "母音の前では j’ になることがあります。"},
+      {"surface": "vais", "lemma": "aller", "ipa": "vɛ", "meaning_ja": "行く", "pos": "動詞", "role": "文の中心となる動詞", "morphology": "aller・直説法現在・1人称単数", "detail_ja": "aller の現在形。主語 Je に対応しています。"},
+      {"surface": "au", "lemma": "à + le", "ipa": "o", "meaning_ja": "〜へ／〜に", "pos": "前置詞＋定冠詞", "role": "目的地 travail を導く", "detail_ja": "à + le が縮約して au になります。"},
+      {"surface": "travail", "lemma": "travail", "ipa": "tʁa.vaj", "meaning_ja": "仕事、職場", "pos": "男性名詞", "role": "移動の目的地", "detail_ja": "ここでは aller au travail で『仕事へ行く／出勤する』という自然なまとまりです。"},
+      {"surface": "en", "lemma": "en", "ipa": "ɑ̃", "meaning_ja": "〜で", "pos": "前置詞", "role": "交通手段 bus を導く", "detail_ja": "交通手段を表す en bus の形です。"},
+      {"surface": "bus", "lemma": "bus", "ipa": "bys", "meaning_ja": "バス", "pos": "男性名詞", "role": "移動手段", "detail_ja": "語末の s はこの語では発音します。"}
+    ],
+    "meaning_chunks": [
+      {"text": "Je vais", "meaning_ja": "私は行きます"},
+      {"text": "au travail", "meaning_ja": "仕事へ"},
+      {"text": "en bus", "meaning_ja": "バスで"}
+    ],
+    "sentence_structure": {
+      "subject": "Je",
+      "verb": "vais",
+      "destination": "au travail",
+      "means": "en bus"
+    },
+    "grammar_tags": ["present", "aller", "contraction-au", "preposition-en"],
+    "sound_tags": ["rhythm-groups", "silent-final-letters"],
+    "vocabulary_tags": ["travel", "work", "transport"],
+    "related_lessons": [],
+    "alternate_expressions": ["Je prends le bus pour aller au travail."],
+    "notes": ["Foundation lesson for the first implementation slice."]
+  }
+]
