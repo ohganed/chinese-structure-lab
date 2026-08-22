@@ -96,6 +96,6 @@ function structureLabel(key){return({subject:'話し手・主語',verb:'文の�
 function soundTypeLabel(type){return({'liaison-required':'リエゾン','enchaînement':'アンシェヌマン','elision':'エリジオン','schwa':'脱落性の e'})[type]||type;}
 function registerLabel(value){return({'all':'どの場面でも','standard-and-conversation':'標準・会話共通'})[value]||value||'';}
 function confidenceLabel(value){return({'verified':'検証済み','pedagogical':'学習用の区切り'})[value]||value;}
-function escapeHtml(value=''){return String(value).replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c]));}
+function escapeHtml(value=''){return String(value).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 
 window.FSL_DEBUG={state,setMode,openWord,closeWord,toggleSound};
