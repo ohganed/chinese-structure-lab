@@ -35,6 +35,17 @@
       </div>
     </section>
 
+    <section class="flow-guide" aria-label="観察の流れ">
+      <div class="flow-guide-head"><span>観察の流れ</span><small>順番は自由です</small></div>
+      <div class="flow-guide-track">
+        <button type="button" data-flow-mode="listen" aria-current="step"><span>1</span>音から見る</button>
+        <button type="button" data-flow-mode="words"><span>2</span>単語を開く</button>
+        <button type="button" data-flow-mode="chunks"><span>3</span>意味のまとまり</button>
+        <button type="button" data-flow-mode="structure"><span>4</span>構造を見る</button>
+        <button type="button" data-flow-mode="sound"><span>5</span>音を深掘り</button>
+      </div>
+    </section>
+
     <nav class="mode-tabs" aria-label="観察モード">
       <button type="button" class="active" data-mode="listen">Listen</button>
       <button type="button" data-mode="words">Open the Words</button>
@@ -69,5 +80,6 @@
   <script type="module" src="./app.js"></script>
   <script type="module" src="./deep-view.js"></script>
   <script type="module" src="./my-text.js"></script>
+  <script type="module" src="./learning-flow.js"></script>
 </body>
 </html>
