@@ -25,8 +25,7 @@ for(const [name,source] of Object.entries({app,deep,myText,css,deepCss})){
 
 assert(app.includes("fetch('./data/index.json'"),'app should boot from a relative lightweight index');
 assert(app.includes('fetch(meta.path'),'lessons should remain lazy-loaded');
-assert(app.includes('speechSynthesis')||app.includes('SpeechSynthesisUtterance'),'browser speech fallback should exist');
-assert(app.includes("'speechSynthesis'in window")||app.includes('speechSynthesis in window')||app.includes('if(!window.speechSynthesis')||app.includes('if(!("speechSynthesis" in window))')||app.includes('if(!\'speechSynthesis\' in window)')||app.includes('if(!(\'speechSynthesis\' in window))')||app.includes('if(!window.speechSynthesis'),'audio-unavailable guard should exist');
+assert(app.includes("if(!('speechSynthesis'in window))return"),'audio-unavailable guard should let learning continue without speech');
 assert(index.lessons.length>0,'Pages build must have at least one indexed lesson');
 for(const lesson of index.lessons){assert(lesson.path.startsWith('./'),'lesson paths must be relative');assert(fs.existsSync(path.join(root,lesson.path.replace(/^\.\//,''))),`missing lesson ${lesson.path}`);}
 for(const ref of Object.values(index.reference_data||{})){assert(typeof ref==='string'&&ref.startsWith('./'),'reference_data paths must be relative');assert(fs.existsSync(path.join(root,ref.replace(/^\.\//,''))),`missing reference data ${ref}`);}
