@@ -1,42 +1,16 @@
 {
-  "schema_version": "1.0",
-  "id": "fr-a1-002",
-  "level": "A1",
-  "theme": "food",
-  "register": "neutral",
-  "sentence": "J'aime le café, mais je préfère le thé.",
-  "translation_ja": "私はコーヒーが好きですが、紅茶のほうが好きです。",
-  "audio": {"natural": "", "clear": "", "slow": "", "source": "browser-tts"},
-  "sound_groups": [
-    {"text": "J'aime le café", "ipa": "ʒɛm lə ka.fe", "role_ja": "最初の意味のまとまり"},
-    {"text": "mais je préfère le thé", "ipa": "mɛ ʒə pʁe.fɛʁ lə te", "role_ja": "対比を示す後半のまとまり"}
+  "schema_version":"1.0","id":"fr-a1-002","level":"A1","theme":"food","register":"neutral",
+  "sentence":"J'aime le café, mais je préfère le thé.","translation_ja":"私はコーヒーが好きですが、紅茶のほうが好きです。",
+  "audio":{"natural":"","clear":"","slow":"","source":"browser-tts"},
+  "sound_groups":[{"text":"J'aime le café","ipa":"ʒɛm lə ka.fe","role_ja":"最初の意味のまとまり"},{"text":"mais je préfère le thé","ipa":"mɛ ʒə pʁe.fɛʁ lə te","role_ja":"対比を示す後半のまとまり"}],
+  "sound_phenomena":[{"type":"elision","label_ja":"エリジオン","span":"J'aime","surface_hint":"je + aime → j'aime","detail_ja":"je は母音で始まる aime の前で j’ になります。","register":"all","confidence":"verified"},{"type":"schwa","label_ja":"脱落性の e","span":"je préfère","surface_hint":"自然会話では je の e が弱くなることがあります","detail_ja":"話速や話者によって je の母音が非常に弱くなることがあります。学習初期は明瞭に発音して問題ありません。","register":"standard-and-conversation","confidence":"variable"}],
+  "sound_reference_examples":[],
+  "words":[
+    {"id":"w1","surface":"J'","lemma":"je","ipa":"ʒ","meaning_ja":"私","pos":"代名詞","role":"主語","detail_ja":"je が母音の前でエリジオンした形です。"},{"id":"w2","surface":"aime","lemma":"aimer","ipa":"ɛm","meaning_ja":"好きである","pos":"動詞","role":"文の中心となる動詞","morphology":"aimer・直説法現在・1人称単数","detail_ja":"aimer は人や物を『好きだ』と表す基本動詞です。"},{"id":"w3","surface":"le","lemma":"le","ipa":"lə","meaning_ja":"その／〜というもの","pos":"定冠詞","role":"café を一般的な種類として導く","detail_ja":"好みを述べるとき、フランス語では定冠詞を使うのが自然です。"},{"id":"w4","surface":"café","lemma":"café","ipa":"ka.fe","meaning_ja":"コーヒー","pos":"男性名詞","role":"aime の対象","detail_ja":"飲み物としてのコーヒー。"},{"id":"w5","surface":"mais","lemma":"mais","ipa":"mɛ","meaning_ja":"しかし","pos":"接続詞","role":"前後を対比する","detail_ja":"二つの内容を対比させます。"},{"id":"w6","surface":"je","lemma":"je","ipa":"ʒə","meaning_ja":"私","pos":"代名詞","role":"主語","detail_ja":"後半の動詞 préfère に対応します。"},{"id":"w7","surface":"préfère","lemma":"préférer","ipa":"pʁe.fɛʁ","meaning_ja":"より好む","pos":"動詞","role":"後半の中心動詞","morphology":"préférer・直説法現在・1人称単数","detail_ja":"二つ以上を比べて『こちらのほうが好き』と表します。"},{"id":"w8","surface":"le","lemma":"le","ipa":"lə","meaning_ja":"その／〜というもの","pos":"定冠詞","role":"thé を一般的な種類として導く","detail_ja":"一般的な好みを表すため定冠詞を使っています。"},{"id":"w9","surface":"thé","lemma":"thé","ipa":"te","meaning_ja":"紅茶、お茶","pos":"男性名詞","role":"préfère の対象","detail_ja":"文脈上は飲み物のお茶です。"}
   ],
-  "sound_phenomena": [
-    {"type": "elision", "label_ja": "エリジオン", "span": "J'aime", "surface_hint": "je + aime → j'aime", "detail_ja": "je は母音で始まる aime の前で j’ になります。", "register": "all", "confidence": "verified"},
-    {"type": "schwa", "label_ja": "脱落性の e", "span": "je préfère", "surface_hint": "自然会話では je の e が弱くなることがあります", "detail_ja": "話速や話者によって je の母音が非常に弱くなることがあります。学習初期は明瞭に発音して問題ありません。", "register": "standard-and-conversation", "confidence": "variable"}
-  ],
-  "sound_reference_examples": [],
-  "words": [
-    {"surface": "J'", "lemma": "je", "ipa": "ʒ", "meaning_ja": "私", "pos": "代名詞", "role": "主語", "detail_ja": "je が母音の前でエリジオンした形です。"},
-    {"surface": "aime", "lemma": "aimer", "ipa": "ɛm", "meaning_ja": "好きである", "pos": "動詞", "role": "文の中心となる動詞", "morphology": "aimer・直説法現在・1人称単数", "detail_ja": "aimer は人や物を『好きだ』と表す基本動詞です。"},
-    {"surface": "le", "lemma": "le", "ipa": "lə", "meaning_ja": "その／〜というもの", "pos": "定冠詞", "role": "café を一般的な種類として導く", "detail_ja": "好みを述べるとき、フランス語では定冠詞を使うのが自然です。"},
-    {"surface": "café", "lemma": "café", "ipa": "ka.fe", "meaning_ja": "コーヒー", "pos": "男性名詞", "role": "aime の対象", "detail_ja": "飲み物としてのコーヒー。"},
-    {"surface": "mais", "lemma": "mais", "ipa": "mɛ", "meaning_ja": "しかし", "pos": "接続詞", "role": "前後を対比する", "detail_ja": "二つの内容を対比させます。"},
-    {"surface": "je", "lemma": "je", "ipa": "ʒə", "meaning_ja": "私", "pos": "代名詞", "role": "主語", "detail_ja": "後半の動詞 préfère に対応します。"},
-    {"surface": "préfère", "lemma": "préférer", "ipa": "pʁe.fɛʁ", "meaning_ja": "より好む", "pos": "動詞", "role": "後半の中心動詞", "morphology": "préférer・直説法現在・1人称単数", "detail_ja": "二つ以上を比べて『こちらのほうが好き』と表します。"},
-    {"surface": "le", "lemma": "le", "ipa": "lə", "meaning_ja": "その／〜というもの", "pos": "定冠詞", "role": "thé を一般的な種類として導く", "detail_ja": "一般的な好みを表すため定冠詞を使っています。"},
-    {"surface": "thé", "lemma": "thé", "ipa": "te", "meaning_ja": "紅茶、お茶", "pos": "男性名詞", "role": "préfère の対象", "detail_ja": "文脈上は飲み物のお茶です。"}
-  ],
-  "meaning_chunks": [
-    {"text": "J'aime le café", "meaning_ja": "私はコーヒーが好きです"},
-    {"text": "mais", "meaning_ja": "しかし"},
-    {"text": "je préfère le thé", "meaning_ja": "私は紅茶のほうが好きです"}
-  ],
-  "sentence_structure": {"subject": "J' / je", "verb": "aime / préfère", "contrast": "mais", "object": "le café / le thé"},
-  "grammar_tags": ["present", "elision", "definite-article", "contrast"],
-  "sound_tags": ["elision", "schwa"],
-  "vocabulary_tags": ["food", "preference"],
-  "related_lessons": ["fr-a1-001"],
-  "alternate_expressions": ["Je préfère le thé au café."],
-  "notes": []
+  "expressions":[{"id":"exp-001","surface":"J'aime le café","type":"common-expression","meaning_ja":"私はコーヒーが好きです","function":"preference","function_ja":"好みを述べる","register":"neutral","word_ids":["w1","w2","w3","w4"],"detail_ja":"aimer + 定冠詞 + 名詞で、一般的な好みを表せます。","example":"J'aime la musique."},{"id":"exp-002","surface":"je préfère le thé","type":"comparison-pattern","meaning_ja":"私は紅茶のほうが好きです","function":"preference-comparison","function_ja":"より強い好みを示す","register":"neutral","word_ids":["w6","w7","w8","w9"],"detail_ja":"préférer を使うと、比較の含みを持って『こちらのほうが好き』と表せます。","example":"Je préfère marcher."}],
+  "transforms":[{"id":"tr-001","label_ja":"比較を一文にまとめる","source":"J'aime le café, mais je préfère le thé.","target":"Je préfère le thé au café.","changes":[{"from":"J'aime le café, mais je préfère le thé","to":"Je préfère le thé au café","reason":"preference-comparison","explanation_ja":"préférer A à B の形で『BよりAを好む』という比較を一つの構造にまとめます。"}]},{"id":"tr-002","label_ja":"主語を変える","source":"J'aime le café.","target":"Nous aimons le café.","changes":[{"from":"J'","to":"Nous","reason":"subject-change"},{"from":"aime","to":"aimons","reason":"verb-agreement"}]}],
+  "meaning_chunks":[{"text":"J'aime le café","meaning_ja":"私はコーヒーが好きです"},{"text":"mais","meaning_ja":"しかし"},{"text":"je préfère le thé","meaning_ja":"私は紅茶のほうが好きです"}],
+  "sentence_structure":{"subject":"J' / je","verb":"aime / préfère","contrast":"mais","object":"le café / le thé"},
+  "grammar_tags":["present","elision","definite-article","contrast"],"sound_tags":["elision","schwa"],"vocabulary_tags":["food","preference"],"related_lessons":["fr-a1-001"],"alternate_expressions":["Je préfère le thé au café."],"notes":[]
 }
