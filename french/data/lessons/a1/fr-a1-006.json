@@ -1,0 +1,13 @@
+{
+  "schema_version":"1.1","id":"fr-a1-006","level":"A1","theme":"food","register":"neutral",
+  "sentence":"Nous mangeons du pain.","translation_ja":"私たちはパンを食べます。",
+  "audio":{"natural":"","clear":"","slow":"","source":"browser-tts"},
+  "sound_groups":[{"text":"Nous mangeons","ipa":"nu mɑ̃.ʒɔ̃","role_ja":"主語と動詞"},{"text":"du pain","ipa":"dy pɛ̃","role_ja":"食べるもの"}],
+  "sound_phenomena":[{"type":"nasal-vowel","label_ja":"鼻母音","span":"mangeons / pain","surface_hint":"/ɑ̃/, /ɔ̃/, /ɛ̃/","detail_ja":"mangeons と pain には複数の鼻母音が現れます。綴りの n はここでは独立した /n/ として発音されません。","register":"all","confidence":"verified"}],
+  "words":[{"id":"w1","lexeme_id":"lex-nous","surface":"Nous","lemma":"nous","ipa":"nu","meaning_ja":"私たちは","pos":"代名詞","role":"主語","detail_ja":"話し手を含む複数の主語です。"},{"id":"w2","lexeme_id":"lex-manger","surface":"mangeons","lemma":"manger","ipa":"mɑ̃.ʒɔ̃","meaning_ja":"食べます","pos":"動詞","role":"述語","morphology":"manger・直説法現在・1人称複数","detail_ja":"nous に対応する現在形です。綴りでは g の音を保つため e が残ります。"},{"id":"w3","lexeme_id":"lex-du","surface":"du","lemma":"du","ipa":"dy","meaning_ja":"（いくらかの）","pos":"部分冠詞","role":"pain を限定する","detail_ja":"数えない量としてパンを述べるときに使う部分冠詞です。"},{"id":"w4","lexeme_id":"lex-pain","surface":"pain","lemma":"pain","ipa":"pɛ̃","meaning_ja":"パン","pos":"男性名詞","role":"目的語","detail_ja":"ここでは食べ物として量を特定せず述べています。"}],
+  "expressions":[{"id":"exp-001","surface":"du pain","type":"noun-phrase","meaning_ja":"パンを／パンをいくらか","function":"partitive","function_ja":"不特定量を示す","register":"neutral","word_ids":["w3","w4"],"detail_ja":"部分冠詞 du と男性名詞 pain のまとまりです。","example":"Je mange du pain."}],
+  "transforms":[{"id":"tr-001","label_ja":"主語を単数にする","source":"Nous mangeons du pain.","target":"Je mange du pain.","changes":[{"from":"Nous","to":"Je","reason":"subject-change","explanation_ja":"主語を nous から je に変えます。"},{"from":"mangeons","to":"mange","reason":"verb-agreement","explanation_ja":"主語に合わせて動詞の形も変わります。"}]}],
+  "meaning_chunks":[{"text":"Nous mangeons","meaning_ja":"私たちは食べます"},{"text":"du pain","meaning_ja":"パンを"}],
+  "sentence_structure":{"subject":"Nous","verb":"mangeons","object":"du pain","intention":"食べるものを述べる"},
+  "grammar_tags":["present","partitive-article","nous"],"sound_tags":["nasal-vowel"],"vocabulary_tags":["food"],"related_lessons":["fr-a1-002"],"alternate_expressions":[],"notes":[]
+}
