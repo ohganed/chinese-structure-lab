@@ -1,24 +1,21 @@
 {
-  "schema_version": "1.0",
-  "source": "built-in-lessons",
-  "occurrences": {
-    "lex-je": [
-      {"lesson_id":"fr-a1-001","word_id":"w1","surface":"Je","sentence":"Je vais au travail en bus."},
-      {"lesson_id":"fr-a1-002","word_id":"w1","surface":"J'","sentence":"J'aime le café, mais je préfère le thé."},
-      {"lesson_id":"fr-a1-002","word_id":"w6","surface":"je","sentence":"J'aime le café, mais je préfère le thé."}
-    ],
-    "lex-aller": [{"lesson_id":"fr-a1-001","word_id":"w2","surface":"vais","sentence":"Je vais au travail en bus."}],
-    "lex-travail": [{"lesson_id":"fr-a1-001","word_id":"w4","surface":"travail","sentence":"Je vais au travail en bus."}],
-    "lex-bus": [{"lesson_id":"fr-a1-001","word_id":"w6","surface":"bus","sentence":"Je vais au travail en bus."}],
-    "lex-aimer": [{"lesson_id":"fr-a1-002","word_id":"w2","surface":"aime","sentence":"J'aime le café, mais je préfère le thé."}],
-    "lex-cafe": [{"lesson_id":"fr-a1-002","word_id":"w4","surface":"café","sentence":"J'aime le café, mais je préfère le thé."}],
-    "lex-preferer": [{"lesson_id":"fr-a1-002","word_id":"w7","surface":"préfère","sentence":"J'aime le café, mais je préfère le thé."}],
-    "lex-the": [{"lesson_id":"fr-a1-002","word_id":"w9","surface":"thé","sentence":"J'aime le café, mais je préfère le thé."}],
-    "lex-ami": [{"lesson_id":"fr-a1-003","word_id":"w2","surface":"amis","sentence":"Les amis arrivent à huit heures."}],
-    "lex-arriver": [{"lesson_id":"fr-a1-003","word_id":"w3","surface":"arrivent","sentence":"Les amis arrivent à huit heures."}],
-    "lex-heure": [{"lesson_id":"fr-a1-003","word_id":"w6","surface":"heures","sentence":"Les amis arrivent à huit heures."}],
-    "lex-vous": [{"lesson_id":"fr-a1-004","word_id":"w1","surface":"Vous","sentence":"Vous avez une minute ?"}],
-    "lex-avoir": [{"lesson_id":"fr-a1-004","word_id":"w2","surface":"avez","sentence":"Vous avez une minute ?"}],
-    "lex-minute": [{"lesson_id":"fr-a1-004","word_id":"w4","surface":"minute","sentence":"Vous avez une minute ?"}]
+  "schema_version":"1.1","source":"built-in-lessons","occurrences":{
+    "lex-je":[{"lesson_id":"fr-a1-001","word_id":"w1","surface":"Je","sentence":"Je vais au travail en bus."},{"lesson_id":"fr-a1-002","word_id":"w1","surface":"J'","sentence":"J'aime le café, mais je préfère le thé."},{"lesson_id":"fr-a1-002","word_id":"w6","surface":"je","sentence":"J'aime le café, mais je préfère le thé."},{"lesson_id":"fr-a1-011","word_id":"w1","surface":"Je","sentence":"Je voudrais un café, s'il vous plaît."}],
+    "lex-aller":[{"lesson_id":"fr-a1-001","word_id":"w2","surface":"vais","sentence":"Je vais au travail en bus."},{"lesson_id":"fr-a1-009","word_id":"w2","surface":"va","sentence":"On va au marché ce matin."}],
+    "lex-travail":[{"lesson_id":"fr-a1-001","word_id":"w4","surface":"travail","sentence":"Je vais au travail en bus."}],"lex-bus":[{"lesson_id":"fr-a1-001","word_id":"w6","surface":"bus","sentence":"Je vais au travail en bus."}],
+    "lex-aimer":[{"lesson_id":"fr-a1-002","word_id":"w2","surface":"aime","sentence":"J'aime le café, mais je préfère le thé."},{"lesson_id":"fr-a1-007","word_id":"w3","surface":"aime","sentence":"Elle n'aime pas le lait."}],
+    "lex-cafe":[{"lesson_id":"fr-a1-002","word_id":"w4","surface":"café","sentence":"J'aime le café, mais je préfère le thé."},{"lesson_id":"fr-a1-011","word_id":"w4","surface":"café","sentence":"Je voudrais un café, s'il vous plaît."}],
+    "lex-preferer":[{"lesson_id":"fr-a1-002","word_id":"w7","surface":"préfère","sentence":"J'aime le café, mais je préfère le thé."}],"lex-the":[{"lesson_id":"fr-a1-002","word_id":"w9","surface":"thé","sentence":"J'aime le café, mais je préfère le thé."}],
+    "lex-ami":[{"lesson_id":"fr-a1-003","word_id":"w2","surface":"amis","sentence":"Les amis arrivent à huit heures."}],"lex-arriver":[{"lesson_id":"fr-a1-003","word_id":"w3","surface":"arrivent","sentence":"Les amis arrivent à huit heures."}],"lex-heure":[{"lesson_id":"fr-a1-003","word_id":"w6","surface":"heures","sentence":"Les amis arrivent à huit heures."}],
+    "lex-vous":[{"lesson_id":"fr-a1-004","word_id":"w1","surface":"Vous","sentence":"Vous avez une minute ?"},{"lesson_id":"fr-a1-011","word_id":"w7","surface":"vous","sentence":"Je voudrais un café, s'il vous plaît."},{"lesson_id":"fr-a1-012","word_id":"w3","surface":"vous","sentence":"Est-ce que vous parlez français ?"}],
+    "lex-avoir":[{"lesson_id":"fr-a1-004","word_id":"w2","surface":"avez","sentence":"Vous avez une minute ?"}],"lex-minute":[{"lesson_id":"fr-a1-004","word_id":"w4","surface":"minute","sentence":"Vous avez une minute ?"}],
+    "lex-il":[{"lesson_id":"fr-a1-005","word_id":"w1","surface":"Il","sentence":"Il habite à Paris."},{"lesson_id":"fr-a1-011","word_id":"w6","surface":"il","sentence":"Je voudrais un café, s'il vous plaît."}],"lex-habiter":[{"lesson_id":"fr-a1-005","word_id":"w2","surface":"habite","sentence":"Il habite à Paris."}],"lex-paris":[{"lesson_id":"fr-a1-005","word_id":"w4","surface":"Paris","sentence":"Il habite à Paris."}],
+    "lex-nous":[{"lesson_id":"fr-a1-006","word_id":"w1","surface":"Nous","sentence":"Nous mangeons du pain."}],"lex-manger":[{"lesson_id":"fr-a1-006","word_id":"w2","surface":"mangeons","sentence":"Nous mangeons du pain."}],"lex-pain":[{"lesson_id":"fr-a1-006","word_id":"w4","surface":"pain","sentence":"Nous mangeons du pain."}],
+    "lex-elle":[{"lesson_id":"fr-a1-007","word_id":"w1","surface":"Elle","sentence":"Elle n'aime pas le lait."}],"lex-lait":[{"lesson_id":"fr-a1-007","word_id":"w6","surface":"lait","sentence":"Elle n'aime pas le lait."}],
+    "lex-tu":[{"lesson_id":"fr-a1-008","word_id":"w1","surface":"Tu","sentence":"Tu prends le train demain."}],"lex-prendre":[{"lesson_id":"fr-a1-008","word_id":"w2","surface":"prends","sentence":"Tu prends le train demain."}],"lex-train":[{"lesson_id":"fr-a1-008","word_id":"w4","surface":"train","sentence":"Tu prends le train demain."}],"lex-demain":[{"lesson_id":"fr-a1-008","word_id":"w5","surface":"demain","sentence":"Tu prends le train demain."}],
+    "lex-on":[{"lesson_id":"fr-a1-009","word_id":"w1","surface":"On","sentence":"On va au marché ce matin."}],"lex-marche":[{"lesson_id":"fr-a1-009","word_id":"w4","surface":"marché","sentence":"On va au marché ce matin."}],"lex-matin":[{"lesson_id":"fr-a1-009","word_id":"w6","surface":"matin","sentence":"On va au marché ce matin."}],
+    "lex-ils":[{"lesson_id":"fr-a1-010","word_id":"w1","surface":"Ils","sentence":"Ils sont à la maison."}],"lex-etre":[{"lesson_id":"fr-a1-010","word_id":"w2","surface":"sont","sentence":"Ils sont à la maison."}],"lex-maison":[{"lesson_id":"fr-a1-010","word_id":"w5","surface":"maison","sentence":"Ils sont à la maison."}],
+    "lex-vouloir":[{"lesson_id":"fr-a1-011","word_id":"w2","surface":"voudrais","sentence":"Je voudrais un café, s'il vous plaît."}],"lex-plaire":[{"lesson_id":"fr-a1-011","word_id":"w8","surface":"plaît","sentence":"Je voudrais un café, s'il vous plaît."}],
+    "lex-parler":[{"lesson_id":"fr-a1-012","word_id":"w4","surface":"parlez","sentence":"Est-ce que vous parlez français ?"}],"lex-francais":[{"lesson_id":"fr-a1-012","word_id":"w5","surface":"français","sentence":"Est-ce que vous parlez français ?"}]
   }
 }
