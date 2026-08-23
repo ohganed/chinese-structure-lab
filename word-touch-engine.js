@@ -1,11 +1,17 @@
 (function(){
 'use strict';
-/* Chinese Structure Lab — Word Touch Engine v2
+/* Chinese Structure Lab — Word Touch Engine v3
    Chinese stays primary. The learner touches a word; that intentional action
    causes sound, then a brief meaning reveal, then the surface returns to Chinese.
-   No autoplay. No correctness. No score. */
-var VERSION=2, timers=new WeakMap();
-function emit(type,data){try{if(window.CSLStorage&&CSLStorage.addEvent)CSLStorage.addEvent(type,data||{})}catch(e){}try{if(window.CSLPlatform&&CSLPlatform.emit)CSLPlatform.emit(type,data||{})}catch(e){}}
+   No autoplay. No correctness. No score.
+   Light Day can route events through CSLLightEventBuffer so taps never trigger
+   a full learning-profile rewrite. */
+var VERSION=3, timers=new WeakMap();
+function emit(type,data){
+ try{if(window.CSLLightEventBuffer&&CSLLightEventBuffer.emit){CSLLightEventBuffer.emit(type,data||{});return}}catch(e){}
+ try{if(window.CSLStorage&&CSLStorage.addEvent)CSLStorage.addEvent(type,data||{})}catch(e){}
+ try{if(window.CSLPlatform&&CSLPlatform.emit)CSLPlatform.emit(type,data||{})}catch(e){}
+}
 function speak(text,rate,onEnd){
  var finished=false;
  function done(){if(finished)return;finished=true;if(onEnd)onEnd()}
@@ -15,10 +21,11 @@ function speak(text,rate,onEnd){
   var vs=speechSynthesis.getVoices().filter(function(v){return /^zh/i.test(v.lang)});u.voice=vs[0]||null;
   u.onend=done;u.onerror=done;
   speechSynthesis.cancel();
-  setTimeout(function(){try{speechSynthesis.speak(u)}catch(e){done()}},20);
-  /* iOS/browser safety net: meaning must never remain stuck if onend is lost. */
-  setTimeout(done,Math.max(1500,Math.min(4200,String(text||'').length*420)));
- }catch(e){setTimeout(done,250)}
+  /* Let the button paint its pressed state before speech work begins. */
+  setTimeout(function(){try{speechSynthesis.speak(u)}catch(e){done()}},0);
+  /* Browser safety net: meaning must never remain stuck if onend is lost. */
+  setTimeout(done,Math.max(1200,Math.min(3600,String(text||'').length*360)));
+ }catch(e){setTimeout(done,200)}
 }
 function touch(el,item,meta){
  if(!el||!item)return;
