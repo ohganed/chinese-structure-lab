@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0",
+  "lessons": [
+    {
+      "id": "fr-a1-001",
+      "level": "A1",
+      "theme": "daily-life",
+      "path": "./data/lessons/a1/fr-a1-001.json"
+    }
+  ]
+}
