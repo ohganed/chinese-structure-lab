@@ -68,14 +68,18 @@ jobs:
           no_situation={'index.html','explore.html','course-map.html','memory.html','garden.html','tester.html'}
           no_session_guide={'tester.html'}
           no_reencounter={'doorways.html','explore.html','course-map.html','memory.html','garden.html','tester.html'}
+          # Light Day has an intentional fast-path runtime. Learner taps must never
+          # start the full underground stack; raw events are buffered and preserved.
+          fast_path_pages={'tired.html'}
           changed=[]
           for p in Path('.').glob('*.html'):
               text=p.read_text(encoding='utf-8');original=text
-              for layer in layers:
-                  if layer not in text and '</body>' in text:text=text.replace('</body>',layer+'</body>',1)
-              if p.name not in no_session_guide and session_guide not in text and '</body>' in text:text=text.replace('</body>',session_guide+'</body>',1)
-              if p.name not in no_reencounter and reencounter not in text and '</body>' in text:text=text.replace('</body>',reencounter+'</body>',1)
-              if p.name not in no_situation and situation not in text and '</body>' in text:text=text.replace('</body>',situation+'</body>',1)
+              if p.name not in fast_path_pages:
+                  for layer in layers:
+                      if layer not in text and '</body>' in text:text=text.replace('</body>',layer+'</body>',1)
+                  if p.name not in no_session_guide and session_guide not in text and '</body>' in text:text=text.replace('</body>',session_guide+'</body>',1)
+                  if p.name not in no_reencounter and reencounter not in text and '</body>' in text:text=text.replace('</body>',reencounter+'</body>',1)
+                  if p.name not in no_situation and situation not in text and '</body>' in text:text=text.replace('</body>',situation+'</body>',1)
               if text!=original:p.write_text(text,encoding='utf-8');changed.append(p.name)
           print('Connected shared layers to:',', '.join(changed) if changed else 'nothing new')
           PY
@@ -130,11 +134,13 @@ jobs:
           absent=[x for x in probes if x not in test]
           if absent: raise SystemExit('Self-test missing probes: '+', '.join(absent))
           for p in Path('.').glob('*.html'):
+              if p.name=='tired.html':
+                  continue
               text=p.read_text(encoding='utf-8')
               for src in ('interaction-ledger.js','temporal-pattern-engine.js','support-regulation-engine.js','curriculum-balance-engine.js','continuity-resilience-engine.js','underground-floor-registry.js','deep-underground-orchestrator.js','underground-constitution.js','underground-integration-bus.js','counterfactual-simulator.js','underground-runtime-self-test.js'):
                   count=text.count(src)
                   if count!=1: raise SystemExit(f'{p}: expected exactly one {src}, found {count}')
-          print('Integration wiring, counterfactual safety, and script uniqueness checks passed.')
+          print('Integration wiring, counterfactual safety, script uniqueness checks passed. Light Day fast path exempted intentionally.')
           PY
 
       - name: Commit generated connections
@@ -144,5 +150,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add '*.html'
-          git commit -m "Apply counterfactual simulator safely [skip shared-layers]"
+          git commit -m "Apply shared layers safely [skip shared-layers]"
           git push
