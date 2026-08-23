@@ -17,6 +17,12 @@
       <button class="quiet-button" id="themeButton" type="button" aria-label="表示テーマを切り替える">◐</button>
     </header>
 
+    <section class="lesson-nav" aria-label="教材ナビゲーション">
+      <button type="button" id="prevLesson" class="nav-button" aria-label="前の教材">‹</button>
+      <label class="lesson-picker-wrap"><span>LESSON</span><select id="lessonPicker" aria-label="教材を選ぶ"></select></label>
+      <button type="button" id="nextLesson" class="nav-button" aria-label="次の教材">›</button>
+    </section>
+
     <section class="sentence-card" aria-labelledby="sentenceLabel">
       <div class="eyebrow" id="sentenceLabel">CURRENT SENTENCE</div>
       <p class="sentence" id="sentence">Chargement…</p>
@@ -40,17 +46,10 @@
   </main>
 
   <aside class="drawer" id="wordDrawer" aria-hidden="true" aria-label="単語詳細">
-    <div class="drawer-head">
-      <div>
-        <div class="eyebrow">WORD DETAIL</div>
-        <h2 id="detailSurface"></h2>
-      </div>
-      <button type="button" class="close-button" id="closeDrawer" aria-label="詳細を閉じる">×</button>
-    </div>
+    <div class="drawer-head"><div><div class="eyebrow">WORD DETAIL</div><h2 id="detailSurface"></h2></div><button type="button" class="close-button" id="closeDrawer" aria-label="詳細を閉じる">×</button></div>
     <div class="drawer-body" id="detailBody" tabindex="0"></div>
   </aside>
   <div class="scrim" id="scrim" hidden></div>
-
   <script type="module" src="./app.js"></script>
 </body>
 </html>
