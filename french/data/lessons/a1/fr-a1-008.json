@@ -1,0 +1,13 @@
+{
+  "schema_version":"1.1","id":"fr-a1-008","level":"A1","theme":"transport","register":"neutral",
+  "sentence":"Tu prends le train demain.","translation_ja":"君は明日電車に乗ります。",
+  "audio":{"natural":"","clear":"","slow":"","source":"browser-tts"},
+  "sound_groups":[{"text":"Tu prends le train","ipa":"ty pʁɑ̃ lə tʁɛ̃","role_ja":"行動のまとまり"},{"text":"demain","ipa":"də.mɛ̃","role_ja":"時を示すまとまり"}],
+  "sound_phenomena":[{"type":"silent-letter","label_ja":"発音されない語末文字","span":"prends","surface_hint":"語末の ds は通常発音しない","detail_ja":"prends の語末 -ds はこの文では発音されません。","register":"all","confidence":"verified"},{"type":"nasal-vowel","label_ja":"鼻母音","span":"train / demain","surface_hint":"/ɛ̃/","detail_ja":"train と demain の終わりには /ɛ̃/ が現れます。","register":"all","confidence":"verified"}],
+  "words":[{"id":"w1","lexeme_id":"lex-tu","surface":"Tu","lemma":"tu","ipa":"ty","meaning_ja":"君は","pos":"代名詞","role":"主語","detail_ja":"親しい相手一人に使う主語代名詞です。"},{"id":"w2","lexeme_id":"lex-prendre","surface":"prends","lemma":"prendre","ipa":"pʁɑ̃","meaning_ja":"乗る／取る","pos":"動詞","role":"述語","morphology":"prendre・直説法現在・2人称単数","detail_ja":"prendre le train で『電車に乗る』を表します。"},{"id":"w3","lexeme_id":"lex-le-article","surface":"le","lemma":"le","ipa":"lə","meaning_ja":"その","pos":"定冠詞","role":"train を限定する","detail_ja":"交通手段を prendre と組み合わせる基本表現です。"},{"id":"w4","lexeme_id":"lex-train","surface":"train","lemma":"train","ipa":"tʁɛ̃","meaning_ja":"電車","pos":"男性名詞","role":"prendre の目的語","detail_ja":"prendre le train で『電車に乗る』です。"},{"id":"w5","lexeme_id":"lex-demain","surface":"demain","lemma":"demain","ipa":"də.mɛ̃","meaning_ja":"明日","pos":"副詞","role":"時を示す","detail_ja":"ここでは行動が起こる時を示します。"}],
+  "expressions":[{"id":"exp-001","surface":"prendre le train","type":"common-expression","meaning_ja":"電車に乗る","function":"transport","function_ja":"交通手段の利用を表す","register":"neutral","word_ids":["w2","w3","w4"],"detail_ja":"日本語の『乗る』に対してフランス語では prendre を使う基本表現です。","example":"Je prends le train."}],
+  "transforms":[{"id":"tr-001","label_ja":"主語を変える","source":"Tu prends le train demain.","target":"Nous prenons le train demain.","changes":[{"from":"Tu","to":"Nous","reason":"subject-change","explanation_ja":"主語を複数の nous に変えます。"},{"from":"prends","to":"prenons","reason":"verb-agreement","explanation_ja":"prendre の活用も主語に合わせて変わります。"}]}],
+  "meaning_chunks":[{"text":"Tu prends le train","meaning_ja":"君は電車に乗ります"},{"text":"demain","meaning_ja":"明日"}],
+  "sentence_structure":{"subject":"Tu","verb":"prends","object":"le train","time":"demain","intention":"明日の移動予定を述べる"},
+  "grammar_tags":["present","future-context","tu"],"sound_tags":["silent-final","nasal-vowel"],"vocabulary_tags":["transport","time"],"related_lessons":["fr-a1-001"],"alternate_expressions":[],"notes":[]
+}
