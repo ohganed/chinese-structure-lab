@@ -1,9 +1,10 @@
 {
-  "schema_version": "1.1",
+  "schema_version": "1.2",
   "reference_data": {
     "lexicon": "./data/lexicon/a1-core.json",
     "lexemes": "./data/lexemes/a1-core.json",
-    "expressions": "./data/expressions/a1-core.json"
+    "expressions": "./data/expressions/a1-core.json",
+    "related_network": "./data/networks/a1-related.json"
   },
   "lessons": [
     {"id":"fr-a1-001","level":"A1","theme":"daily-life","title_ja":"仕事へ行く","path":"./data/lessons/a1/fr-a1-001.json"},
