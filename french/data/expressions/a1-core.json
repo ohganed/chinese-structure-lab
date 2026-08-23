@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "source": "built-in-lessons",
+  "expressions": [
+    {"id":"exp-au-travail","surface":"au travail","tokens":["au","travail"],"meaning_ja":"仕事へ／職場へ","type":"fixed-expression","register":"neutral","confidence":"verified"},
+    {"id":"exp-en-bus","surface":"en bus","tokens":["en","bus"],"meaning_ja":"バスで","type":"transport-expression","register":"neutral","confidence":"verified"},
+    {"id":"exp-jaime-le-cafe","surface":"j'aime le café","tokens":["j'","aime","le","café"],"meaning_ja":"私はコーヒーが好きです","type":"preference-expression","register":"neutral","confidence":"verified"},
+    {"id":"exp-je-prefere-le-the","surface":"je préfère le thé","tokens":["je","préfère","le","thé"],"meaning_ja":"私は紅茶のほうが好きです","type":"preference-expression","register":"neutral","confidence":"verified"},
+    {"id":"exp-a-huit-heures","surface":"à huit heures","tokens":["à","huit","heures"],"meaning_ja":"8時に","type":"time-expression","register":"neutral","confidence":"verified"},
+    {"id":"exp-avoir-une-minute","surface":"avoir une minute","tokens":["avoir","une","minute"],"match_forms":[["avez","une","minute"]],"meaning_ja":"少し時間がある","type":"common-expression","register":"neutral","confidence":"verified"}
+  ]
+}

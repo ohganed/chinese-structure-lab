@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "source": "verified-curated",
+  "relations": [
+    {"from":"lex-aller","to":"lex-arriver","type":"semantic-neighbor","note_ja":"移動・到着に関係するが同義語ではありません。","confidence":"verified"},
+    {"from":"lex-travail","to":"lex-aller","type":"common-pattern","expression":"aller au travail","note_ja":"『仕事へ行く』でよく一緒に現れます。","confidence":"verified"},
+    {"from":"lex-aimer","to":"lex-preferer","type":"semantic-neighbor","note_ja":"好みを表す動詞。préférer は比較・選好をより明示します。","confidence":"verified"},
+    {"from":"lex-cafe","to":"lex-the","type":"semantic-field","note_ja":"飲み物という同じ意味領域に属します。","confidence":"verified"},
+    {"from":"lex-heure","to":"lex-minute","type":"semantic-field","note_ja":"時刻・時間の単位として関連します。","confidence":"verified"},
+    {"from":"lex-avoir","to":"lex-minute","type":"common-pattern","expression":"avoir une minute","note_ja":"『少し時間がある』という表現を作ります。","confidence":"verified"},
+    {"from":"lex-ami","to":"lex-arriver","type":"lesson-context","expression":"Les amis arrivent","note_ja":"教材内で一緒に現れる関係であり、語義上の類義関係ではありません。","confidence":"verified"}
+  ]
+}

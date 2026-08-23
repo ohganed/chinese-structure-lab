@@ -1,0 +1,83 @@
+[
+  {
+    "id": "fr-a1-001",
+    "level": "A1",
+    "theme": "daily-life",
+    "register": "neutral",
+    "sentence": "Je vais au travail en bus.",
+    "translation_ja": "私はバスで仕事に行きます。",
+    "audio": {"natural": "", "clear": "", "slow": ""},
+    "sound_groups": [
+      {"text": "Je vais au travail", "ipa": "ʒə vɛ o tʁa.vaj", "role_ja": "最初のリズムグループ"},
+      {"text": "en bus", "ipa": "ɑ̃ bys", "role_ja": "移動手段をまとめる短いリズムグループ"}
+    ],
+    "sound_phenomena": [
+      {
+        "type": "silent-final-letter",
+        "label_ja": "発音されない語末文字",
+        "span": "vais au",
+        "focus": "vais",
+        "surface_hint": "vais の s は発音しない",
+        "detail_ja": "vais は /vɛ/。綴りの s はこの形では発音されません。次が母音で始まる au でも、ここでは s をリエゾンさせません。",
+        "register": "all",
+        "confidence": "verified"
+      },
+      {
+        "type": "liaison-blocked",
+        "label_ja": "リエゾンしない位置",
+        "span": "vais au",
+        "focus": "s + au",
+        "surface_hint": "× /vɛ.z‿o/ → ○ /vɛ o/",
+        "detail_ja": "一般に動詞の後ではリエゾンをしません。Je vais au travail は /ʒə vɛ o tʁa.vaj/ と続きます。",
+        "register": "standard-and-conversation",
+        "confidence": "verified"
+      },
+      {
+        "type": "rhythm-group",
+        "label_ja": "リズムグループ",
+        "span": "Je vais au travail / en bus",
+        "focus": "grouping",
+        "surface_hint": "語ごとではなく、意味のまとまりで流れる",
+        "detail_ja": "フランス語は各単語を強く区切るより、意味のまとまりを一続きに発音する傾向があります。ここでは目的地までを一まとまり、その後の en bus をもう一まとまりとして聞けます。",
+        "register": "all",
+        "confidence": "pedagogical"
+      },
+      {
+        "type": "nasal-vowel",
+        "label_ja": "鼻母音",
+        "span": "en bus",
+        "focus": "en",
+        "surface_hint": "en = /ɑ̃/",
+        "detail_ja": "en はここでは鼻母音 /ɑ̃/。n を独立した子音として /n/ と発音しません。",
+        "register": "all",
+        "confidence": "verified"
+      }
+    ],
+    "sound_reference_examples": [
+      {"type": "liaison-required", "text": "les amis", "ipa": "le.z‿a.mi", "note_ja": "限定詞＋名詞で起こる代表的な必須リエゾン。"},
+      {"type": "enchaînement", "text": "avec elle", "ipa": "a.vɛ.k‿ɛl", "note_ja": "もともと発音される語末子音 /k/ が次の母音へ滑らかにつながる。"},
+      {"type": "elision", "text": "je aime → j’aime", "ipa": "ʒɛm", "note_ja": "母音衝突を避けるため je の e が落ち、アポストロフィで示される。実際の正しい形は j’aime。"},
+      {"type": "schwa", "text": "je te le demande", "ipa": "ʒə tə lə də.mɑ̃d", "note_ja": "e caduc は速度や話し方によって弱化・脱落することがある。最初は明瞭形と自然会話形を区別して観察する。"}
+    ],
+    "words": [
+      {"surface": "Je", "lemma": "je", "ipa": "ʒə", "meaning_ja": "私（主語）", "pos": "代名詞", "role": "話し手を表す主語", "detail_ja": "母音の前では j’ になることがあります。"},
+      {"surface": "vais", "lemma": "aller", "ipa": "vɛ", "meaning_ja": "行く", "pos": "動詞", "role": "文の中心となる動詞", "morphology": "aller・直説法現在・1人称単数", "detail_ja": "aller の現在形。主語 Je に対応しています。"},
+      {"surface": "au", "lemma": "à + le", "ipa": "o", "meaning_ja": "〜へ／〜に", "pos": "前置詞＋定冠詞", "role": "目的地 travail を導く", "detail_ja": "à + le が縮約して au になります。"},
+      {"surface": "travail", "lemma": "travail", "ipa": "tʁa.vaj", "meaning_ja": "仕事、職場", "pos": "男性名詞", "role": "移動の目的地", "detail_ja": "ここでは aller au travail で『仕事へ行く／出勤する』という自然なまとまりです。"},
+      {"surface": "en", "lemma": "en", "ipa": "ɑ̃", "meaning_ja": "〜で", "pos": "前置詞", "role": "交通手段 bus を導く", "detail_ja": "交通手段を表す en bus の形です。"},
+      {"surface": "bus", "lemma": "bus", "ipa": "bys", "meaning_ja": "バス", "pos": "男性名詞", "role": "移動手段", "detail_ja": "語末の s はこの語では発音します。"}
+    ],
+    "meaning_chunks": [
+      {"text": "Je vais", "meaning_ja": "私は行きます"},
+      {"text": "au travail", "meaning_ja": "仕事へ"},
+      {"text": "en bus", "meaning_ja": "バスで"}
+    ],
+    "sentence_structure": {"subject": "Je", "verb": "vais", "destination": "au travail", "means": "en bus"},
+    "grammar_tags": ["present", "aller", "contraction-au", "preposition-en"],
+    "sound_tags": ["rhythm-groups", "silent-final-letters", "liaison-blocked", "nasal-vowel"],
+    "vocabulary_tags": ["travel", "work", "transport"],
+    "related_lessons": [],
+    "alternate_expressions": ["Je prends le bus pour aller au travail."],
+    "notes": ["Foundation lesson for the first implementation slice."]
+  }
+]
