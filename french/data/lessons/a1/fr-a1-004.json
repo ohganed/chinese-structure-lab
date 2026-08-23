@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0",
+  "id": "fr-a1-004",
+  "level": "A1",
+  "theme": "daily-life",
+  "register": "neutral",
+  "sentence": "Vous avez une minute ?",
+  "translation_ja": "1分お時間ありますか？",
+  "audio": {"natural": "", "clear": "", "slow": "", "source": "browser-tts"},
+  "sound_groups": [
+    {"text": "Vous avez", "ipa": "vu.z‿a.ve", "role_ja": "主語と動詞のまとまり"},
+    {"text": "une minute", "ipa": "yn mi.nyt", "role_ja": "目的語のまとまり"}
+  ],
+  "sound_phenomena": [
+    {"type": "liaison-required", "label_ja": "必須リエゾン", "span": "vous avez", "surface_hint": "vous → /z/ + avez", "detail_ja": "主語代名詞 vous と母音で始まる動詞 avez の間では、標準的な発音で /z/ のリエゾンが起こります。", "register": "all", "confidence": "verified"},
+    {"type": "spelling-sound", "label_ja": "綴りと音", "span": "minute", "surface_hint": "u は /y/", "detail_ja": "minute の u は日本語の『ウ』とは異なる前舌円唇母音 /y/ です。", "register": "all", "confidence": "verified"}
+  ],
+  "sound_reference_examples": [],
+  "words": [
+    {"surface": "Vous", "lemma": "vous", "ipa": "vu", "meaning_ja": "あなた／あなた方", "pos": "代名詞", "role": "主語", "detail_ja": "ここでは丁寧な単数の『あなた』として使えます。"},
+    {"surface": "avez", "lemma": "avoir", "ipa": "a.ve", "meaning_ja": "持っている／ある", "pos": "動詞", "role": "文の中心となる動詞", "morphology": "avoir・直説法現在・2人称複数", "detail_ja": "vous に対応する avoir の現在形です。"},
+    {"surface": "une", "lemma": "un", "ipa": "yn", "meaning_ja": "一つの", "pos": "不定冠詞", "role": "minute を限定する", "detail_ja": "女性名詞 minute に対応する女性単数形です。"},
+    {"surface": "minute", "lemma": "minute", "ipa": "mi.nyt", "meaning_ja": "分", "pos": "女性名詞", "role": "avoir の目的語", "detail_ja": "avoir une minute で『少し時間がある』という自然な表現になります。"}
+  ],
+  "expressions": [
+    {"id": "exp-a1-004-01", "surface": "avoir une minute", "type": "common-expression", "meaning_ja": "少し時間がある", "function": "availability", "register": "neutral", "word_ids": ["avez", "une", "minute"]}
+  ],
+  "meaning_chunks": [
+    {"text": "Vous avez", "meaning_ja": "あなたにはありますか"},
+    {"text": "une minute", "meaning_ja": "少し時間が"}
+  ],
+  "sentence_structure": {"subject": "Vous", "verb": "avez", "object": "une minute", "intention": "相手に少し時間があるか丁寧に尋ねる"},
+  "grammar_tags": ["present", "avoir", "question-intonation"],
+  "sound_tags": ["liaison-required", "vowel-y"],
+  "vocabulary_tags": ["time", "conversation"],
+  "related_lessons": ["fr-a1-003"],
+  "alternate_expressions": ["Est-ce que vous avez une minute ?"],
+  "notes": []
+}
