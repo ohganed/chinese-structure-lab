@@ -1,0 +1,13 @@
+{
+  "schema_version":"1.1","id":"fr-a1-010","level":"A1","theme":"home","register":"neutral",
+  "sentence":"Ils sont à la maison.","translation_ja":"彼らは家にいます。",
+  "audio":{"natural":"","clear":"","slow":"","source":"browser-tts"},
+  "sound_groups":[{"text":"Ils sont","ipa":"il sɔ̃","role_ja":"主語と動詞"},{"text":"à la maison","ipa":"a la mɛ.zɔ̃","role_ja":"場所のまとまり"}],
+  "sound_phenomena":[{"type":"silent-letter","label_ja":"発音されない複数語尾","span":"Ils","surface_hint":"語末 s はここでは発音しない","detail_ja":"次の sont は子音 /s/ で始まるため、Ils の語末 s によるリエゾンは起こりません。","register":"all","confidence":"verified"},{"type":"nasal-vowel","label_ja":"鼻母音","span":"sont / maison","surface_hint":"/ɔ̃/","detail_ja":"sont と maison の終わりには /ɔ̃/ が現れます。","register":"all","confidence":"verified"}],
+  "words":[{"id":"w1","lexeme_id":"lex-ils","surface":"Ils","lemma":"ils","ipa":"il","meaning_ja":"彼らは","pos":"代名詞","role":"主語","detail_ja":"男性を含む複数の人・ものを受ける主語代名詞です。"},{"id":"w2","lexeme_id":"lex-etre","surface":"sont","lemma":"être","ipa":"sɔ̃","meaning_ja":"〜にいる／〜である","pos":"動詞","role":"述語","morphology":"être・直説法現在・3人称複数","detail_ja":"ils に対応する être の現在形です。"},{"id":"w3","lexeme_id":"lex-a-prep","surface":"à","lemma":"à","ipa":"a","meaning_ja":"〜に","pos":"前置詞","role":"場所を導く","detail_ja":"ここでは所在する場所を導きます。"},{"id":"w4","lexeme_id":"lex-la-article","surface":"la","lemma":"la","ipa":"la","meaning_ja":"その","pos":"定冠詞","role":"maison を限定する","detail_ja":"女性単数名詞 maison に対応します。"},{"id":"w5","lexeme_id":"lex-maison","surface":"maison","lemma":"maison","ipa":"mɛ.zɔ̃","meaning_ja":"家","pos":"女性名詞","role":"場所","detail_ja":"à la maison は『家に／家で』という非常によく使うまとまりです。"}],
+  "expressions":[{"id":"exp-001","surface":"à la maison","type":"common-expression","meaning_ja":"家に／家で","function":"location","function_ja":"場所を示す","register":"neutral","word_ids":["w3","w4","w5"],"detail_ja":"所在や活動場所を表す基本表現です。","example":"Je suis à la maison."}],
+  "transforms":[{"id":"tr-001","label_ja":"単数にする","source":"Ils sont à la maison.","target":"Il est à la maison.","changes":[{"from":"Ils","to":"Il","reason":"number-change","explanation_ja":"複数の ils を単数の il に変えます。"},{"from":"sont","to":"est","reason":"verb-agreement","explanation_ja":"être の形も3人称単数に変わります。"}]}],
+  "meaning_chunks":[{"text":"Ils sont","meaning_ja":"彼らはいます"},{"text":"à la maison","meaning_ja":"家に"}],
+  "sentence_structure":{"subject":"Ils","verb":"sont","location":"à la maison","intention":"人の所在を述べる"},
+  "grammar_tags":["etre","present","plural","location"],"sound_tags":["no-liaison","nasal-vowel"],"vocabulary_tags":["home"],"related_lessons":["fr-a1-005"],"alternate_expressions":[],"notes":[]
+}
