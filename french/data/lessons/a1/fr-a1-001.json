@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "id": "fr-a1-001",
   "level": "A1",
   "theme": "daily-life",
@@ -24,12 +24,12 @@
     {"type":"schwa","text":"je te le demande","ipa":"ʒə tə lə də.mɑ̃d","note_ja":"自然な会話では一部の e が弱化・脱落する可能性があり、話速や話者で変動します。"}
   ],
   "words": [
-    {"id":"w1","surface":"Je","lemma":"je","ipa":"ʒə","meaning_ja":"私（主語）","pos":"代名詞","role":"話し手を表す主語","detail_ja":"母音の前では j’ になることがあります。"},
-    {"id":"w2","surface":"vais","lemma":"aller","ipa":"vɛ","meaning_ja":"行く","pos":"動詞","role":"文の中心となる動詞","morphology":"aller・直説法現在・1人称単数","detail_ja":"aller の現在形。主語 Je に対応しています。"},
-    {"id":"w3","surface":"au","lemma":"à + le","ipa":"o","meaning_ja":"〜へ／〜に","pos":"前置詞＋定冠詞","role":"目的地 travail を導く","detail_ja":"à + le が縮約して au になります。"},
-    {"id":"w4","surface":"travail","lemma":"travail","ipa":"tʁa.vaj","meaning_ja":"仕事、職場","pos":"男性名詞","role":"移動の目的地","detail_ja":"ここでは aller au travail で『仕事へ行く／出勤する』という自然なまとまりです。"},
-    {"id":"w5","surface":"en","lemma":"en","ipa":"ɑ̃","meaning_ja":"〜で","pos":"前置詞","role":"交通手段 bus を導く","detail_ja":"交通手段を表す en bus の形です。"},
-    {"id":"w6","surface":"bus","lemma":"bus","ipa":"bys","meaning_ja":"バス","pos":"男性名詞","role":"移動手段","detail_ja":"語末の s はこの語では発音します。"}
+    {"id":"w1","lexeme_id":"lex-je","surface":"Je","lemma":"je","ipa":"ʒə","meaning_ja":"私（主語）","pos":"代名詞","role":"話し手を表す主語","detail_ja":"母音の前では j’ になることがあります。"},
+    {"id":"w2","lexeme_id":"lex-aller","surface":"vais","lemma":"aller","ipa":"vɛ","meaning_ja":"行く","pos":"動詞","role":"文の中心となる動詞","morphology":"aller・直説法現在・1人称単数","detail_ja":"aller の現在形。主語 Je に対応しています。"},
+    {"id":"w3","lexeme_id":"lex-au","surface":"au","lemma":"à + le","ipa":"o","meaning_ja":"〜へ／〜に","pos":"前置詞＋定冠詞","role":"目的地 travail を導く","detail_ja":"à + le が縮約して au になります。"},
+    {"id":"w4","lexeme_id":"lex-travail","surface":"travail","lemma":"travail","ipa":"tʁa.vaj","meaning_ja":"仕事、職場","pos":"男性名詞","role":"移動の目的地","detail_ja":"ここでは aller au travail で『仕事へ行く／出勤する』という自然なまとまりです。"},
+    {"id":"w5","lexeme_id":"lex-en-prep","surface":"en","lemma":"en","ipa":"ɑ̃","meaning_ja":"〜で","pos":"前置詞","role":"交通手段 bus を導く","detail_ja":"交通手段を表す en bus の形です。"},
+    {"id":"w6","lexeme_id":"lex-bus","surface":"bus","lemma":"bus","ipa":"bys","meaning_ja":"バス","pos":"男性名詞","role":"移動手段","detail_ja":"語末の s はこの語では発音します。"}
   ],
   "expressions": [
     {"id":"exp-001","surface":"au travail","type":"fixed-expression","meaning_ja":"仕事へ／職場へ","function":"destination","function_ja":"移動の目的地を表す","register":"neutral","word_ids":["w3","w4"],"detail_ja":"aller au travail 全体で『仕事へ行く／出勤する』という自然なまとまりになります。","example":"Il va au travail à pied."},
