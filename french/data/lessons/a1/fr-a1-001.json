@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0",
+  "id": "fr-a1-001",
+  "level": "A1",
+  "theme": "daily-life",
+  "register": "neutral",
+  "sentence": "Je vais au travail en bus.",
+  "translation_ja": "私はバスで仕事に行きます。",
+  "audio": {"natural": "", "clear": "", "slow": "", "source": "browser-tts"},
+  "sound_groups": [
+    {"text": "Je vais au travail", "ipa": "ʒə vɛ o tʁa.vaj", "role_ja": "ひとつの流れとして聞こえやすい部分"},
+    {"text": "en bus", "ipa": "ɑ̃ bys", "role_ja": "交通手段を表すまとまり"}
+  ],
+  "sound_phenomena": [
+    {"type":"silent-letter","label_ja":"語末の文字","span":"vais","surface_hint":"s は発音しない","detail_ja":"vais の語末 s はこの文では発音されません。","register":"all","confidence":"verified"},
+    {"type":"no-liaison","label_ja":"リエゾンしない","span":"vais au","surface_hint":"× /vɛ.z‿o/","detail_ja":"vais au では通常、vais の s を使ったリエゾンは起こりません。単語境界が母音同士でも、自動的にリエゾンするわけではありません。","register":"standard-and-conversation","confidence":"verified"},
+    {"type":"rhythm-group","label_ja":"リズムグループ","span":"Je vais au travail / en bus","surface_hint":"意味とリズムのまとまり","detail_ja":"フランス語では個々の単語を強く区切るより、意味のまとまり全体が一つのリズムとして聞こえます。","register":"all","confidence":"pedagogical"},
+    {"type":"nasal-vowel","label_ja":"鼻母音","span":"en","surface_hint":"/ɑ̃/","detail_ja":"en はここでは鼻母音 /ɑ̃/ で発音されます。n を独立した子音として後ろに付けません。","register":"all","confidence":"verified"}
+  ],
+  "sound_reference_examples": [
+    {"type":"liaison-required","text":"les amis","ipa":"le.z‿a.mi","note_ja":"定冠詞 les と母音で始まる名詞の間の代表的なリエゾン。"},
+    {"type":"enchaînement","text":"avec elle","ipa":"a.vɛ.k‿ɛl","note_ja":"もともと発音される語末子音が次の母音へ連続して聞こえる例。"},
+    {"type":"elision","text":"je aime → j’aime","ipa":"ʒɛm","note_ja":"母音衝突を避けるため je が j’ になる例。"},
+    {"type":"schwa","text":"je te le demande","ipa":"ʒə tə lə də.mɑ̃d","note_ja":"自然な会話では一部の e が弱化・脱落する可能性があり、話速や話者で変動します。"}
+  ],
+  "words": [
+    {"id":"w1","surface":"Je","lemma":"je","ipa":"ʒə","meaning_ja":"私（主語）","pos":"代名詞","role":"話し手を表す主語","detail_ja":"母音の前では j’ になることがあります。"},
+    {"id":"w2","surface":"vais","lemma":"aller","ipa":"vɛ","meaning_ja":"行く","pos":"動詞","role":"文の中心となる動詞","morphology":"aller・直説法現在・1人称単数","detail_ja":"aller の現在形。主語 Je に対応しています。"},
+    {"id":"w3","surface":"au","lemma":"à + le","ipa":"o","meaning_ja":"〜へ／〜に","pos":"前置詞＋定冠詞","role":"目的地 travail を導く","detail_ja":"à + le が縮約して au になります。"},
+    {"id":"w4","surface":"travail","lemma":"travail","ipa":"tʁa.vaj","meaning_ja":"仕事、職場","pos":"男性名詞","role":"移動の目的地","detail_ja":"ここでは aller au travail で『仕事へ行く／出勤する』という自然なまとまりです。"},
+    {"id":"w5","surface":"en","lemma":"en","ipa":"ɑ̃","meaning_ja":"〜で","pos":"前置詞","role":"交通手段 bus を導く","detail_ja":"交通手段を表す en bus の形です。"},
+    {"id":"w6","surface":"bus","lemma":"bus","ipa":"bys","meaning_ja":"バス","pos":"男性名詞","role":"移動手段","detail_ja":"語末の s はこの語では発音します。"}
+  ],
+  "expressions": [
+    {"id":"exp-001","surface":"au travail","type":"fixed-expression","meaning_ja":"仕事へ／職場へ","function":"destination","register":"neutral","word_ids":["w3","w4"]}
+  ],
+  "meaning_chunks": [
+    {"text":"Je vais","meaning_ja":"私は行きます"},
+    {"text":"au travail","meaning_ja":"仕事へ"},
+    {"text":"en bus","meaning_ja":"バスで"}
+  ],
+  "sentence_structure": {"subject":"Je","verb":"vais","destination":"au travail","means":"en bus"},
+  "grammar_tags":["present","aller","contraction-au","preposition-en"],
+  "sound_tags":["rhythm-groups","silent-final-letters","no-liaison","nasal-vowel"],
+  "vocabulary_tags":["travel","work","transport"],
+  "related_lessons":[],
+  "alternate_expressions":["Je prends le bus pour aller au travail."],
+  "notes":["Foundation lesson for the first implementation slice."]
+}
