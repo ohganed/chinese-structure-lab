@@ -32,7 +32,12 @@
     {"id":"w6","surface":"bus","lemma":"bus","ipa":"bys","meaning_ja":"バス","pos":"男性名詞","role":"移動手段","detail_ja":"語末の s はこの語では発音します。"}
   ],
   "expressions": [
-    {"id":"exp-001","surface":"au travail","type":"fixed-expression","meaning_ja":"仕事へ／職場へ","function":"destination","register":"neutral","word_ids":["w3","w4"]}
+    {"id":"exp-001","surface":"au travail","type":"fixed-expression","meaning_ja":"仕事へ／職場へ","function":"destination","function_ja":"移動の目的地を表す","register":"neutral","word_ids":["w3","w4"],"detail_ja":"aller au travail 全体で『仕事へ行く／出勤する』という自然なまとまりになります。","example":"Il va au travail à pied."},
+    {"id":"exp-002","surface":"en bus","type":"common-expression","meaning_ja":"バスで","function":"means","function_ja":"交通手段を表す","register":"neutral","word_ids":["w5","w6"],"detail_ja":"交通手段を表す en + 名詞の基本例です。","example":"Nous voyageons en train."}
+  ],
+  "transforms": [
+    {"id":"tr-001","label_ja":"主語を変える","source":"Je vais au travail en bus.","target":"Nous allons au travail en bus.","changes":[{"from":"Je","to":"Nous","reason":"subject-change","explanation_ja":"話し手一人から『私たち』へ変わります。"},{"from":"vais","to":"allons","reason":"verb-agreement","explanation_ja":"主語 Nous に合わせて aller の形も変わります。"}]},
+    {"id":"tr-002","label_ja":"否定にする","source":"Je vais au travail en bus.","target":"Je ne vais pas au travail en bus.","changes":[{"from":"vais","to":"ne vais pas","reason":"negation","explanation_ja":"動詞を ne ... pas で挟み、否定を作ります。"}]}
   ],
   "meaning_chunks": [
     {"text":"Je vais","meaning_ja":"私は行きます"},
