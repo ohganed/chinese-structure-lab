@@ -12,7 +12,7 @@
     <header class="topbar">
       <div>
         <div class="brand">French Structure Lab</div>
-        <div class="sub">Sound → Words → Meaning → Structure</div>
+        <div class="sub">Sound → Words → Expressions → Meaning → Structure</div>
       </div>
       <button class="quiet-button" id="themeButton" type="button" aria-label="表示テーマを切り替える">◐</button>
     </header>
@@ -37,16 +37,18 @@
     <nav class="mode-tabs" aria-label="観察モード">
       <button type="button" class="active" data-mode="listen">Listen</button>
       <button type="button" data-mode="words">Open the Words</button>
+      <button type="button" data-mode="expressions">Expressions</button>
       <button type="button" data-mode="chunks">Meaning Chunks</button>
       <button type="button" data-mode="structure">Structure</button>
       <button type="button" data-mode="sound">Sound Lab</button>
+      <button type="button" data-mode="transform">Transform</button>
     </nav>
 
     <section class="workspace" id="workspace" aria-live="polite"></section>
   </main>
 
-  <aside class="drawer" id="wordDrawer" aria-hidden="true" aria-label="単語詳細">
-    <div class="drawer-head"><div><div class="eyebrow">WORD DETAIL</div><h2 id="detailSurface"></h2></div><button type="button" class="close-button" id="closeDrawer" aria-label="詳細を閉じる">×</button></div>
+  <aside class="drawer" id="wordDrawer" aria-hidden="true" aria-label="詳細">
+    <div class="drawer-head"><div><div class="eyebrow" id="detailKind">DETAIL</div><h2 id="detailSurface"></h2></div><button type="button" class="close-button" id="closeDrawer" aria-label="詳細を閉じる">×</button></div>
     <div class="drawer-body" id="detailBody" tabindex="0"></div>
   </aside>
   <div class="scrim" id="scrim" hidden></div>
