@@ -10,30 +10,22 @@
 <body>
   <main class="app" id="app">
     <header class="topbar">
-      <div>
-        <div class="brand">French Structure Lab</div>
-        <div class="sub">Sound → Words → Expressions → Meaning → Structure</div>
-      </div>
+      <div><div class="brand">French Structure Lab</div><div class="sub">Sound → Words → Expressions → Meaning → Structure</div></div>
       <button class="quiet-button" id="themeButton" type="button" aria-label="表示テーマを切り替える">◐</button>
     </header>
-
     <section class="lesson-nav" aria-label="教材ナビゲーション">
       <button type="button" id="prevLesson" class="nav-button" aria-label="前の教材">‹</button>
       <label class="lesson-picker-wrap"><span>LESSON</span><select id="lessonPicker" aria-label="教材を選ぶ"></select></label>
       <button type="button" id="nextLesson" class="nav-button" aria-label="次の教材">›</button>
     </section>
-
     <section class="sentence-card" aria-labelledby="sentenceLabel">
       <div class="eyebrow" id="sentenceLabel">CURRENT SENTENCE</div>
       <p class="sentence" id="sentence">Chargement…</p>
       <p class="translation" id="translation" hidden></p>
       <div class="audio-row" aria-label="音声速度">
-        <button type="button" data-speech-rate="1">▶ Natural</button>
-        <button type="button" data-speech-rate="0.82">Clear</button>
-        <button type="button" data-speech-rate="0.68">Slow</button>
+        <button type="button" data-speech-rate="1">▶ Natural</button><button type="button" data-speech-rate="0.82">Clear</button><button type="button" data-speech-rate="0.68">Slow</button>
       </div>
     </section>
-
     <nav class="mode-tabs" aria-label="観察モード">
       <button type="button" class="active" data-mode="listen">Listen</button>
       <button type="button" data-mode="words">Open the Words</button>
@@ -42,11 +34,10 @@
       <button type="button" data-mode="structure">Structure</button>
       <button type="button" data-mode="sound">Sound Lab</button>
       <button type="button" data-mode="transform">Transform</button>
+      <button type="button" data-mode="map">Learning Map</button>
     </nav>
-
     <section class="workspace" id="workspace" aria-live="polite"></section>
   </main>
-
   <aside class="drawer" id="wordDrawer" aria-hidden="true" aria-label="詳細">
     <div class="drawer-head"><div><div class="eyebrow" id="detailKind">DETAIL</div><h2 id="detailSurface"></h2></div><button type="button" class="close-button" id="closeDrawer" aria-label="詳細を閉じる">×</button></div>
     <div class="drawer-body" id="detailBody" tabindex="0"></div>
