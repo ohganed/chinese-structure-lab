@@ -25,6 +25,9 @@ for(const [name,source] of Object.entries({app,deep,myText,css,deepCss})){
 
 assert(app.includes("fetch('./data/index.json'"),'app should boot from a relative lightweight index');
 assert(app.includes('fetch(meta.path'),'lessons should remain lazy-loaded');
+assert(app.includes('URLSearchParams(location.hash'),'lesson routing should stay hash-based for GitHub Pages reload safety');
+assert(app.includes('window.addEventListener(\'hashchange\'')||app.includes('window.addEventListener("hashchange"'),'hash navigation should be handled without server routes');
+assert(!app.includes('history.pushState('),'foundation should not require path-based SPA routing');
 assert(app.includes("if(!('speechSynthesis'in window))return"),'audio-unavailable guard should let learning continue without speech');
 assert(index.lessons.length>0,'Pages build must have at least one indexed lesson');
 for(const lesson of index.lessons){assert(lesson.path.startsWith('./'),'lesson paths must be relative');assert(fs.existsSync(path.join(root,lesson.path.replace(/^\.\//,''))),`missing lesson ${lesson.path}`);}
