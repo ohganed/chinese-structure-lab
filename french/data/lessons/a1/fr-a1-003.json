@@ -1,39 +1,14 @@
 {
-  "schema_version": "1.0",
-  "id": "fr-a1-003",
-  "level": "A1",
-  "theme": "people",
-  "register": "neutral",
-  "sentence": "Les amis arrivent à huit heures.",
-  "translation_ja": "友人たちは8時に到着します。",
-  "audio": {"natural": "", "clear": "", "slow": "", "source": "browser-tts"},
-  "sound_groups": [
-    {"text": "Les amis arrivent", "ipa": "le.z‿a.mi a.ʁiv", "role_ja": "主語と動詞のまとまり"},
-    {"text": "à huit heures", "ipa": "a ɥit œʁ", "role_ja": "時刻のまとまり"}
-  ],
-  "sound_phenomena": [
-    {"type": "liaison-required", "label_ja": "必須リエゾン", "span": "les amis", "surface_hint": "les → /z/ + amis", "detail_ja": "複数定冠詞 les の後に母音で始まる名詞 amis が続くため、/z/ のリエゾンが起こります。", "register": "all", "confidence": "verified"},
-    {"type": "no-liaison", "label_ja": "リエゾンしない", "span": "huit heures", "surface_hint": "huit の t はここで heures とリエゾンさせない", "detail_ja": "huit heures は通常 /ɥit œʁ/ と発音し、huit の語末子音を heures へリエゾンさせるとは考えません。", "register": "all", "confidence": "verified"}
-  ],
-  "sound_reference_examples": [],
-  "words": [
-    {"surface": "Les", "lemma": "le", "ipa": "le", "meaning_ja": "その〜たち", "pos": "定冠詞", "role": "amis を限定する", "detail_ja": "複数形の定冠詞です。"},
-    {"surface": "amis", "lemma": "ami", "ipa": "a.mi", "meaning_ja": "友人たち", "pos": "男性名詞・複数", "role": "主語の中心", "detail_ja": "ami の複数形です。"},
-    {"surface": "arrivent", "lemma": "arriver", "ipa": "a.ʁiv", "meaning_ja": "到着する", "pos": "動詞", "role": "文の中心となる動詞", "morphology": "arriver・直説法現在・3人称複数", "detail_ja": "語尾 -ent はここでは発音されません。"},
-    {"surface": "à", "lemma": "à", "ipa": "a", "meaning_ja": "〜に", "pos": "前置詞", "role": "時刻を導く", "detail_ja": "時刻を表す表現を導きます。"},
-    {"surface": "huit", "lemma": "huit", "ipa": "ɥit", "meaning_ja": "8", "pos": "数詞", "role": "時刻の数", "detail_ja": "huit heures で8時を表します。"},
-    {"surface": "heures", "lemma": "heure", "ipa": "œʁ", "meaning_ja": "時", "pos": "女性名詞・複数", "role": "時刻の単位", "detail_ja": "数詞と組み合わせて時刻を表します。"}
-  ],
-  "meaning_chunks": [
-    {"text": "Les amis", "meaning_ja": "友人たちは"},
-    {"text": "arrivent", "meaning_ja": "到着します"},
-    {"text": "à huit heures", "meaning_ja": "8時に"}
-  ],
-  "sentence_structure": {"subject": "Les amis", "verb": "arrivent", "time": "à huit heures"},
-  "grammar_tags": ["present", "plural", "time-expression"],
-  "sound_tags": ["liaison-required", "silent-ent"],
-  "vocabulary_tags": ["people", "time"],
-  "related_lessons": ["fr-a1-002"],
-  "alternate_expressions": ["Mes amis arrivent à huit heures."],
-  "notes": []
+  "schema_version":"1.0","id":"fr-a1-003","level":"A1","theme":"people","register":"neutral",
+  "sentence":"Les amis arrivent à huit heures.","translation_ja":"友人たちは8時に到着します。",
+  "audio":{"natural":"","clear":"","slow":"","source":"browser-tts"},
+  "sound_groups":[{"text":"Les amis arrivent","ipa":"le.z‿a.mi a.ʁiv","role_ja":"主語と動詞のまとまり"},{"text":"à huit heures","ipa":"a ɥit œʁ","role_ja":"時刻のまとまり"}],
+  "sound_phenomena":[{"type":"liaison-required","label_ja":"必須リエゾン","span":"les amis","surface_hint":"les → /z/ + amis","detail_ja":"複数定冠詞 les の後に母音で始まる名詞 amis が続くため、/z/ のリエゾンが起こります。","register":"all","confidence":"verified"},{"type":"no-liaison","label_ja":"リエゾンしない","span":"huit heures","surface_hint":"huit の t はここで heures とリエゾンさせない","detail_ja":"huit heures は通常 /ɥit œʁ/ と発音し、huit の語末子音を heures へリエゾンさせるとは考えません。","register":"all","confidence":"verified"}],
+  "sound_reference_examples":[],
+  "words":[{"id":"w1","surface":"Les","lemma":"le","ipa":"le","meaning_ja":"その〜たち","pos":"定冠詞","role":"amis を限定する","detail_ja":"複数形の定冠詞です。"},{"id":"w2","surface":"amis","lemma":"ami","ipa":"a.mi","meaning_ja":"友人たち","pos":"男性名詞・複数","role":"主語の中心","detail_ja":"ami の複数形です。"},{"id":"w3","surface":"arrivent","lemma":"arriver","ipa":"a.ʁiv","meaning_ja":"到着する","pos":"動詞","role":"文の中心となる動詞","morphology":"arriver・直説法現在・3人称複数","detail_ja":"語尾 -ent はここでは発音されません。"},{"id":"w4","surface":"à","lemma":"à","ipa":"a","meaning_ja":"〜に","pos":"前置詞","role":"時刻を導く","detail_ja":"時刻を表す表現を導きます。"},{"id":"w5","surface":"huit","lemma":"huit","ipa":"ɥit","meaning_ja":"8","pos":"数詞","role":"時刻の数","detail_ja":"huit heures で8時を表します。"},{"id":"w6","surface":"heures","lemma":"heure","ipa":"œʁ","meaning_ja":"時","pos":"女性名詞・複数","role":"時刻の単位","detail_ja":"数詞と組み合わせて時刻を表します。"}],
+  "expressions":[{"id":"exp-001","surface":"à huit heures","type":"time-expression","meaning_ja":"8時に","function":"time","function_ja":"時刻を表す","register":"neutral","word_ids":["w4","w5","w6"],"detail_ja":"à + 時刻で『〜時に』を表します。","example":"Le train part à neuf heures."}],
+  "transforms":[{"id":"tr-001","label_ja":"限定詞を変える","source":"Les amis arrivent à huit heures.","target":"Mes amis arrivent à huit heures.","changes":[{"from":"Les","to":"Mes","reason":"determiner-change","explanation_ja":"『その友人たち』から『私の友人たち』へ限定の仕方が変わります。"}]},{"id":"tr-002","label_ja":"主語を単数にする","source":"Les amis arrivent à huit heures.","target":"L'ami arrive à huit heures.","changes":[{"from":"Les amis","to":"L'ami","reason":"subject-change","explanation_ja":"複数の友人から一人の友人へ変わります。"},{"from":"arrivent","to":"arrive","reason":"verb-agreement","explanation_ja":"主語が単数になるため動詞も3人称単数形になります。"}]}],
+  "meaning_chunks":[{"text":"Les amis","meaning_ja":"友人たちは"},{"text":"arrivent","meaning_ja":"到着します"},{"text":"à huit heures","meaning_ja":"8時に"}],
+  "sentence_structure":{"subject":"Les amis","verb":"arrivent","time":"à huit heures"},
+  "grammar_tags":["present","plural","time-expression"],"sound_tags":["liaison-required","silent-ent"],"vocabulary_tags":["people","time"],"related_lessons":["fr-a1-002"],"alternate_expressions":["Mes amis arrivent à huit heures."],"notes":[]
 }
