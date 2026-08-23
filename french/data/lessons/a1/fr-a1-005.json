@@ -1,0 +1,13 @@
+{
+  "schema_version":"1.1","id":"fr-a1-005","level":"A1","theme":"daily-life","register":"neutral",
+  "sentence":"Il habite à Paris.","translation_ja":"彼はパリに住んでいます。",
+  "audio":{"natural":"","clear":"","slow":"","source":"browser-tts"},
+  "sound_groups":[{"text":"Il habite à Paris","ipa":"il a.bit a pa.ʁi","role_ja":"一つの短いリズムグループ"}],
+  "sound_phenomena":[{"type":"enchaînement","label_ja":"アンシェヌマン","span":"Il habite","surface_hint":"il + habite","detail_ja":"il の語末 /l/ は実際に発音される子音で、続く母音と滑らかにつながって聞こえます。リエゾンで新しい子音が現れる現象とは異なります。","register":"all","confidence":"verified"}],
+  "words":[{"id":"w1","lexeme_id":"lex-il","surface":"Il","lemma":"il","ipa":"il","meaning_ja":"彼","pos":"代名詞","role":"主語","detail_ja":"男性単数の人を受ける主語代名詞です。"},{"id":"w2","lexeme_id":"lex-habiter","surface":"habite","lemma":"habiter","ipa":"a.bit","meaning_ja":"住んでいる","pos":"動詞","role":"述語","morphology":"habiter・直説法現在・3人称単数","detail_ja":"habiter の現在形です。語頭の h は発音しません。"},{"id":"w3","lexeme_id":"lex-a-prep","surface":"à","lemma":"à","ipa":"a","meaning_ja":"〜に","pos":"前置詞","role":"場所を導く","detail_ja":"ここでは居住地を導きます。"},{"id":"w4","lexeme_id":"lex-paris","surface":"Paris","lemma":"Paris","ipa":"pa.ʁi","meaning_ja":"パリ","pos":"固有名詞","role":"居住地","detail_ja":"都市名 Paris の前では通常冠詞を置かず、à Paris と言います。"}],
+  "expressions":[{"id":"exp-001","surface":"habiter à Paris","type":"pattern","meaning_ja":"パリに住む","function":"location","function_ja":"居住地を示す","register":"neutral","word_ids":["w2","w3","w4"],"detail_ja":"habiter + à + 都市名という基本パターンです。","example":"Elle habite à Lyon."}],
+  "transforms":[{"id":"tr-001","label_ja":"主語を変える","source":"Il habite à Paris.","target":"Elle habite à Paris.","changes":[{"from":"Il","to":"Elle","reason":"subject-change","explanation_ja":"男性単数の il を女性単数の elle に変えます。動詞形はどちらも3人称単数なので habite のままです。"}]}],
+  "meaning_chunks":[{"text":"Il habite","meaning_ja":"彼は住んでいます"},{"text":"à Paris","meaning_ja":"パリに"}],
+  "sentence_structure":{"subject":"Il","verb":"habite","complement":"à Paris","intention":"居住地を述べる"},
+  "grammar_tags":["present","third-person","location"],"sound_tags":["enchaînement","silent-h"],"vocabulary_tags":["home","city"],"related_lessons":["fr-a1-001"],"alternate_expressions":[],"notes":[]
+}
