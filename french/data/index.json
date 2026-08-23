@@ -1,9 +1,14 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
+  "reference_data": {
+    "lexicon": "./data/lexicon/a1-core.json",
+    "lexemes": "./data/lexemes/a1-core.json",
+    "expressions": "./data/expressions/a1-core.json"
+  },
   "lessons": [
-    {"id":"fr-a1-001","level":"A1","theme":"daily-life","title_ja":"通勤","path":"./data/lessons/a1/fr-a1-001.json"},
-    {"id":"fr-a1-002","level":"A1","theme":"food","title_ja":"好み","path":"./data/lessons/a1/fr-a1-002.json"},
-    {"id":"fr-a1-003","level":"A1","theme":"people","title_ja":"到着時刻","path":"./data/lessons/a1/fr-a1-003.json"},
+    {"id":"fr-a1-001","level":"A1","theme":"daily-life","title_ja":"仕事へ行く","path":"./data/lessons/a1/fr-a1-001.json"},
+    {"id":"fr-a1-002","level":"A1","theme":"food","title_ja":"コーヒーと紅茶","path":"./data/lessons/a1/fr-a1-002.json"},
+    {"id":"fr-a1-003","level":"A1","theme":"people","title_ja":"8時に到着","path":"./data/lessons/a1/fr-a1-003.json"},
     {"id":"fr-a1-004","level":"A1","theme":"daily-life","title_ja":"少し時間ありますか","path":"./data/lessons/a1/fr-a1-004.json"}
   ]
 }
