@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0",
+  "source": "built-in-lessons",
+  "lexemes": [
+    {"id":"lex-je","lemma":"je","pos":"代名詞","meaning_ja":"私","confidence":"verified"},
+    {"id":"lex-aller","lemma":"aller","pos":"動詞","meaning_ja":"行く","confidence":"verified"},
+    {"id":"lex-travail","lemma":"travail","pos":"男性名詞","meaning_ja":"仕事、職場","confidence":"verified"},
+    {"id":"lex-bus","lemma":"bus","pos":"男性名詞","meaning_ja":"バス","confidence":"verified"},
+    {"id":"lex-aimer","lemma":"aimer","pos":"動詞","meaning_ja":"好きである","confidence":"verified"},
+    {"id":"lex-cafe","lemma":"café","pos":"男性名詞","meaning_ja":"コーヒー","confidence":"verified"},
+    {"id":"lex-preferer","lemma":"préférer","pos":"動詞","meaning_ja":"より好む","confidence":"verified"},
+    {"id":"lex-the","lemma":"thé","pos":"男性名詞","meaning_ja":"紅茶、お茶","confidence":"verified"},
+    {"id":"lex-ami","lemma":"ami","pos":"男性名詞","meaning_ja":"友人","confidence":"verified"},
+    {"id":"lex-arriver","lemma":"arriver","pos":"動詞","meaning_ja":"到着する","confidence":"verified"},
+    {"id":"lex-heure","lemma":"heure","pos":"女性名詞","meaning_ja":"時、時間","confidence":"verified"},
+    {"id":"lex-vous","lemma":"vous","pos":"代名詞","meaning_ja":"あなた／あなた方","confidence":"verified"},
+    {"id":"lex-avoir","lemma":"avoir","pos":"動詞","meaning_ja":"持つ、ある","confidence":"verified"},
+    {"id":"lex-minute","lemma":"minute","pos":"女性名詞","meaning_ja":"分","confidence":"verified"}
+  ]
+}
