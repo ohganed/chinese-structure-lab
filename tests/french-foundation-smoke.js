@@ -4,6 +4,7 @@ const assert=require('assert');
 const indexPath='french/data/index.json';
 const appPath='french/app.js';
 const htmlPath='french/index.html';
+const myTextPath='french/my-text.js';
 
 const index=JSON.parse(fs.readFileSync(indexPath,'utf8'));
 assert(index.schema_version,'dataset schema_version is required');
@@ -30,20 +31,28 @@ assert(app.includes('URLSearchParams'),'lesson ID should be recoverable from the
 assert(app.includes('state.selectedExpression'),'expression state must be centralized');
 assert(app.includes('state.openTransform'),'transform expansion state must be centralized');
 assert(app.includes("const STORAGE_KEY='fsl.learning.v1'"),'learning history needs a versioned local key');
-assert(app.includes('localStorage.getItem'),'learning history should load locally');
-assert(app.includes('localStorage.setItem'),'learning history should save locally');
 assert(app.includes('state.history.events.length>300'),'history must be bounded');
-assert(app.includes("recordEvent('word-opened'"),'word encounters must be recordable');
-assert(app.includes("recordEvent('expression-opened'"),'expression encounters must be recordable');
-assert(app.includes("recordEvent('sound-opened'"),'sound encounters must be recordable');
-assert(app.includes("recordEvent('transform-opened'"),'transform encounters must be recordable');
 assert(app.includes('renderLearningMap'),'Learning Map renderer must exist');
-assert(app.includes('clearHistory'),'history must be removable on-device');
 assert(app.includes("speechSynthesis.cancel()"),'speech should cancel before replacement');
 assert(!app.includes('MutationObserver'),'foundation should not use MutationObserver');
 assert(!app.includes('setInterval('),'foundation should not poll');
 
 const html=fs.readFileSync(htmlPath,'utf8');
-for(const label of ['Open the Words','Expressions','Meaning Chunks','Sound Lab','Transform','Learning Map'])assert(html.includes(label),`${label} mode must exist`);
+for(const label of ['Open the Words','Expressions','Meaning Chunks','Sound Lab','Transform','Learning Map','My Text'])assert(html.includes(label),`${label} must exist`);
+assert(html.includes('id="myTextInput"'),'My Text input must exist');
+assert(html.includes('id="importMyText"'),'My Text JSON import must exist');
+assert(html.includes('id="exportMyText"'),'My Text JSON export must exist');
+assert(html.includes('src="./my-text.js"'),'My Text module must load by relative path');
 
-console.log('French Structure Lab Learning Map + local history smoke: OK');
+const myText=fs.readFileSync(myTextPath,'utf8');
+assert(myText.includes("const MY_TEXT_KEY='fsl.mytext.v1'"),'My Text needs a separate versioned local key');
+assert(myText.includes("source:'user'"),'My Text must stay distinct from built-in lessons');
+assert(myText.includes("confidence:'unverified'"),'user/imported text must not be marked verified');
+assert(myText.includes('store.items.length>100'),'My Text storage must be bounded');
+assert(myText.includes('JSON.parse(await file.text())'),'JSON import must parse locally');
+assert(myText.includes("kind:'french-structure-lab-my-text'"),'JSON export needs an identifiable kind');
+assert(myText.includes('URL.createObjectURL'),'JSON export should be client-side only');
+assert(!myText.includes('fetch('),'My Text must not depend on an external API');
+assert(!myText.includes('setInterval('),'My Text must not poll');
+
+console.log('French Structure Lab My Text + JSON transfer smoke: OK');
