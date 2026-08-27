@@ -52,6 +52,7 @@ jobs:
           reencounter='<script src="./reencounter-layer.js"></script>'
           situation='<script src="./situation-layer.js"></script>'
           words_return='<script src="./words-come-back-word-layer.js"></script>'
+          fivefold_nav='<script src="./fivefold-nav-layer.js"></script>'
           no_situation={'index.html','explore.html','course-map.html','memory.html','garden.html','tester.html','fivefold-level.html'}
           no_session_guide={'tester.html'}
           no_reencounter={'doorways.html','explore.html','course-map.html','memory.html','garden.html','tester.html','fivefold-level.html'}
@@ -73,6 +74,8 @@ jobs:
                       text=text.replace('</body>',situation+'</body>',1)
                   if p.name=='index.html' and words_return not in text and '</body>' in text:
                       text=text.replace('</body>',words_return+'</body>',1)
+                  if p.name=='explore.html' and fivefold_nav not in text and '</body>' in text:
+                      text=text.replace('</body>',fivefold_nav+'</body>',1)
               if text!=original:
                   p.write_text(text,encoding='utf-8');changed.append(p.name)
           print('Light runtime + universal word touch applied to:',', '.join(changed) if changed else 'nothing new')
@@ -90,6 +93,8 @@ jobs:
           analyzer=Path('session-end-analyzer.js').read_text()
           missing=[x for x in heavy if x!='underground-runtime-self-test.js' and x not in analyzer]
           if missing: raise SystemExit('Session End Analyzer missing underground modules: '+', '.join(missing))
+          if 'flushBeforeAnalysis:true' not in analyzer or 'CSLLightEventBuffer.flush' not in analyzer:
+              raise SystemExit('Session End Analyzer must flush raw buffered learning events before analysis')
           bus=Path('underground-integration-bus.js').read_text()
           if "setTimeout(function(){run('startup')" in bus or "addEventListener('csl:" in bus:
               raise SystemExit('Integration bus still contains real-time/startup analysis triggers')
@@ -114,7 +119,10 @@ jobs:
           index=Path('index.html').read_text()
           if 'words-come-back-word-layer.js' not in index:
               raise SystemExit('index.html: missing Words come back word layer')
-          print('Session-end-only underground architecture and Words come back word-touch wiring verified.')
+          explore=Path('explore.html').read_text()
+          if 'fivefold-nav-layer.js' not in explore:
+              raise SystemExit('explore.html: missing fivefold curriculum entrance layer')
+          print('Session-end-only underground architecture, raw-event flush, and fivefold navigation verified.')
           PY
 
       - name: Commit generated runtime wiring
