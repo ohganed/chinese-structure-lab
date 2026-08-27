@@ -52,9 +52,9 @@ jobs:
           reencounter='<script src="./reencounter-layer.js"></script>'
           situation='<script src="./situation-layer.js"></script>'
           words_return='<script src="./words-come-back-word-layer.js"></script>'
-          no_situation={'index.html','explore.html','course-map.html','memory.html','garden.html','tester.html'}
+          no_situation={'index.html','explore.html','course-map.html','memory.html','garden.html','tester.html','fivefold-level.html'}
           no_session_guide={'tester.html'}
-          no_reencounter={'doorways.html','explore.html','course-map.html','memory.html','garden.html','tester.html'}
+          no_reencounter={'doorways.html','explore.html','course-map.html','memory.html','garden.html','tester.html','fivefold-level.html'}
           fast_path_pages={'tired.html'}
           changed=[]
           for p in Path('.').glob('*.html'):
@@ -83,6 +83,7 @@ jobs:
         run: |
           for f in *.js; do node --check "$f"; done
           node tests/curriculum-expansion-smoke.js
+          node tests/fivefold-level-expansion-smoke.js
           python3 - <<'PY'
           from pathlib import Path
           heavy=['learning-memory-engine.js','learner-model-engine.js','reencounter-planner.js','situation-graph-engine.js','persistent-world-engine.js','language-graph-engine.js','meaning-sense-graph-engine.js','encounter-quality-engine.js','retrieval-need-engine.js','opportunity-matching-engine.js','adaptive-presentation-engine.js','presentation-policy-layer.js','learning-os-core.js','contradiction-quality-auditor.js','evidence-confidence-engine.js','intervention-budget-engine.js','learner-agency-engine.js','learning-rhythm-engine.js','cognitive-load-guard.js','temporal-pattern-engine.js','support-regulation-engine.js','curriculum-balance-engine.js','continuity-resilience-engine.js','underground-floor-registry.js','deep-underground-orchestrator.js','underground-constitution.js','underground-governor.js','decision-trace-ledger.js','underground-integration-bus.js','counterfactual-simulator.js','underground-runtime-self-test.js']
