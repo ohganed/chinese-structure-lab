@@ -1,0 +1,31 @@
+name: Shared Curriculum Quality
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'sentence-bank*.js'
+      - 'tests/curriculum-expansion-smoke.js'
+      - 'tests/chinese-naturalness-regression.js'
+      - '.github/workflows/content-quality.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check curriculum JavaScript syntax
+        shell: bash
+        run: |
+          node --check sentence-bank.js
+          node --check sentence-bank-expansion-01.js
+          node --check sentence-bank-expansion-02.js
+          node --check sentence-bank-expansion-03.js
+      - name: Verify shared curriculum structure
+        run: node tests/curriculum-expansion-smoke.js
+      - name: Verify Natural Chinese regression gate
+        run: node tests/chinese-naturalness-regression.js
