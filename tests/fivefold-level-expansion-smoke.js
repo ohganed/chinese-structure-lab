@@ -1,0 +1,24 @@
+const fs=require('fs');
+const vm=require('vm');
+const assert=require('assert');
+const path=require('path');
+const root=path.resolve(__dirname,'..');
+const sandbox={window:{}};vm.createContext(sandbox);
+vm.runInContext(fs.readFileSync(path.join(root,'fivefold-curriculum-data.js'),'utf8'),sandbox,{filename:'fivefold-curriculum-data.js'});
+const api=sandbox.window.CSLFivefoldCurriculum;assert(api,'fivefold curriculum API missing');
+const a1=api.all('A1'),a2=api.all('A2');
+assert.strictEqual(a1.length,1248,'A1 expansion must add exactly 1,248 lines (312 → 1,560 total)');
+assert.strictEqual(a2.length,240,'A2 expansion must add exactly 240 lines (60 → 300 total)');
+const all=a1.concat(a2);
+assert.strictEqual(new Set(all.map(x=>x.id)).size,all.length,'all new IDs must be unique');
+['A1','A2'].forEach(level=>{const xs=level==='A1'?a1:a2;assert.strictEqual(new Set(xs.map(x=>x.zh)).size,xs.length,level+' must not inflate count with duplicate Chinese sentences')});
+all.forEach(x=>{
+ ['id','level','category','context','zh','py','ja'].forEach(k=>assert(x[k],x.id+' missing '+k));
+ assert(Array.isArray(x.words)&&x.words.length>=2,x.id+' must expose at least two word/chunk learning objects');
+ assert(x.words.every(w=>/ · /.test(w)),x.id+' has malformed word/chunk data');
+});
+const page=fs.readFileSync(path.join(root,'fivefold-level.html'),'utf8');
+assert(page.includes('PAGE=24'),'expanded course must render in small 24-line batches');
+assert(page.includes('light-event-buffer.js'),'learning-time events must use the lightweight buffer');
+assert(page.includes('word-touch-engine.js'),'expanded course must reuse universal Word Touch');
+console.log('fivefold level expansion smoke: passed — A1 total 1560, A2 total 300');
