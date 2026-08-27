@@ -1,12 +1,12 @@
 (function(){
 'use strict';
-/* Chinese Structure Lab — Word Touch Engine v6
+/* Chinese Structure Lab — Word Touch Engine v7
    Learner-driven four-step word objects:
    Chinese only -> tap: immediate speech -> tap: meaning -> tap: details -> tap: Chinese only.
    Audio always starts inside the actual user gesture. History may be buffered.
-   Details may use item.detail / usage / note / examples, with pinyin as a stable fallback.
+   Details may use item.detail / usage / note / examples and can fall back to a real Sentence Bank example.
    No autoplay. No correctness. No score. */
-var VERSION=6,cachedVoices=[],states=new WeakMap();
+var VERSION=7,cachedVoices=[],states=new WeakMap();
 function refreshVoices(){try{cachedVoices=speechSynthesis.getVoices()||[]}catch(e){cachedVoices=[]}}
 try{refreshVoices();if('speechSynthesis' in window)speechSynthesis.onvoiceschanged=refreshVoices}catch(e){}
 function emit(type,data){
@@ -31,6 +31,18 @@ function speak(text,rate,onEnd){
   safety=setTimeout(done,Math.max(1400,Math.min(4200,String(text||'').length*420)));
  }catch(e){setTimeout(done,200)}
 }
+function bankExamples(item){
+ var zh=item.zh||item.word||'',out=[];
+ try{
+  var bank=window.CSLSentenceBank,all=bank&&bank.all?bank.all():[];
+  for(var i=0;i<all.length&&out.length<2;i++){
+   var s=all[i],words=s&&Array.isArray(s.words)?s.words:[];
+   var hit=words.some(function(w){return String(w||'').split(' ')[0]===zh||String(w||'').indexOf(zh+' ')===0});
+   if(hit&&s.zh)out.push({zh:s.zh,ja:s.ja||''});
+  }
+ }catch(e){}
+ return out;
+}
 function detailText(item){
  var lines=[],py=item.py||item.pinyin||'';
  if(py)lines.push('拼音 '+py);
@@ -38,6 +50,7 @@ function detailText(item){
  if(detail)lines.push(String(detail));
  var examples=item.examples||item.example||[];
  if(typeof examples==='string')examples=[examples];
+ if(!Array.isArray(examples)||!examples.length)examples=bankExamples(item);
  if(Array.isArray(examples))examples.slice(0,2).forEach(function(x){
   if(!x)return;
   if(typeof x==='string')lines.push('例 '+x);
@@ -93,6 +106,15 @@ function button(item,meta){
  var h=document.createElement('span');h.setAttribute('data-csl-word-helper','');h.hidden=true;h.style.display='block';h.style.fontSize='.68em';h.style.fontWeight='650';h.style.marginTop='3px';h.style.lineHeight='1.35';h.style.whiteSpace='pre-line';
  b.appendChild(z);b.appendChild(h);states.set(b,0);b.addEventListener('click',function(){touch(b,item,meta)},{passive:true});return b
 }
-function mount(container,items,meta){if(!container)return;container.innerHTML='';(items||[]).forEach(function(x){container.appendChild(button(x,meta))});return container}
+function refreshNearbyHints(container){
+ try{
+  var scope=container&&container.closest?container.closest('.card')||document:null;
+  var hint=scope&&scope.querySelector?scope.querySelector('.quietHint'):null;
+  if(hint&&/1回目/.test(hint.textContent||''))hint.textContent='中国語 → 1回目：🔊 音声 → 2回目：意味 → 3回目：詳細 → 4回目：中国語';
+  var note=document.querySelector('.softnote');
+  if(note&&/音と発音/.test(note.textContent||''))note.textContent='最初は中国語だけ。1回押すと音声、もう1回押すと意味、さらに押すと詳細情報、もう1回押すと中国語だけに戻ります。';
+ }catch(e){}
+}
+function mount(container,items,meta){if(!container)return;container.innerHTML='';(items||[]).forEach(function(x){container.appendChild(button(x,meta))});refreshNearbyHints(container);return container}
 window.CSLWordTouch={version:VERSION,mount:mount,touch:touch,speak:speak,refreshVoices:refreshVoices,detailText:detailText};
 })();
