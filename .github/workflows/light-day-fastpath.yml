@@ -1,0 +1,55 @@
+name: Protect Light Day Fast Path
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  protect:
+    if: ${{ !contains(github.event.head_commit.message, '[skip light-fastpath]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Enforce non-blocking Light Day runtime
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('tired.html')
+          text=p.read_text(encoding='utf-8')
+          old=text
+          # Canonical storage must never be started on a timer while the learner is tapping.
+          text=text.replace("setTimeout(function(){if(!document.hidden)ensureStorageAndFlush()},15000);","")
+          if '<script src="./storage-core.js"></script>' in text:
+              raise SystemExit('tired.html must not eagerly load storage-core.js')
+          forbidden=['learning-memory-engine.js','underground-integration-bus.js','deep-underground-orchestrator.js']
+          present=[x for x in forbidden if x in text]
+          if present:
+              raise SystemExit('Heavy runtime found in Light Day: '+', '.join(present))
+          if text!=old:
+              p.write_text(text,encoding='utf-8')
+              print('Removed timed canonical-storage startup from Light Day.')
+          else:
+              print('Light Day runtime already satisfies fast-path rule.')
+          PY
+
+      - name: Validate Light Day fast path
+        run: |
+          node --check word-touch-engine.js
+          node --check light-event-buffer.js
+          node tests/light-day-fastpath-smoke.js
+
+      - name: Commit automatic repair
+        shell: bash
+        run: |
+          if git diff --quiet; then echo "No repair needed."; exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add tired.html
+          git commit -m "Keep Light Day interaction path non-blocking [skip light-fastpath]"
+          git push
