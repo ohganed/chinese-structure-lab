@@ -1,9 +1,10 @@
 (function(){
 'use strict';
-/* Underground Runtime Self-Test v4
-   Non-destructive health check for the learning underground.
-   It verifies presence and safe read paths; it does not spend budget or alter UI. */
-var VERSION=4,EXT='undergroundRuntimeSelfTestV1';
+/* Underground Runtime Self-Test v5
+   MAINTENANCE ONLY.
+   It is intentionally dormant during learning sessions and runs only when
+   explicitly requested by maintenance/debug tooling. */
+var VERSION=5,EXT='undergroundRuntimeSelfTestV1';
 function now(){return new Date().toISOString()}function safe(fn){try{return{ok:true,value:fn()}}catch(e){return{ok:false,error:String(e&&e.message||e)}}}
 function exists(name,method){var x=window[name];return!!(x&&(!method||typeof x[method]==='function'))}
 function check(name,pass,detail){return{name:name,pass:!!pass,detail:detail||null}}
@@ -36,9 +37,9 @@ function run(){var checks=[];
  var deep=safe(function(){return window.CSLDeepUnderground.get()});checks.push(check('deep-invariants',deep.ok&&deep.value&&deep.value.floors&&deep.value.floors[49]&&deep.value.floors[49].status==='healthy',deep.ok?(deep.value.floors[49].issues||[]).join(','):deep.error));
  var constitution=safe(function(){return window.CSLUndergroundConstitution.get()});checks.push(check('constitutional-boundary',constitution.ok&&constitution.value&&constitution.value.constitution&&constitution.value.constitution.noGrades===true&&constitution.value.constitution.noForcedReview===true&&constitution.value.constitution.noHistoryDeletion===true,constitution.ok?constitution.value.action:constitution.error));
  var cf=safe(function(){return window.CSLCounterfactualSimulator.simulate()});checks.push(check('counterfactual-read',cf.ok&&cf.value&&cf.value.policy&&cf.value.policy.simulationOnly===true&&cf.value.policy.noBudgetSpend===true,cf.ok?'simulation safeguards present':cf.error));
- var failed=checks.filter(function(c){return!c.pass}),status=failed.length?'degraded':'healthy';var report={version:VERSION,ranAt:now(),status:status,total:checks.length,passed:checks.length-failed.length,failed:failed.length,checks:checks,policy:{nonDestructive:true,noBudgetSpend:true,noUIChange:true,noLearnerGrade:true}};
+ var failed=checks.filter(function(c){return!c.pass}),status=failed.length?'degraded':'healthy';var report={version:VERSION,ranAt:now(),status:status,total:checks.length,passed:checks.length-failed.length,failed:failed.length,checks:checks,policy:{maintenanceOnly:true,nonDestructive:true,noBudgetSpend:true,noUIChange:true,noLearnerGrade:true,noAutoRun:true}};
  var s=window.CSLStorage;safe(function(){if(!s||!s.load||!s.save)return;var p=s.load();p.extensions=p.extensions||{};p.extensions[EXT]=report;s.save(p)});
  try{if(window.CSLPlatform&&CSLPlatform.emit)CSLPlatform.emit('underground-self-test',{version:VERSION,status:status,passed:report.passed,total:report.total})}catch(e){}
  return report}
-window.CSLUndergroundSelfTest={version:VERSION,run:run};setTimeout(run,6500);
+window.CSLUndergroundSelfTest={version:VERSION,run:run,policy:{maintenanceOnly:true,noAutoRun:true}};
 })();
