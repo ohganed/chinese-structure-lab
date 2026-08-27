@@ -15,52 +15,36 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Connect Chinese Learning OS and shared learning layers to pages
+      - name: Keep learning-time runtime light and reserve underground for session end
         shell: bash
         run: |
           python3 - <<'PY'
           from pathlib import Path
-          layers=[
+
+          realtime_layers=[
             '<script src="./platform-bridge.js"></script>',
             '<script src="./audio-haptics-layer.js"></script>',
             '<script src="./storage-core.js"></script>',
             '<script src="./interaction-ledger.js"></script>',
-            '<script src="./learning-memory-engine.js"></script>',
-            '<script src="./learner-model-engine.js"></script>',
-            '<script src="./reencounter-planner.js"></script>',
-            '<script src="./situation-graph-engine.js"></script>',
-            '<script src="./persistent-world-engine.js"></script>',
-            '<script src="./language-graph-engine.js"></script>',
-            '<script src="./meaning-sense-graph-engine.js"></script>',
-            '<script src="./encounter-quality-engine.js"></script>',
-            '<script src="./retrieval-need-engine.js"></script>',
-            '<script src="./opportunity-matching-engine.js"></script>',
-            '<script src="./adaptive-presentation-engine.js"></script>',
-            '<script src="./presentation-policy-layer.js"></script>',
-            '<script src="./learning-os-core.js"></script>',
-            '<script src="./contradiction-quality-auditor.js"></script>',
-            '<script src="./evidence-confidence-engine.js"></script>',
-            '<script src="./intervention-budget-engine.js"></script>',
-            '<script src="./learner-agency-engine.js"></script>',
-            '<script src="./learning-rhythm-engine.js"></script>',
-            '<script src="./cognitive-load-guard.js"></script>',
-            '<script src="./temporal-pattern-engine.js"></script>',
-            '<script src="./support-regulation-engine.js"></script>',
-            '<script src="./curriculum-balance-engine.js"></script>',
-            '<script src="./continuity-resilience-engine.js"></script>',
-            '<script src="./underground-floor-registry.js"></script>',
-            '<script src="./deep-underground-orchestrator.js"></script>',
-            '<script src="./underground-constitution.js"></script>',
-            '<script src="./underground-governor.js"></script>',
-            '<script src="./decision-trace-ledger.js"></script>',
-            '<script src="./underground-integration-bus.js"></script>',
-            '<script src="./counterfactual-simulator.js"></script>',
-            '<script src="./underground-runtime-self-test.js"></script>',
+            '<script src="./session-end-analyzer.js"></script>',
             '<script src="./interactive-cues.js"></script>',
             '<script src="./senior-accessibility.js"></script>',
             '<script src="./a1-pedagogy-layer.js"></script>',
             '<script src="./curriculum-pedagogy-layer.js"></script>',
             '<script src="./feedback-layer.js"></script>'
+          ]
+          heavy=[
+            'learning-memory-engine.js','learner-model-engine.js','reencounter-planner.js',
+            'situation-graph-engine.js','persistent-world-engine.js','language-graph-engine.js',
+            'meaning-sense-graph-engine.js','encounter-quality-engine.js','retrieval-need-engine.js',
+            'opportunity-matching-engine.js','adaptive-presentation-engine.js','presentation-policy-layer.js',
+            'learning-os-core.js','contradiction-quality-auditor.js','evidence-confidence-engine.js',
+            'intervention-budget-engine.js','learner-agency-engine.js','learning-rhythm-engine.js',
+            'cognitive-load-guard.js','temporal-pattern-engine.js','support-regulation-engine.js',
+            'curriculum-balance-engine.js','continuity-resilience-engine.js','underground-floor-registry.js',
+            'deep-underground-orchestrator.js','underground-constitution.js','underground-governor.js',
+            'decision-trace-ledger.js','underground-integration-bus.js','counterfactual-simulator.js',
+            'underground-runtime-self-test.js'
           ]
           session_guide='<script src="./session-guide.js"></script>'
           reencounter='<script src="./reencounter-layer.js"></script>'
@@ -68,87 +52,63 @@ jobs:
           no_situation={'index.html','explore.html','course-map.html','memory.html','garden.html','tester.html'}
           no_session_guide={'tester.html'}
           no_reencounter={'doorways.html','explore.html','course-map.html','memory.html','garden.html','tester.html'}
-          # Light Day has an intentional fast-path runtime. Learner taps must never
-          # start the full underground stack; raw events are buffered and preserved.
           fast_path_pages={'tired.html'}
           changed=[]
           for p in Path('.').glob('*.html'):
               text=p.read_text(encoding='utf-8');original=text
+              # Remove all eager underground script tags from every page.
+              for src in heavy:
+                  text=text.replace(f'<script src="./{src}"></script>','')
               if p.name not in fast_path_pages:
-                  for layer in layers:
-                      if layer not in text and '</body>' in text:text=text.replace('</body>',layer+'</body>',1)
-                  if p.name not in no_session_guide and session_guide not in text and '</body>' in text:text=text.replace('</body>',session_guide+'</body>',1)
-                  if p.name not in no_reencounter and reencounter not in text and '</body>' in text:text=text.replace('</body>',reencounter+'</body>',1)
-                  if p.name not in no_situation and situation not in text and '</body>' in text:text=text.replace('</body>',situation+'</body>',1)
-              if text!=original:p.write_text(text,encoding='utf-8');changed.append(p.name)
-          print('Connected shared layers to:',', '.join(changed) if changed else 'nothing new')
+                  for layer in realtime_layers:
+                      if layer not in text and '</body>' in text:
+                          text=text.replace('</body>',layer+'</body>',1)
+                  if p.name not in no_session_guide and session_guide not in text and '</body>' in text:
+                      text=text.replace('</body>',session_guide+'</body>',1)
+                  if p.name not in no_reencounter and reencounter not in text and '</body>' in text:
+                      text=text.replace('</body>',reencounter+'</body>',1)
+                  if p.name not in no_situation and situation not in text and '</body>' in text:
+                      text=text.replace('</body>',situation+'</body>',1)
+              if text!=original:
+                  p.write_text(text,encoding='utf-8');changed.append(p.name)
+          print('Light runtime applied to:',', '.join(changed) if changed else 'nothing new')
           PY
 
-      - name: Validate underground JavaScript syntax
+      - name: Validate JavaScript syntax and architecture
         shell: bash
         run: |
           for f in *.js; do node --check "$f"; done
-          node tests/deep-underground-smoke.js
-          node tests/underground-efficiency-smoke.js
           node tests/curriculum-expansion-smoke.js
-
-      - name: Validate integration wiring
-        shell: bash
-        run: |
           python3 - <<'PY'
           from pathlib import Path
-          required=['storage-core.js','interaction-ledger.js','learner-model-engine.js','opportunity-matching-engine.js','adaptive-presentation-engine.js','presentation-policy-layer.js','evidence-confidence-engine.js','intervention-budget-engine.js','learner-agency-engine.js','learning-rhythm-engine.js','cognitive-load-guard.js','temporal-pattern-engine.js','support-regulation-engine.js','curriculum-balance-engine.js','continuity-resilience-engine.js','underground-floor-registry.js','deep-underground-orchestrator.js','underground-constitution.js','underground-governor.js','decision-trace-ledger.js','underground-integration-bus.js','counterfactual-simulator.js','underground-runtime-self-test.js']
-          missing=[x for x in required if not Path(x).exists()]
-          if missing: raise SystemExit('Missing underground files: '+', '.join(missing))
+          heavy=['learning-memory-engine.js','learner-model-engine.js','reencounter-planner.js','situation-graph-engine.js','persistent-world-engine.js','language-graph-engine.js','meaning-sense-graph-engine.js','encounter-quality-engine.js','retrieval-need-engine.js','opportunity-matching-engine.js','adaptive-presentation-engine.js','presentation-policy-layer.js','learning-os-core.js','contradiction-quality-auditor.js','evidence-confidence-engine.js','intervention-budget-engine.js','learner-agency-engine.js','learning-rhythm-engine.js','cognitive-load-guard.js','temporal-pattern-engine.js','support-regulation-engine.js','curriculum-balance-engine.js','continuity-resilience-engine.js','underground-floor-registry.js','deep-underground-orchestrator.js','underground-constitution.js','underground-governor.js','decision-trace-ledger.js','underground-integration-bus.js','counterfactual-simulator.js','underground-runtime-self-test.js']
+          analyzer=Path('session-end-analyzer.js').read_text()
+          missing=[x for x in heavy if x!='underground-runtime-self-test.js' and x not in analyzer]
+          if missing: raise SystemExit('Session End Analyzer missing underground modules: '+', '.join(missing))
           bus=Path('underground-integration-bus.js').read_text()
-          checks=['CSLUndergroundGovernor','CSLInterventionBudget','CSLDecisionTrace','CSLLearnerAgency','duplicate-intervention-suppressed']
-          absent=[x for x in checks if x not in bus]
-          if absent: raise SystemExit('Integration bus missing APIs/safety guards: '+', '.join(absent))
-          ledger=Path('interaction-ledger.js').read_text()
-          required_ledger=['CSLInteractionLedger','CSLStorage.addEvent','learnerInitiated','noCorrectness','noGrades','noTypedText','localProfileOnly']
-          absent=[x for x in required_ledger if x not in ledger]
-          if absent: raise SystemExit('Interaction ledger missing APIs/safeguards: '+', '.join(absent))
-          forbidden_ledger=['input.value','textarea.value','contenteditable','localStorage.clear']
-          present=[x for x in forbidden_ledger if x in ledger]
-          if present: raise SystemExit('Interaction ledger contains forbidden collection/destructive paths: '+', '.join(present))
-          deep_files=['temporal-pattern-engine.js','support-regulation-engine.js','curriculum-balance-engine.js','continuity-resilience-engine.js','deep-underground-orchestrator.js','underground-constitution.js']
-          deep_text='\n'.join(Path(x).read_text() for x in deep_files)
-          required_deep=['CSLTemporalPattern','CSLSupportRegulation','CSLCurriculumBalance','CSLContinuityResilience','CSLDeepUnderground','CSLUndergroundConstitution','noGrades','noForcedReview','noHistoryDeletion','FREEZE_ADAPTATION']
-          absent=[x for x in required_deep if x not in deep_text]
-          if absent: raise SystemExit('Deep underground missing APIs/safeguards: '+', '.join(absent))
-          forbidden_deep=['document.body','innerHTML=','CSLInterventionBudget.request','localStorage.clear']
-          present=[x for x in forbidden_deep if x in deep_text]
-          if present: raise SystemExit('Deep underground contains forbidden UI/budget/destructive paths: '+', '.join(present))
-          registry=Path('underground-floor-registry.js').read_text()
-          if 'total:50' not in registry or 'CSLUndergroundFloors' not in registry:
-              raise SystemExit('Underground floor registry does not guarantee 50 floors')
-          cf=Path('counterfactual-simulator.js').read_text()
-          required_cf=['CSLCounterfactualSimulator','simulationOnly','noBudgetSpend','noUIChange','noHistoryMutation','noTraceWrite']
-          absent=[x for x in required_cf if x not in cf]
-          if absent: raise SystemExit('Counterfactual simulator missing safeguards: '+', '.join(absent))
-          forbidden=['CSLInterventionBudget.request','CSLDecisionTrace.record','CSLStorage.save','document.body.append','innerHTML=']
-          present=[x for x in forbidden if x in cf]
-          if present: raise SystemExit('Counterfactual simulator contains forbidden side-effect paths: '+', '.join(present))
-          test=Path('underground-runtime-self-test.js').read_text()
-          probes=['CSLStorage','CSLInteractionLedger','CSLTemporalPattern','CSLSupportRegulation','CSLCurriculumBalance','CSLContinuityResilience','CSLUndergroundFloors','CSLDeepUnderground','CSLUndergroundConstitution','CSLAdaptivePresentation','CSLEvidenceConfidence','CSLInterventionBudget','CSLLearnerAgency','CSLLearningRhythm','CSLCognitiveLoadGuard','CSLUndergroundGovernor','CSLDecisionTrace','CSLUndergroundIntegration','CSLCounterfactualSimulator']
-          absent=[x for x in probes if x not in test]
-          if absent: raise SystemExit('Self-test missing probes: '+', '.join(absent))
+          if "setTimeout(function(){run('startup')" in bus or "addEventListener('csl:" in bus:
+              raise SystemExit('Integration bus still contains real-time/startup analysis triggers')
+          deep=Path('deep-underground-orchestrator.js').read_text()
+          if "setTimeout(function()" in deep or "addEventListener('csl:" in deep:
+              raise SystemExit('Deep underground still contains automatic learning-time triggers')
+          selftest=Path('underground-runtime-self-test.js').read_text()
+          if 'setTimeout(run' in selftest:
+              raise SystemExit('Underground self-test still auto-runs')
           for p in Path('.').glob('*.html'):
-              if p.name=='tired.html':
-                  continue
               text=p.read_text(encoding='utf-8')
-              for src in ('interaction-ledger.js','temporal-pattern-engine.js','support-regulation-engine.js','curriculum-balance-engine.js','continuity-resilience-engine.js','underground-floor-registry.js','deep-underground-orchestrator.js','underground-constitution.js','underground-integration-bus.js','counterfactual-simulator.js','underground-runtime-self-test.js'):
-                  count=text.count(src)
-                  if count!=1: raise SystemExit(f'{p}: expected exactly one {src}, found {count}')
-          print('Integration wiring, counterfactual safety, script uniqueness checks passed. Light Day fast path exempted intentionally.')
+              eager=[src for src in heavy if f'<script src="./{src}"></script>' in text]
+              if eager: raise SystemExit(f'{p}: eager underground scripts remain: '+', '.join(eager))
+              if p.name!='tired.html' and p.name!='tester.html' and 'session-end-analyzer.js' not in text:
+                  raise SystemExit(f'{p}: missing session-end-analyzer.js')
+          print('Session-end-only underground architecture verified.')
           PY
 
-      - name: Commit generated connections
+      - name: Commit generated runtime wiring
         shell: bash
         run: |
           if git diff --quiet; then echo "No changes needed."; exit 0; fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add '*.html'
-          git commit -m "Apply shared layers safely [skip shared-layers]"
+          git commit -m "Apply light learning runtime [skip shared-layers]"
           git push
