@@ -51,6 +51,7 @@ jobs:
           session_guide='<script src="./session-guide.js"></script>'
           reencounter='<script src="./reencounter-layer.js"></script>'
           situation='<script src="./situation-layer.js"></script>'
+          words_return='<script src="./words-come-back-word-layer.js"></script>'
           no_situation={'index.html','explore.html','course-map.html','memory.html','garden.html','tester.html'}
           no_session_guide={'tester.html'}
           no_reencounter={'doorways.html','explore.html','course-map.html','memory.html','garden.html','tester.html'}
@@ -70,6 +71,8 @@ jobs:
                       text=text.replace('</body>',reencounter+'</body>',1)
                   if p.name not in no_situation and situation not in text and '</body>' in text:
                       text=text.replace('</body>',situation+'</body>',1)
+                  if p.name=='index.html' and words_return not in text and '</body>' in text:
+                      text=text.replace('</body>',words_return+'</body>',1)
               if text!=original:
                   p.write_text(text,encoding='utf-8');changed.append(p.name)
           print('Light runtime + universal word touch applied to:',', '.join(changed) if changed else 'nothing new')
@@ -97,6 +100,8 @@ jobs:
               raise SystemExit('Underground self-test still auto-runs')
           if not Path('word-touch-engine.js').exists() or not Path('legacy-word-touch-upgrader.js').exists():
               raise SystemExit('Universal word-touch runtime files are missing')
+          if not Path('words-come-back-word-layer.js').exists():
+              raise SystemExit('Words come back word layer is missing')
           for p in Path('.').glob('*.html'):
               text=p.read_text(encoding='utf-8')
               eager=[src for src in heavy if f'<script src="./{src}"></script>' in text]
@@ -105,7 +110,10 @@ jobs:
                   if 'session-end-analyzer.js' not in text: raise SystemExit(f'{p}: missing session-end-analyzer.js')
                   if 'word-touch-engine.js' not in text: raise SystemExit(f'{p}: missing word-touch-engine.js')
                   if 'legacy-word-touch-upgrader.js' not in text: raise SystemExit(f'{p}: missing legacy-word-touch-upgrader.js')
-          print('Session-end-only underground architecture and universal word-touch wiring verified.')
+          index=Path('index.html').read_text()
+          if 'words-come-back-word-layer.js' not in index:
+              raise SystemExit('index.html: missing Words come back word layer')
+          print('Session-end-only underground architecture and Words come back word-touch wiring verified.')
           PY
 
       - name: Commit generated runtime wiring
