@@ -27,6 +27,8 @@ jobs:
             '<script src="./storage-core.js"></script>',
             '<script src="./interaction-ledger.js"></script>',
             '<script src="./session-end-analyzer.js"></script>',
+            '<script src="./word-touch-engine.js"></script>',
+            '<script src="./legacy-word-touch-upgrader.js"></script>',
             '<script src="./interactive-cues.js"></script>',
             '<script src="./senior-accessibility.js"></script>',
             '<script src="./a1-pedagogy-layer.js"></script>',
@@ -56,7 +58,6 @@ jobs:
           changed=[]
           for p in Path('.').glob('*.html'):
               text=p.read_text(encoding='utf-8');original=text
-              # Remove all eager underground script tags from every page.
               for src in heavy:
                   text=text.replace(f'<script src="./{src}"></script>','')
               if p.name not in fast_path_pages:
@@ -71,7 +72,7 @@ jobs:
                       text=text.replace('</body>',situation+'</body>',1)
               if text!=original:
                   p.write_text(text,encoding='utf-8');changed.append(p.name)
-          print('Light runtime applied to:',', '.join(changed) if changed else 'nothing new')
+          print('Light runtime + universal word touch applied to:',', '.join(changed) if changed else 'nothing new')
           PY
 
       - name: Validate JavaScript syntax and architecture
@@ -94,13 +95,17 @@ jobs:
           selftest=Path('underground-runtime-self-test.js').read_text()
           if 'setTimeout(run' in selftest:
               raise SystemExit('Underground self-test still auto-runs')
+          if not Path('word-touch-engine.js').exists() or not Path('legacy-word-touch-upgrader.js').exists():
+              raise SystemExit('Universal word-touch runtime files are missing')
           for p in Path('.').glob('*.html'):
               text=p.read_text(encoding='utf-8')
               eager=[src for src in heavy if f'<script src="./{src}"></script>' in text]
               if eager: raise SystemExit(f'{p}: eager underground scripts remain: '+', '.join(eager))
-              if p.name!='tired.html' and p.name!='tester.html' and 'session-end-analyzer.js' not in text:
-                  raise SystemExit(f'{p}: missing session-end-analyzer.js')
-          print('Session-end-only underground architecture verified.')
+              if p.name!='tired.html' and p.name!='tester.html':
+                  if 'session-end-analyzer.js' not in text: raise SystemExit(f'{p}: missing session-end-analyzer.js')
+                  if 'word-touch-engine.js' not in text: raise SystemExit(f'{p}: missing word-touch-engine.js')
+                  if 'legacy-word-touch-upgrader.js' not in text: raise SystemExit(f'{p}: missing legacy-word-touch-upgrader.js')
+          print('Session-end-only underground architecture and universal word-touch wiring verified.')
           PY
 
       - name: Commit generated runtime wiring
@@ -110,5 +115,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add '*.html'
-          git commit -m "Apply light learning runtime [skip shared-layers]"
+          git commit -m "Apply universal word touch runtime [skip shared-layers]"
           git push
