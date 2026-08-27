@@ -4,7 +4,7 @@ const assert=require('assert');
 const path=require('path');
 const root=path.resolve(__dirname,'..');
 const sandbox={window:{}};vm.createContext(sandbox);
-vm.runInContext(fs.readFileSync(path.join(root,'fivefold-curriculum-data.js'),'utf8'),sandbox,{filename:'fivefold-curriculum-data.js'});
+vm.runInContext(fs.readFileSync(path.join(root,'fivefold-curriculum-v2.js'),'utf8'),sandbox,{filename:'fivefold-curriculum-v2.js'});
 const api=sandbox.window.CSLFivefoldCurriculum;assert(api,'fivefold curriculum API missing');
 const a1=api.all('A1'),a2=api.all('A2');
 assert.strictEqual(a1.length,1248,'A1 expansion must add exactly 1,248 lines (312 → 1,560 total)');
@@ -18,7 +18,9 @@ all.forEach(x=>{
  assert(x.words.every(w=>/ · /.test(w)),x.id+' has malformed word/chunk data');
 });
 const page=fs.readFileSync(path.join(root,'fivefold-level.html'),'utf8');
+assert(page.includes('fivefold-curriculum-v2.js'),'expanded browser must load the deduplicated v2 shard');
 assert(page.includes('PAGE=24'),'expanded course must render in small 24-line batches');
 assert(page.includes('light-event-buffer.js'),'learning-time events must use the lightweight buffer');
 assert(page.includes('word-touch-engine.js'),'expanded course must reuse universal Word Touch');
+assert(!page.includes('situation-layer.js')&&!page.includes('reencounter-layer.js'),'expanded browser must not restore unnecessary real-time layers');
 console.log('fivefold level expansion smoke: passed — A1 total 1560, A2 total 300');
