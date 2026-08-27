@@ -1,10 +1,11 @@
 (function(){
 'use strict';
-/* Underground Integration Bus v4
-   Connects existing underground engines without taking learner control.
-   Event-driven recalculation, normalized snapshots, governor arbitration,
-   budget consumption only after an allowed proposal, and decision tracing. */
-var VERSION=4,EXT='undergroundIntegrationV1',PROFILE_KEY='csl_profile_v1',timer=null,lastFingerprint='';
+/* Underground Integration Bus v5
+   SESSION-END ONLY.
+   During learning, the app records raw learner events but performs no deep analysis.
+   Deep analysis is invoked explicitly after a learning session ends.
+   This preserves the underground intelligence while removing real-time CPU/storage churn. */
+var VERSION=5,EXT='undergroundIntegrationV1',PROFILE_KEY='csl_profile_v1',lastFingerprint='';
 function safe(fn){try{return fn()}catch(e){return null}}
 function now(){return new Date().toISOString()}
 function storage(){return window.CSLStorage||null}
@@ -27,10 +28,7 @@ function run(reason){var snap=normalized(),decision=read('CSLUndergroundGovernor
    if(fingerprint===lastFingerprint){budgetResult={consumed:false,reason:'duplicate-suppressed'};decision=quiet('duplicate-intervention-suppressed');}
    else {budgetResult=consumeBudget(decision);lastFingerprint=fingerprint;if(!budgetResult.consumed)decision=quiet('budget-denied',[budgetResult.reason]);}
  } else {lastFingerprint=fingerprint;}
- var result={version:VERSION,ranAt:now(),reason:reason||'manual',snapshot:snap,decision:decision,budget:budgetResult,agencyApplied:agency.agencyApplied||null,deepSupportApplied:deepSupport.applied};trace(decision,result);safe(function(){if(window.CSLPlatform&&CSLPlatform.emit)CSLPlatform.emit('underground-integration',{action:decision.action,reason:result.reason})});return result}
-function schedule(reason){clearTimeout(timer);timer=setTimeout(function(){run(reason)},160)}
-['learning-event','encounter-recorded','sentence-viewed','word-touched','audio-played','pinyin-toggled','meaning-revealed','structure-opened','unclear-changed','scene-changed','accessibility-changed','learner-choice','platform-ready'].forEach(function(n){window.addEventListener('csl:'+n,function(){schedule(n)})});
-window.addEventListener('storage',function(e){if(primaryChanged(e))schedule('primary-storage-change')});
-window.CSLUndergroundIntegration={version:VERSION,run:run,snapshot:normalized,schedule:schedule,primaryStorageChange:primaryChanged};
-setTimeout(function(){run('startup')},5000);
+ var result={version:VERSION,ranAt:now(),reason:reason||'session-end',snapshot:snap,decision:decision,budget:budgetResult,agencyApplied:agency.agencyApplied||null,deepSupportApplied:deepSupport.applied,policy:{sessionEndOnly:true,noRealtimeAnalysis:true}};trace(decision,result);safe(function(){if(window.CSLPlatform&&CSLPlatform.emit)CSLPlatform.emit('underground-integration',{action:decision.action,reason:result.reason})});return result}
+function schedule(){return{scheduled:false,reason:'realtime-analysis-disabled'}}
+window.CSLUndergroundIntegration={version:VERSION,run:run,snapshot:normalized,schedule:schedule,primaryStorageChange:primaryChanged,policy:{sessionEndOnly:true,noStartupRun:true,noRealtimeListeners:true}};
 })();
