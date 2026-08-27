@@ -56,7 +56,7 @@ function renderSentence(){if(!route.length)return;var x=route[pos],btn=document.
 function touchSentence(){var x=route[pos],btn=document.getElementById('sentenceTouch');if(meaningTimer)clearTimeout(meaningTimer);btn.classList.remove('meaning');btn.classList.add('sounding');recordEvent('sentence_touch',{sentenceId:x.id,sentence:x.zh,course:'tired',learnerInitiated:true});CSLWordTouch.speak(x.zh,.88,function(){btn.classList.remove('sounding');btn.classList.add('meaning');recordEvent('sentence_meaning_revealed',{sentenceId:x.id,course:'tired',learnerInitiated:true,temporary:true});meaningTimer=setTimeout(function(){btn.classList.remove('meaning')},1800)})}
 function ensureStorageAndFlush(){if(window.CSLStorage){try{CSLLightEventBuffer.flush()}catch(e){};return}if(storageLoading)return;storageLoading=true;var s=document.createElement('script');s.src='./storage-core.js';s.onload=function(){storageLoading=false;try{CSLLightEventBuffer.flush()}catch(e){}};s.onerror=function(){storageLoading=false};document.head.appendChild(s)}
 function advance(){if(pos<route.length-1){pos++;renderSentence();return}recordEvent('tired_course_complete',{items:route.length,sentenceIds:route.map(function(x){return x.id})});document.getElementById('card').style.display='none';document.getElementById('done').classList.add('on');setTimeout(ensureStorageAndFlush,250)}
-mountWords();try{speechSynthesis.getVoices()}catch(e){}setTimeout(function(){if(!document.hidden)ensureStorageAndFlush()},15000);
+mountWords();try{speechSynthesis.getVoices()}catch(e){}
 </script>
 </body>
 </html>
