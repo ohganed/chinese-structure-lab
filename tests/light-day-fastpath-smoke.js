@@ -12,7 +12,11 @@ need(!tired.includes('<script src="./storage-core.js"></script>'),'Light Day mus
 need(!tired.includes('learning-memory-engine.js'),'Light Day must not eagerly load underground engines');
 need(!tired.includes('underground-integration-bus.js'),'Light Day must stay outside the full underground runtime');
 need(workflow.includes("fast_path_pages={'tired.html'}"),'Workflow must preserve the Light Day fast-path exemption');
-need(word.includes('Chinese only -> tap: immediate speech + pinyin -> tap: meaning -> tap: Chinese only'),'Word Touch three-step contract must remain explicit');
+need(word.includes('Chinese only -> tap: immediate speech -> tap: meaning -> tap: details -> tap: Chinese only'),'Word Touch four-step contract must remain explicit');
+need(word.includes('next=(current+1)%4'),'Word Touch must cycle through four states');
+need(word.includes("emit('word_audio_played'"),'Audio step must be recorded');
+need(word.includes("emit('word_meaning_revealed'"),'Meaning step must be recorded');
+need(word.includes("emit('word_detail_revealed'"),'Detail step must be recorded');
 need(word.includes('synth.speak(u);'),'Speech must be invoked directly by the touch path');
 need(buffer.includes("KEY='csl_light_event_queue_v1'"),'Buffered events must have a durable queue');
 need(buffer.includes('if(!window.CSLStorage||!CSLStorage.load||!CSLStorage.save)return false'),'Buffer must preserve events when canonical storage is unavailable');
