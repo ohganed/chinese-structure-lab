@@ -7,19 +7,22 @@ var B=window.CSLFivefoldCurriculum;if(!B||!B.all)return;
 function W(z,p,j){return z+' '+p+' · '+j}
 function cp(x){return JSON.parse(JSON.stringify(x))}
 function set(x,zh,py,ja,words,note){x.zh=zh;x.py=py;x.ja=ja;x.words=words;if(note)x.auditNote=note;return x}
+/* Routine rows are generated in blocks of 12 actions per time expression.
+   Correct only combinations that are poor default teaching examples, while
+   retaining each permanent sentence ID. */
 var time={
- '025':['今天下午','jīntiān xiàwǔ','今日の午後','吃午饭','chī wǔfàn','昼ごはんを食べます'],
- '026':['今天下午','jīntiān xiàwǔ','今日の午後','喝咖啡','hē kāfēi','コーヒーを飲みます'],
- '027':['今天下午','jīntiān xiàwǔ','今日の午後','去买东西','qù mǎi dōngxi','買い物に行きます'],
- '037':['今天晚上','jīntiān wǎnshang','今夜','吃晚饭','chī wǎnfàn','夕食を食べます'],
- '038':['今天晚上','jīntiān wǎnshang','今夜','看电视','kàn diànshì','テレビを見ます'],
- '039':['今天晚上','jīntiān wǎnshang','今夜','准备睡觉','zhǔnbèi shuìjiào','寝る準備をします'],
- '061':['明天下午','míngtiān xiàwǔ','明日の午後','吃午饭','chī wǔfàn','昼ごはんを食べます'],
- '062':['明天下午','míngtiān xiàwǔ','明日の午後','喝咖啡','hē kāfēi','コーヒーを飲みます'],
- '063':['明天下午','míngtiān xiàwǔ','明日の午後','去买东西','qù mǎi dōngxi','買い物に行きます'],
- '073':['明天晚上','míngtiān wǎnshang','明日の夜','吃晚饭','chī wǎnfàn','夕食を食べます'],
- '074':['明天晚上','míngtiān wǎnshang','明日の夜','看电视','kàn diànshì','テレビを見ます'],
- '075':['明天晚上','míngtiān wǎnshang','明日の夜','准备睡觉','zhǔnbèi shuìjiào','寝る準備をします'],
+ '013':['今天下午','jīntiān xiàwǔ','今日の午後','吃午饭','chī wǔfàn','昼ごはんを食べます'],
+ '014':['今天下午','jīntiān xiàwǔ','今日の午後','喝咖啡','hē kāfēi','コーヒーを飲みます'],
+ '015':['今天下午','jīntiān xiàwǔ','今日の午後','去买东西','qù mǎi dōngxi','買い物に行きます'],
+ '025':['今天晚上','jīntiān wǎnshang','今夜','吃晚饭','chī wǎnfàn','夕食を食べます'],
+ '026':['今天晚上','jīntiān wǎnshang','今夜','看电视','kàn diànshì','テレビを見ます'],
+ '027':['今天晚上','jīntiān wǎnshang','今夜','准备睡觉','zhǔnbèi shuìjiào','寝る準備をします'],
+ '049':['明天下午','míngtiān xiàwǔ','明日の午後','吃午饭','chī wǔfàn','昼ごはんを食べます'],
+ '050':['明天下午','míngtiān xiàwǔ','明日の午後','喝咖啡','hē kāfēi','コーヒーを飲みます'],
+ '051':['明天下午','míngtiān xiàwǔ','明日の午後','去买东西','qù mǎi dōngxi','買い物に行きます'],
+ '061':['明天晚上','míngtiān wǎnshang','明日の夜','吃晚饭','chī wǎnfàn','夕食を食べます'],
+ '062':['明天晚上','míngtiān wǎnshang','明日の夜','看电视','kàn diànshì','テレビを見ます'],
+ '063':['明天晚上','míngtiān wǎnshang','明日の夜','准备睡觉','zhǔnbèi shuìjiào','寝る準備をします'],
  '085':['周日下午','zhōurì xiàwǔ','日曜の午後','吃午饭','chī wǔfàn','昼ごはんを食べます'],
  '086':['周日下午','zhōurì xiàwǔ','日曜の午後','喝咖啡','hē kāfēi','コーヒーを飲みます'],
  '087':['周日下午','zhōurì xiàwǔ','日曜の午後','去买东西','qù mǎi dōngxi','買い物に行きます']
@@ -27,7 +30,6 @@ var time={
 var shopNouns=[
  ['书','shū','本'],['衣服','yīfu','服'],['鞋','xié','靴'],['杯子','bēizi','カップ'],['伞','sǎn','傘'],['票','piào','切符'],['包','bāo','バッグ'],['水','shuǐ','水'],['帽子','màozi','帽子'],['裤子','kùzi','ズボン'],['手机','shǒujī','携帯'],['充电器','chōngdiànqì','充電器']
 ];
-function pad(n){return String(n).padStart(3,'0')}
 function patch(x){x=cp(x);var m;
  if((m=x.id.match(/^csl-a1x-routine-(\d{3})$/))&&time[m[1]]){
   var a=time[m[1]],zh='我'+a[0]+a[3]+'。',py='wǒ '+a[1]+' '+a[4],ja='私は'+a[2]+'、'+a[5]+'。';
