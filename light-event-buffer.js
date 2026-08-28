@@ -1,10 +1,12 @@
 (function(){
 'use strict';
-/* Chinese Structure Lab — Light Event Buffer v1
-   Keeps learner-initiated Light Day interactions fast.
-   Events are appended to a small durable queue first, then merged into the
-   canonical CSLStorage profile in one batch when the learner is no longer tapping. */
-var VERSION=1,KEY='csl_light_event_queue_v1',MAX=400,flushTimer=null;
+/* Chinese Structure Lab — Light Event Buffer v2
+   Learning time = append durable raw events only.
+   NO timer flush, NO pagehide flush, NO analysis.
+   The queue is merged into CSLStorage only when Session End Analyzer explicitly
+   calls flush() after the learner presses "学習を終了".
+*/
+var VERSION=2,KEY='csl_light_event_queue_v1',MAX=5000;
 function parse(v,f){try{return v?JSON.parse(v):f}catch(e){return f}}
 function queue(){var q=parse(localStorage.getItem(KEY),[]);return Array.isArray(q)?q:[]}
 function persist(q){try{localStorage.setItem(KEY,JSON.stringify((q||[]).slice(-MAX)))}catch(e){}}
@@ -14,12 +16,9 @@ function emit(type,data){
  var q=queue(),d=device();
  q.push({id:'lev:'+d+':'+Date.now()+':'+Math.random().toString(36).slice(2,7),deviceId:d,type:type,at:now(),data:data||{}});
  persist(q);
- if(flushTimer)clearTimeout(flushTimer);
- /* Only flush after a long quiet period. Every new tap postpones the heavy write. */
- flushTimer=setTimeout(flush,12000);
+ return true;
 }
 function flush(){
- if(flushTimer){clearTimeout(flushTimer);flushTimer=null}
  var q=queue();if(!q.length)return true;
  try{
   if(!window.CSLStorage||!CSLStorage.load||!CSLStorage.save)return false;
@@ -33,7 +32,6 @@ function flush(){
  }catch(e){persist(q);return false}
 }
 function size(){return queue().length}
-window.CSLLightEventBuffer={version:VERSION,emit:emit,flush:flush,size:size};
-window.addEventListener('pagehide',flush,{capture:true});
-document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden')flush()});
+function peek(){return queue().slice()}
+window.CSLLightEventBuffer={version:VERSION,emit:emit,flush:flush,size:size,peek:peek,policy:{appendOnlyDuringLearning:true,flushAtSessionEndOnly:true,noTimerFlush:true,noPagehideFlush:true,noAnalysis:true}};
 })();
