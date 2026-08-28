@@ -49,12 +49,11 @@ jobs:
             'decision-trace-ledger.js','underground-integration-bus.js','counterfactual-simulator.js',
             'underground-runtime-self-test.js'
           ]
-          # This old layer performs lexical/semantic comparison while the learner is studying.
-          # It is intentionally removed: reencounter decisions belong at the session boundary.
           realtime_analysis=['reencounter-layer.js']
           session_guide='<script src="./session-guide.js"></script>'
           situation='<script src="./situation-layer.js"></script>'
           words_return='<script src="./words-come-back-word-layer.js"></script>'
+          next_plan='<script src="./next-session-plan-layer.js"></script>'
           fivefold_nav='<script src="./fivefold-nav-layer.js"></script>'
           no_situation={'index.html','explore.html','course-map.html','memory.html','garden.html','tester.html','fivefold-level.html'}
           no_session_guide={'tester.html'}
@@ -72,8 +71,9 @@ jobs:
                       text=text.replace('</body>',session_guide+'</body>',1)
                   if p.name not in no_situation and situation not in text and '</body>' in text:
                       text=text.replace('</body>',situation+'</body>',1)
-                  if p.name=='index.html' and words_return not in text and '</body>' in text:
-                      text=text.replace('</body>',words_return+'</body>',1)
+                  if p.name=='index.html':
+                      for layer in [words_return,next_plan]:
+                          if layer not in text and '</body>' in text:text=text.replace('</body>',layer+'</body>',1)
                   if p.name=='explore.html' and fivefold_nav not in text and '</body>' in text:
                       text=text.replace('</body>',fivefold_nav+'</body>',1)
               if text!=original:
@@ -102,6 +102,12 @@ jobs:
           ledger=Path('interaction-ledger.js').read_text()
           if 'patchSentence(' in ledger or 'CSLStorage.load()' in ledger:
               raise SystemExit('Interaction ledger still performs profile work during learning')
+          consumer=Path('next-session-plan-layer.js').read_text()
+          forbidden=['CSLStorage.save','CSLStorage.addEvent','CSLStorage.patchSentence','CSLLearningMemory','CSLLearnerModel','CSLReencounterPlanner.refresh','CSLDeepUnderground','CSLUndergroundIntegration']
+          bad=[x for x in forbidden if x in consumer]
+          if bad: raise SystemExit('Next Session Plan consumer is not read-only: '+', '.join(bad))
+          if "localStorage.getItem(ROOT_KEY)" not in consumer or 'precomputedPlanOnly:true' not in consumer:
+              raise SystemExit('Next Session Plan consumer must read precomputed profile state only')
           bus=Path('underground-integration-bus.js').read_text()
           if "setTimeout(function(){run('startup')" in bus or "addEventListener('csl:" in bus:
               raise SystemExit('Integration bus still contains real-time/startup analysis triggers')
@@ -120,15 +126,13 @@ jobs:
                   for required in ['light-event-buffer.js','session-end-analyzer.js','word-touch-engine.js','legacy-word-touch-upgrader.js']:
                       if required not in text: raise SystemExit(f'{p}: missing {required}')
           index=Path('index.html').read_text()
-          if 'words-come-back-word-layer.js' not in index:
-              raise SystemExit('index.html: missing Words come back word layer')
+          for required in ['words-come-back-word-layer.js','next-session-plan-layer.js']:
+              if required not in index: raise SystemExit('index.html: missing '+required)
           explore=Path('explore.html').read_text()
-          if 'fivefold-nav-layer.js' not in explore:
-              raise SystemExit('explore.html: missing fivefold curriculum entrance layer')
+          if 'fivefold-nav-layer.js' not in explore: raise SystemExit('explore.html: missing fivefold curriculum entrance layer')
           expanded=Path('fivefold-level.html').read_text()
-          if 'natural-chinese-overrides.js' not in expanded:
-              raise SystemExit('fivefold-level.html: Natural Chinese correction layer is missing')
-          print('User-session-first architecture verified: raw events only during learning; underground at explicit session end.')
+          if 'natural-chinese-overrides.js' not in expanded: raise SystemExit('fivefold-level.html: Natural Chinese correction layer is missing')
+          print('Closed user loop verified: raw events during learning; underground at explicit end; precomputed plan consumed read-only next session.')
           PY
 
       - name: Commit generated runtime wiring
@@ -138,5 +142,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add '*.html'
-          git commit -m "Enforce session-boundary runtime [skip shared-layers]"
+          git commit -m "Wire next-session plan consumer [skip shared-layers]"
           git push
