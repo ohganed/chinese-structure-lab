@@ -1,18 +1,24 @@
 (function(){
 'use strict';
-/* Legacy Word Touch Upgrader v2
+/* Legacy Word Touch Upgrader v3
    Replaces old .word buttons completely with the shared 4-step Word Touch behavior.
    Initial Chinese only -> tap 1 audio -> tap 2 meaning -> tap 3 details -> tap 4 Chinese only.
    Legacy .word styling is intentionally NOT preserved.
+   Important: legacy buttons may contain glued bilingual text such as 你you or 请please.
+   Only Han characters are passed to Chinese speech synthesis.
 */
-var VERSION=2,seen=new WeakSet();
+var VERSION=3,seen=new WeakSet();
 function txt(el,sel){var x=el&&el.querySelector&&el.querySelector(sel);return x?(x.textContent||'').trim():''}
 function nearestLesson(btn){return btn.closest('.lesson,.card,.item,.entry,article,section')||btn.parentElement}
+function chineseOnly(raw){
+ var parts=String(raw||'').match(/[\u3400-\u9FFF\uF900-\uFAFF]+/g);
+ return parts&&parts.length?parts.join(''):String(raw||'').trim();
+}
 function parseLegacy(btn){
  var clone=btn.cloneNode(true),small=clone.querySelector('small'),meaning='';
  if(small){meaning=(small.textContent||'').trim();small.remove()}
  var raw=(clone.textContent||'').replace(/[▶🔊🔉🔈]/g,' ').replace(/\s+/g,' ').trim();
- var zh=raw.split(' ')[0]||raw;
+ var zh=chineseOnly(raw);
  var lesson=nearestLesson(btn),sentence=txt(lesson,'.zh'),pinyin=txt(lesson,'.py'),en=txt(lesson,'.en'),ja=txt(lesson,'.ja');
  var examples=[];if(sentence)examples.push({zh:sentence,ja:ja||en||''});
  return{id:'legacy-word-'+zh,zh:zh,ja:meaning,detail:pinyin?('文の発音 '+pinyin):'',examples:examples};
@@ -42,6 +48,6 @@ function upgrade(btn){
  btn.parentNode.replaceChild(newBtn,btn);
 }
 function scan(root){if(!window.CSLWordTouch)return;(root||document).querySelectorAll('.word').forEach(upgrade)}
-function start(){ensureStyle();scan(document);var mo=new MutationObserver(function(ms){ms.forEach(function(m){m.addedNodes.forEach(function(n){if(n.nodeType!==1)return;if(n.matches&&n.matches('.word'))upgrade(n);scan(n)})})});mo.observe(document.documentElement,{childList:true,subtree:true});window.CSLLegacyWordTouchUpgrader={version:VERSION,scan:scan,upgrade:upgrade}}
+function start(){ensureStyle();scan(document);var mo=new MutationObserver(function(ms){ms.forEach(function(m){m.addedNodes.forEach(function(n){if(n.nodeType!==1)return;if(n.matches&&n.matches('.word'))upgrade(n);scan(n)})})});mo.observe(document.documentElement,{childList:true,subtree:true});window.CSLLegacyWordTouchUpgrader={version:VERSION,scan:scan,upgrade:upgrade,chineseOnly:chineseOnly}}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
 })();
