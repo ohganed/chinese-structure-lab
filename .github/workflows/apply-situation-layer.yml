@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Keep learning-time runtime light and reserve underground for session end
+      - name: Enforce user-session-first runtime
         shell: bash
         run: |
           python3 - <<'PY'
@@ -25,6 +25,7 @@ jobs:
             '<script src="./platform-bridge.js"></script>',
             '<script src="./audio-haptics-layer.js"></script>',
             '<script src="./storage-core.js"></script>',
+            '<script src="./light-event-buffer.js"></script>',
             '<script src="./interaction-ledger.js"></script>',
             '<script src="./session-end-analyzer.js"></script>',
             '<script src="./word-touch-engine.js"></script>',
@@ -48,19 +49,20 @@ jobs:
             'decision-trace-ledger.js','underground-integration-bus.js','counterfactual-simulator.js',
             'underground-runtime-self-test.js'
           ]
+          # This old layer performs lexical/semantic comparison while the learner is studying.
+          # It is intentionally removed: reencounter decisions belong at the session boundary.
+          realtime_analysis=['reencounter-layer.js']
           session_guide='<script src="./session-guide.js"></script>'
-          reencounter='<script src="./reencounter-layer.js"></script>'
           situation='<script src="./situation-layer.js"></script>'
           words_return='<script src="./words-come-back-word-layer.js"></script>'
           fivefold_nav='<script src="./fivefold-nav-layer.js"></script>'
           no_situation={'index.html','explore.html','course-map.html','memory.html','garden.html','tester.html','fivefold-level.html'}
           no_session_guide={'tester.html'}
-          no_reencounter={'doorways.html','explore.html','course-map.html','memory.html','garden.html','tester.html','fivefold-level.html'}
           fast_path_pages={'tired.html'}
           changed=[]
           for p in Path('.').glob('*.html'):
               text=p.read_text(encoding='utf-8');original=text
-              for src in heavy:
+              for src in heavy+realtime_analysis:
                   text=text.replace(f'<script src="./{src}"></script>','')
               if p.name not in fast_path_pages:
                   for layer in realtime_layers:
@@ -68,8 +70,6 @@ jobs:
                           text=text.replace('</body>',layer+'</body>',1)
                   if p.name not in no_session_guide and session_guide not in text and '</body>' in text:
                       text=text.replace('</body>',session_guide+'</body>',1)
-                  if p.name not in no_reencounter and reencounter not in text and '</body>' in text:
-                      text=text.replace('</body>',reencounter+'</body>',1)
                   if p.name not in no_situation and situation not in text and '</body>' in text:
                       text=text.replace('</body>',situation+'</body>',1)
                   if p.name=='index.html' and words_return not in text and '</body>' in text:
@@ -78,7 +78,7 @@ jobs:
                       text=text.replace('</body>',fivefold_nav+'</body>',1)
               if text!=original:
                   p.write_text(text,encoding='utf-8');changed.append(p.name)
-          print('Light runtime + universal word touch applied to:',', '.join(changed) if changed else 'nothing new')
+          print('Session-boundary runtime applied to:',', '.join(changed) if changed else 'nothing new')
           PY
 
       - name: Validate JavaScript syntax and architecture
@@ -96,6 +96,12 @@ jobs:
           if missing: raise SystemExit('Session End Analyzer missing underground modules: '+', '.join(missing))
           if 'flushBeforeAnalysis:true' not in analyzer or 'CSLLightEventBuffer.flush' not in analyzer:
               raise SystemExit('Session End Analyzer must flush raw buffered learning events before analysis')
+          buf=Path('light-event-buffer.js').read_text()
+          if 'setTimeout(flush' in buf or "addEventListener('pagehide',flush" in buf or "visibilitychange" in buf:
+              raise SystemExit('Light event buffer still flushes during learning')
+          ledger=Path('interaction-ledger.js').read_text()
+          if 'patchSentence(' in ledger or 'CSLStorage.load()' in ledger:
+              raise SystemExit('Interaction ledger still performs profile work during learning')
           bus=Path('underground-integration-bus.js').read_text()
           if "setTimeout(function(){run('startup')" in bus or "addEventListener('csl:" in bus:
               raise SystemExit('Integration bus still contains real-time/startup analysis triggers')
@@ -105,18 +111,14 @@ jobs:
           selftest=Path('underground-runtime-self-test.js').read_text()
           if 'setTimeout(run' in selftest:
               raise SystemExit('Underground self-test still auto-runs')
-          if not Path('word-touch-engine.js').exists() or not Path('legacy-word-touch-upgrader.js').exists():
-              raise SystemExit('Universal word-touch runtime files are missing')
-          if not Path('words-come-back-word-layer.js').exists():
-              raise SystemExit('Words come back word layer is missing')
           for p in Path('.').glob('*.html'):
               text=p.read_text(encoding='utf-8')
               eager=[src for src in heavy if f'<script src="./{src}"></script>' in text]
               if eager: raise SystemExit(f'{p}: eager underground scripts remain: '+', '.join(eager))
-              if p.name!='tired.html' and p.name!='tester.html':
-                  if 'session-end-analyzer.js' not in text: raise SystemExit(f'{p}: missing session-end-analyzer.js')
-                  if 'word-touch-engine.js' not in text: raise SystemExit(f'{p}: missing word-touch-engine.js')
-                  if 'legacy-word-touch-upgrader.js' not in text: raise SystemExit(f'{p}: missing legacy-word-touch-upgrader.js')
+              if 'reencounter-layer.js' in text: raise SystemExit(f'{p}: real-time reencounter analysis remains')
+              if p.name not in {'tired.html','tester.html'}:
+                  for required in ['light-event-buffer.js','session-end-analyzer.js','word-touch-engine.js','legacy-word-touch-upgrader.js']:
+                      if required not in text: raise SystemExit(f'{p}: missing {required}')
           index=Path('index.html').read_text()
           if 'words-come-back-word-layer.js' not in index:
               raise SystemExit('index.html: missing Words come back word layer')
@@ -126,7 +128,7 @@ jobs:
           expanded=Path('fivefold-level.html').read_text()
           if 'natural-chinese-overrides.js' not in expanded:
               raise SystemExit('fivefold-level.html: Natural Chinese correction layer is missing')
-          print('Session-end-only underground architecture, raw-event flush, fivefold navigation, and Natural Chinese correction layer verified.')
+          print('User-session-first architecture verified: raw events only during learning; underground at explicit session end.')
           PY
 
       - name: Commit generated runtime wiring
@@ -136,5 +138,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add '*.html'
-          git commit -m "Apply universal word touch runtime [skip shared-layers]"
+          git commit -m "Enforce session-boundary runtime [skip shared-layers]"
           git push
