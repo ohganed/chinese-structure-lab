@@ -1,6 +1,6 @@
 (function(){
 'use strict';
-/* Natural Chinese Audit correction layer v1.
+/* Natural Chinese Audit correction layer v2.
    Stable sentence IDs are never changed. This layer corrects surface language,
    pinyin, Japanese glosses and word/chunk data after deterministic generation. */
 var B=window.CSLFivefoldCurriculum;if(!B||!B.all)return;
@@ -40,6 +40,17 @@ function patch(x){x=cp(x);var m;
   if(n>=61&&n<=72){var so=[['这本书','zhè běn shū','この本'],['这件衣服','zhè jiàn yīfu','この服'],['这双鞋','zhè shuāng xié','この靴'],['这个杯子','zhège bēizi','このカップ'],['这把伞','zhè bǎ sǎn','この傘'],['这张票','zhè zhāng piào','この切符'],['这个包','zhège bāo','このバッグ'],['这瓶水','zhè píng shuǐ','この水'],['这个帽子','zhège màozi','この帽子'],['这条裤子','zhè tiáo kùzi','このズボン'],['这部手机','zhè bù shǒujī','この携帯'],['这个充电器','zhège chōngdiànqì','この充電器']][n-61];return set(x,'我想买'+so[0]+'。','wǒ xiǎng mǎi '+so[1],so[2]+'を買いたいです。',[W('我想买','wǒ xiǎng mǎi','買いたい'),W(so[0],so[1],so[2])],'replace permission-like purchase sentence');}
  }
  if(/^csl-a1x-location-questions-/.test(x.id)&&x.zh.indexOf('麻烦问一下，')===0){x.zh=x.zh.replace('麻烦问一下，','想问一下，');x.py=x.py.replace(/^máfan wèn yíxià, /,'xiǎng wèn yíxià, ');x.ja=x.ja.replace(/^お尋ねしますが、/,'ちょっと聞きたいのですが、');x.words=[W('想问一下','xiǎng wèn yíxià','ちょっと聞きたい'),x.words[0],W('在哪儿','zài nǎr','どこ')];x.auditNote='lighter everyday question';}
+ /* The eighth permission frame is grammatical but needlessly roundabout for A1. */
+ if(/^csl-a1x-permission-/.test(x.id)&&/^在这里.+没问题吗？$/.test(x.zh)){
+  var action=x.zh.slice(3,-6),apy=x.py.replace(/^zài zhèlǐ /,'').replace(/ méi wèntí ma$/,'');
+  x.zh='请问，在这里'+action+'可以吗？';x.py='qǐngwèn, zài zhèlǐ '+apy+' kěyǐ ma';x.ja=x.ja.replace(/^ここで/,'すみません、ここで').replace(/しても問題ないですか。$/,'してもいいですか。');
+  x.words=[W('请问','qǐngwèn','すみません／お尋ねします'),W('在这里','zài zhèlǐ','ここで'),W(action,apy,'する'),W('可以吗','kěyǐ ma','いいですか')];x.auditNote='simpler A1 permission request';
+ }
+ /* In the generated 把-family, five result complements lacked sentence-final 了,
+    while the other three already encoded completion. Add it only where absent. */
+ if(/^csl-a2x-ba-/.test(x.id)&&!/了。$/.test(x.zh)){
+  x.zh=x.zh.replace(/。$/,'了。');x.py=x.py+' le';x.words=x.words.concat([W('了','le','完了したことを示す')]);x.auditNote='completed ba-construction';
+ }
  return x;
 }
 var oldAll=B.all.bind(B),oldGet=B.get&&B.get.bind(B),oldQuery=B.query&&B.query.bind(B),oldForCourse=B.forCourse&&B.forCourse.bind(B);
@@ -47,5 +58,5 @@ B.all=function(level){return oldAll(level).map(patch)};
 if(oldGet)B.get=function(id){var x=oldGet(id);return x?patch(x):x};
 if(oldQuery)B.query=function(opts){return oldQuery(opts).map(patch)};
 if(oldForCourse)B.forCourse=function(course){return oldForCourse(course).map(patch)};
-B.naturalChineseAudit={version:1,stableIds:true,correctedFamilies:['routine','shopping','location-questions']};
+B.naturalChineseAudit={version:2,stableIds:true,correctedFamilies:['routine','shopping','location-questions','permission','ba']};
 })();
