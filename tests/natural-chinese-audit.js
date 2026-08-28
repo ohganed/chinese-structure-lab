@@ -17,6 +17,7 @@ const bad=[
  /^这.+有便宜一点儿的吗？$/,
  /^我可以买这.+吗？$/,
  /^麻烦问一下，/,
+ /没问题吗？$/,
  /我的手机被我忘在酒店了/,
  /有两个人的座位吗/,
  /^我看看。$/,
@@ -27,6 +28,7 @@ all.forEach(x=>{
  assert(!/[{][xpj][}]/.test(x.zh+x.py+x.ja),x.id+' contains unresolved template placeholder');
  bad.forEach(re=>assert(!re.test(x.zh),x.id+' failed naturalness rule '+re+': '+x.zh));
  assert(Array.isArray(x.words)&&x.words.length>=2,x.id+' needs useful word/chunk breakdown');
+ if(/^csl-a2x-ba-/.test(x.id))assert(/了。$/.test(x.zh),x.id+' should present the completed 把 event naturally: '+x.zh);
 });
 function families(xs){const m={};xs.forEach(x=>{const mm=x.id.match(/^csl-a[12]x-([a-z0-9-]+)-\d+$/);const f=mm?mm[1]:'other';(m[f]||(m[f]=[])).push(x)});return m}
 function report(level,xs){const fm=families(xs);console.log('\n'+level+' Natural Chinese family audit');Object.keys(fm).sort().forEach(f=>{const a=fm[f];const samples=[a[0],a[Math.floor(a.length/2)],a[a.length-1]].filter(Boolean).map(x=>x.zh);console.log(' - '+f+': '+a.length+' | '+samples.join(' / '))})}
