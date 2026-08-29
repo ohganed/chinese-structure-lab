@@ -4,9 +4,9 @@ on:
   push:
     branches: [main]
     paths:
-      - 'sentence-bank*.js'
-      - 'tests/curriculum-expansion-smoke.js'
-      - 'tests/chinese-naturalness-regression.js'
+      - '*.html'
+      - '*.js'
+      - 'tests/*.js'
       - '.github/workflows/content-quality.yml'
   workflow_dispatch:
 
@@ -29,3 +29,5 @@ jobs:
         run: node tests/curriculum-expansion-smoke.js
       - name: Verify Natural Chinese regression gate
         run: node tests/chinese-naturalness-regression.js
+      - name: Verify English mode completeness
+        run: node tests/english-mode-audit.js
