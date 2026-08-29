@@ -1,6 +1,6 @@
 const fs=require('fs'),vm=require('vm'),path=require('path');
 const root=path.resolve(__dirname,'..'),sandbox={window:{}};vm.createContext(sandbox);
-['fivefold-curriculum-v2.js','natural-chinese-overrides.js','fivefold-english-layer.js'].forEach(f=>vm.runInContext(fs.readFileSync(path.join(root,f),'utf8'),sandbox,{filename:f}));
+['fivefold-curriculum-v2.js','natural-chinese-overrides.js','fivefold-english-layer.js','fivefold-english-fixes.js'].forEach(f=>vm.runInContext(fs.readFileSync(path.join(root,f),'utf8'),sandbox,{filename:f}));
 const api=sandbox.window.CSLFivefoldCurriculum;
 for(const level of ['A1','A2']){
  const xs=api.all(level),missSent=xs.filter(x=>!x.en),missWords=new Map();
