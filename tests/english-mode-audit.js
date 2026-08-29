@@ -25,7 +25,7 @@ for(const file of htmlFiles){
 }
 try{
   const sandbox={window:{}}; vm.createContext(sandbox);
-  ['fivefold-curriculum-v2.js','natural-chinese-overrides.js','fivefold-english-layer.js'].forEach(f=>vm.runInContext(fs.readFileSync(path.join(root,f),'utf8'),sandbox,{filename:f}));
+  ['fivefold-curriculum-v2.js','natural-chinese-overrides.js','fivefold-english-layer.js','fivefold-english-fixes.js'].forEach(f=>vm.runInContext(fs.readFileSync(path.join(root,f),'utf8'),sandbox,{filename:f}));
   const api=sandbox.window.CSLFivefoldCurriculum;
   if(api){
     for(const level of ['A1','A2']){
@@ -47,13 +47,15 @@ try{
       'csl-a2x-experience-001':/I've been to Beijing\./,
       'csl-a2x-ba-001':/I closed the door\./,
       'csl-a2x-if-then-001':/If I have time, I will go exercise\./,
-      'csl-a2x-plans-001':/planning to go to Beijing tomorrow/i
+      'csl-a2x-plans-001':/planning to go to Beijing tomorrow/i,
+      'csl-a2x-plans-002':/planning to see a friend tomorrow/i,
+      'csl-a2x-plans-045':/planning to study Chinese next month/i
     };
     Object.entries(checks).forEach(([id,re])=>{var x=api.get?api.get(id):api.all().find(y=>y.id===id);if(!x||!re.test(x.en||''))add('HIGH','fivefold-english-layer.js','natural-English-regression',id+' => '+(x&&x.en))});
   }
 }catch(e){add('HIGH','fivefold-english-layer.js','expanded-data-audit-error',String(e.message||e))}
 for(const file of jsFiles){
-  if(file==='fivefold-curriculum-v2.js')continue; // canonical JA source is paired by fivefold-english-layer.js
+  if(file==='fivefold-curriculum-v2.js')continue;
   const text=fs.readFileSync(path.join(root,file),'utf8');
   if(/\bja\s*:/.test(text)&&!/\ben\s*:/.test(text)&&/(\bzh\s*:|sentence|curriculum|bank)/i.test(text)) add('MEDIUM',file,'ja-field-without-en-schema','Contains Japanese curriculum/gloss fields but no English field in this file.');
 }
