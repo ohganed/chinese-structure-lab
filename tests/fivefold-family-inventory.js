@@ -16,5 +16,12 @@ function report(level){
   console.log('FAMILY '+k+' COUNT '+a.length);
   ix.forEach(i=>{const x=a[i];console.log('  '+x.id+' | '+x.zh+' | '+x.py+' | '+x.ja+' | context='+x.context)});
  });
+ const chunks=new Map();
+ items.forEach(x=>(x.words||[]).forEach(raw=>{
+  const s=String(raw),parts=s.split(' · '),left=parts[0]||'',sp=left.indexOf(' '),zh=sp<0?left:left.slice(0,sp),py=sp<0?'':left.slice(sp+1),ja=parts[1]||'';
+  if(!chunks.has(zh))chunks.set(zh,{py,ja});
+ }));
+ console.log('\n'+level+' UNIQUE WORD / CHUNK INVENTORY — '+chunks.size);
+ [...chunks.entries()].sort((a,b)=>a[0].localeCompare(b[0],'zh')).forEach(([zh,v])=>console.log('WORD '+zh+' | '+v.py+' | '+v.ja));
 }
 report('A1');report('A2');
