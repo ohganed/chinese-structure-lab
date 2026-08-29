@@ -1,34 +1,46 @@
 (function(){
 'use strict';
-/* Chinese Structure Lab — Words Come Back Word Layer v1
+/* Chinese Structure Lab — Words Come Back Word Layer v2
    Pedagogical surface only. No learner analysis runs here.
-   When a "Words come back" section appears, lazily load the shared Sentence Bank,
-   match each Chinese sentence, and expose its canonical words/chunks through the
-   existing learner-driven Word Touch interaction.
-*/
-var VERSION=1,loading=null,timer=null;
-var BANK_SCRIPTS=['sentence-bank.js','sentence-bank-expansion-01.js','sentence-bank-expansion-02.js','sentence-bank-expansion-03.js'];
+   The Shared Sentence Bank + English layer are lazy-loaded only when a
+   "Words come back" section is actually present. Canonical structured
+   word objects are passed directly to Word Touch. */
+var VERSION=2,loading=null,timer=null;
+var BANK_SCRIPTS=['sentence-bank.js','sentence-bank-expansion-01.js','sentence-bank-expansion-02.js','sentence-bank-expansion-03.js','sentence-bank-english-data.js','sentence-bank-english-layer.js'];
 function norm(t){return String(t||'').replace(/\s+/g,'').replace(/[。！？!?，,；;：:“”‘’"'（）()、]/g,'')}
 function hasHan(t){return /[\u3400-\u9fff]/.test(t||'')}
+function ready(src){
+ if(src==='word-touch-engine.js')return !!window.CSLWordTouch;
+ if(src==='sentence-bank.js')return !!window.CSLSentenceBank;
+ if(src==='sentence-bank-english-data.js')return !!window.CSLSentenceBankEnglishData;
+ if(src==='sentence-bank-english-layer.js')return !!(window.CSLSentenceBank&&window.CSLSentenceBank.englishLayer);
+ return false;
+}
 function loadOne(src){return new Promise(function(resolve,reject){
- if(src==='word-touch-engine.js'&&window.CSLWordTouch){resolve();return}
- if(src!=='word-touch-engine.js'&&window.CSLSentenceBank&&src==='sentence-bank.js'){resolve();return}
- var existing=document.querySelector('script[src$="/'+src+'"],script[data-csl-wcb="'+src+'"]');
- if(existing){if((src==='word-touch-engine.js'&&window.CSLWordTouch)||(src!=='word-touch-engine.js'&&src==='sentence-bank.js'&&window.CSLSentenceBank)){resolve();return}existing.addEventListener('load',resolve,{once:true});existing.addEventListener('error',reject,{once:true});return}
+ if(ready(src)){resolve();return}
+ var existing=document.querySelector('script[src$="/'+src+'"],script[src$="'+src+'"],script[data-csl-wcb="'+src+'"]');
+ if(existing){
+  if(ready(src)){resolve();return}
+  /* An expansion script may already have finished before this layer starts.
+     In that case its side effect is already in the bank; do not wait forever. */
+  if(/^sentence-bank-expansion-/.test(src)&&window.CSLSentenceBank){resolve();return}
+  existing.addEventListener('load',resolve,{once:true});existing.addEventListener('error',reject,{once:true});return
+ }
  var s=document.createElement('script');s.src='./'+src;s.async=false;s.dataset.cslWcb=src;s.onload=resolve;s.onerror=function(){reject(new Error('Failed to load '+src))};document.head.appendChild(s)
 })}
 function ensureRuntime(){
- if(window.CSLSentenceBank&&window.CSLWordTouch)return Promise.resolve();
+ if(window.CSLSentenceBank&&window.CSLSentenceBank.englishLayer&&window.CSLWordTouch)return Promise.resolve();
  if(loading)return loading;
  var chain=Promise.resolve();
- if(!window.CSLSentenceBank)BANK_SCRIPTS.forEach(function(src){chain=chain.then(function(){return loadOne(src)})});
- if(!window.CSLWordTouch)chain=chain.then(function(){return loadOne('word-touch-engine.js')});
+ BANK_SCRIPTS.forEach(function(src){chain=chain.then(function(){return loadOne(src)})});
+ chain=chain.then(function(){return loadOne('word-touch-engine.js')});
  loading=chain.catch(function(){loading=null});return loading
 }
-function parseWord(raw,i){
+function parseLegacyWord(raw,i,item){
+ if(raw&&typeof raw==='object')return raw;
  var parts=String(raw||'').split(' · '),left=(parts.shift()||'').trim(),meaning=parts.join(' · ').trim();
  var bits=left.split(/\s+/),zh=bits.shift()||left,py=bits.join(' ');
- return{id:'wcb-'+zh+'-'+i,zh:zh,py:py,ja:meaning}
+ return{id:(item&&item.id?item.id:'wcb')+'-w'+i,zh:zh,py:py,ja:meaning,en:''}
 }
 function bankItemFor(text){
  var b=window.CSLSentenceBank,all=b&&b.all?b.all():[],n=norm(text);
@@ -47,10 +59,7 @@ function sentenceNodes(label){
  var p=label.parentElement,n=p&&p.nextElementSibling,count=0;while(n&&count<3){addScope(n);n=n.nextElementSibling;count++}
  return out
 }
-function isWordsComeBackLabel(el){
- var t=((el.getAttribute&&el.getAttribute('data-en'))||'')+' '+((el.textContent||''));
- return /\bwords?\s+come\s+back\b/i.test(t)
-}
+function isWordsComeBackLabel(el){var t=((el.getAttribute&&el.getAttribute('data-en'))||'')+' '+((el.textContent||''));return /\bwords?\s+come\s+back\b/i.test(t)}
 function labels(){return Array.prototype.filter.call(document.querySelectorAll('[data-en],.stageLabel,.eyebrow,h1,h2,h3,h4,h5,summary'),isWordsComeBackLabel)}
 function attachToSentence(el){
  if(!el||el.dataset.cslWcbWords==='1')return;
@@ -59,14 +68,11 @@ function attachToSentence(el){
  var box=document.createElement('div');box.className='csl-wcb-words';box.setAttribute('data-csl-wcb-sentence-id',item.id||'');
  var lab=document.createElement('div');lab.className='csl-wcb-label';lab.textContent='WORDS IN THIS SENTENCE';
  var row=document.createElement('div');row.className='csl-wcb-row';box.appendChild(lab);box.appendChild(row);el.insertAdjacentElement('afterend',box);
- var words=item.words.map(parseWord).filter(function(w){return w.zh});
+ var words=item.words.map(function(w,i){return parseLegacyWord(w,i,item)}).filter(function(w){return w&&w.zh});
  window.CSLWordTouch.mount(row,words,{course:'words-come-back',sentenceId:item.id||null});
 }
-function apply(){
- var ls=labels();if(!ls.length)return;
- ensureRuntime().then(function(){if(!window.CSLSentenceBank||!window.CSLWordTouch)return;ls.forEach(function(label){sentenceNodes(label).forEach(attachToSentence)})})
-}
+function apply(){var ls=labels();if(!ls.length)return;ensureRuntime().then(function(){if(!window.CSLSentenceBank||!window.CSLSentenceBank.englishLayer||!window.CSLWordTouch)return;ls.forEach(function(label){sentenceNodes(label).forEach(attachToSentence)})})}
 function schedule(){clearTimeout(timer);timer=setTimeout(apply,120)}
-function boot(){apply();var mo=new MutationObserver(schedule);mo.observe(document.body,{childList:true,subtree:true});window.CSLWordsComeBackWords={version:VERSION,refresh:apply,policy:{pedagogyOnly:true,noRealtimeAnalysis:true,lazySentenceBank:true}}}
+function boot(){apply();var mo=new MutationObserver(schedule);mo.observe(document.body,{childList:true,subtree:true});window.CSLWordsComeBackWords={version:VERSION,refresh:apply,policy:{pedagogyOnly:true,noRealtimeAnalysis:true,lazySentenceBank:true,bilingualBank:true}}}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();
