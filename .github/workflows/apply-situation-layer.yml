@@ -54,6 +54,7 @@ jobs:
           situation='<script src="./situation-layer.js"></script>'
           words_return='<script src="./words-come-back-word-layer.js"></script>'
           next_plan='<script src="./next-session-plan-layer.js"></script>'
+          recovery='<script src="./stale-session-recovery.js"></script>'
           fivefold_nav='<script src="./fivefold-nav-layer.js"></script>'
           no_situation={'index.html','explore.html','course-map.html','memory.html','garden.html','tester.html','fivefold-level.html'}
           no_session_guide={'tester.html'}
@@ -76,9 +77,13 @@ jobs:
                           if layer not in text and '</body>' in text:text=text.replace('</body>',layer+'</body>',1)
                   if p.name=='explore.html' and fivefold_nav not in text and '</body>' in text:
                       text=text.replace('</body>',fivefold_nav+'</body>',1)
+              # Even fast-path pages get only this tiny stale-session detector.
+              # It lazy-loads storage/analyzer only when a >=12h unfinished session exists.
+              if p.name!='tester.html' and recovery not in text and '</body>' in text:
+                  text=text.replace('</body>',recovery+'</body>',1)
               if text!=original:
                   p.write_text(text,encoding='utf-8');changed.append(p.name)
-          print('Session-boundary runtime applied to:',', '.join(changed) if changed else 'nothing new')
+          print('Session-boundary + stale recovery runtime applied to:',', '.join(changed) if changed else 'nothing new')
           PY
 
       - name: Validate JavaScript syntax and architecture
@@ -88,6 +93,7 @@ jobs:
           node tests/curriculum-expansion-smoke.js
           node tests/fivefold-level-expansion-smoke.js
           node tests/natural-chinese-audit.js
+          node tests/stale-session-recovery-smoke.js
           python3 - <<'PY'
           from pathlib import Path
           heavy=['learning-memory-engine.js','learner-model-engine.js','reencounter-planner.js','situation-graph-engine.js','persistent-world-engine.js','language-graph-engine.js','meaning-sense-graph-engine.js','encounter-quality-engine.js','retrieval-need-engine.js','opportunity-matching-engine.js','adaptive-presentation-engine.js','presentation-policy-layer.js','learning-os-core.js','contradiction-quality-auditor.js','evidence-confidence-engine.js','intervention-budget-engine.js','learner-agency-engine.js','learning-rhythm-engine.js','cognitive-load-guard.js','temporal-pattern-engine.js','support-regulation-engine.js','curriculum-balance-engine.js','continuity-resilience-engine.js','underground-floor-registry.js','deep-underground-orchestrator.js','underground-constitution.js','underground-governor.js','decision-trace-ledger.js','underground-integration-bus.js','counterfactual-simulator.js','underground-runtime-self-test.js']
@@ -102,12 +108,17 @@ jobs:
           ledger=Path('interaction-ledger.js').read_text()
           if 'patchSentence(' in ledger or 'CSLStorage.load()' in ledger:
               raise SystemExit('Interaction ledger still performs profile work during learning')
+          recovery=Path('stale-session-recovery.js').read_text()
+          for required in ['12*60*60*1000','inactivity-12h','CSLSessionEndAnalyzer.analyze','noBackgroundTimer:true','preservesRawHistory:true','lazyLoadsMinimalRuntime:true']:
+              if required not in recovery: raise SystemExit('Stale recovery missing '+required)
+          if 'setInterval(' in recovery:
+              raise SystemExit('Stale recovery must not poll in background')
           consumer=Path('next-session-plan-layer.js').read_text()
           forbidden=['CSLStorage.save','CSLStorage.addEvent','CSLStorage.patchSentence','CSLLearningMemory','CSLLearnerModel','CSLReencounterPlanner.refresh','CSLDeepUnderground','CSLUndergroundIntegration']
           bad=[x for x in forbidden if x in consumer]
           if bad: raise SystemExit('Next Session Plan consumer is not read-only: '+', '.join(bad))
-          if "localStorage.getItem(ROOT_KEY)" not in consumer or 'precomputedPlanOnly:true' not in consumer:
-              raise SystemExit('Next Session Plan consumer must read precomputed profile state only')
+          for required in ['precomputedPlanOnly:true','waitsForStaleRecovery:true','csl:stale-session-recovery-complete']:
+              if required not in consumer: raise SystemExit('Next Session Plan consumer missing '+required)
           bus=Path('underground-integration-bus.js').read_text()
           if "setTimeout(function(){run('startup')" in bus or "addEventListener('csl:" in bus:
               raise SystemExit('Integration bus still contains real-time/startup analysis triggers')
@@ -122,17 +133,19 @@ jobs:
               eager=[src for src in heavy if f'<script src="./{src}"></script>' in text]
               if eager: raise SystemExit(f'{p}: eager underground scripts remain: '+', '.join(eager))
               if 'reencounter-layer.js' in text: raise SystemExit(f'{p}: real-time reencounter analysis remains')
+              if p.name!='tester.html' and 'stale-session-recovery.js' not in text:
+                  raise SystemExit(f'{p}: missing 12-hour stale-session recovery')
               if p.name not in {'tired.html','tester.html'}:
                   for required in ['light-event-buffer.js','session-end-analyzer.js','word-touch-engine.js','legacy-word-touch-upgrader.js']:
                       if required not in text: raise SystemExit(f'{p}: missing {required}')
           index=Path('index.html').read_text()
-          for required in ['words-come-back-word-layer.js','next-session-plan-layer.js']:
+          for required in ['words-come-back-word-layer.js','next-session-plan-layer.js','stale-session-recovery.js']:
               if required not in index: raise SystemExit('index.html: missing '+required)
           explore=Path('explore.html').read_text()
           if 'fivefold-nav-layer.js' not in explore: raise SystemExit('explore.html: missing fivefold curriculum entrance layer')
           expanded=Path('fivefold-level.html').read_text()
           if 'natural-chinese-overrides.js' not in expanded: raise SystemExit('fivefold-level.html: Natural Chinese correction layer is missing')
-          print('Closed user loop verified: raw events during learning; underground at explicit end; precomputed plan consumed read-only next session.')
+          print('Closed user loop verified: explicit end OR >=12h visit recovery -> underground -> fresh plan -> next study.')
           PY
 
       - name: Commit generated runtime wiring
@@ -142,5 +155,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add '*.html'
-          git commit -m "Wire next-session plan consumer [skip shared-layers]"
+          git commit -m "Wire 12-hour session recovery [skip shared-layers]"
           git push
