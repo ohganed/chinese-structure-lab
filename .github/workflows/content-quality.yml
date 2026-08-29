@@ -27,6 +27,7 @@ jobs:
           node --check sentence-bank-expansion-03.js
           node --check word-touch-engine.js
           node --check fivefold-english-layer.js
+          node --check fivefold-english-fixes.js
       - name: Verify shared curriculum structure
         run: node tests/curriculum-expansion-smoke.js
       - name: Verify Natural Chinese regression gate
