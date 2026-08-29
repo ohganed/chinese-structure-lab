@@ -26,11 +26,14 @@ jobs:
           node --check sentence-bank-expansion-02.js
           node --check sentence-bank-expansion-03.js
           node --check word-touch-engine.js
+          node --check fivefold-english-layer.js
       - name: Verify shared curriculum structure
         run: node tests/curriculum-expansion-smoke.js
       - name: Verify Natural Chinese regression gate
         run: node tests/chinese-naturalness-regression.js
       - name: Inventory fivefold curriculum families
         run: node tests/fivefold-family-inventory.js
+      - name: Report remaining English gaps
+        run: node tests/english-missing-inventory.js
       - name: Verify English mode completeness
         run: node tests/english-mode-audit.js
