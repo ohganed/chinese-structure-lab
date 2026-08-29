@@ -58,5 +58,5 @@ function ensureStorageAndFlush(){if(window.CSLStorage){try{CSLLightEventBuffer.f
 function advance(){if(pos<route.length-1){pos++;renderSentence();return}recordEvent('tired_course_complete',{items:route.length,sentenceIds:route.map(function(x){return x.id})});document.getElementById('card').style.display='none';document.getElementById('done').classList.add('on');setTimeout(ensureStorageAndFlush,250)}
 mountWords();try{speechSynthesis.getVoices()}catch(e){}
 </script>
-</body>
+<script src="./stale-session-recovery.js"></script></body>
 </html>
