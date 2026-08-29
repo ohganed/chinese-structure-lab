@@ -1,0 +1,26 @@
+const fs=require('fs'),vm=require('vm'),path=require('path');
+const root=path.resolve(__dirname,'..'),sandbox={window:{}};vm.createContext(sandbox);
+['sentence-bank.js','sentence-bank-expansion-01.js','sentence-bank-expansion-02.js','sentence-bank-expansion-03.js'].forEach(f=>vm.runInContext(fs.readFileSync(path.join(root,f),'utf8'),sandbox,{filename:f}));
+const api=sandbox.window.CSLSentenceBank;if(!api)throw new Error('CSLSentenceBank missing');
+const all=api.all();
+const missingSentence=all.filter(x=>!x.en||!String(x.en).trim());
+const missingContext=all.filter(x=>!x.contextEn||!String(x.contextEn).trim());
+const chunks=new Map();
+all.forEach(x=>(x.words||[]).forEach(raw=>{
+ const s=String(raw),parts=s.split(' · '),left=parts[0]||'',sp=left.indexOf(' '),zh=sp<0?left:left.slice(0,sp),py=sp<0?'':left.slice(sp+1),ja=parts[1]||'';
+ if(!chunks.has(zh))chunks.set(zh,{py,ja,count:0});chunks.get(zh).count++;
+}));
+const levels={};all.forEach(x=>levels[x.level]=(levels[x.level]||0)+1);
+const primary={};all.forEach(x=>{const k=(x.tags&&x.tags[0])||'untagged';primary[k]=(primary[k]||0)+1});
+console.log('=== SHARED BANK ENGLISH INVENTORY ===');
+console.log('TOTAL',all.length);
+console.log('LEVELS',JSON.stringify(levels));
+console.log('PRIMARY TAGS',JSON.stringify(primary));
+console.log('MISSING EN SENTENCES',missingSentence.length);
+console.log('MISSING EN CONTEXTS',missingContext.length);
+console.log('UNIQUE WORD/CHUNKS',chunks.size);
+console.log('\nSENTENCE CATALOG');
+all.forEach(x=>console.log('SENT '+x.id+' | '+x.level+' | '+x.zh+' | '+x.py+' | '+x.ja+' | '+x.context));
+console.log('\nWORD/CHUNK CATALOG');
+[...chunks.entries()].sort((a,b)=>a[0].localeCompare(b[0],'zh')).forEach(([zh,v])=>console.log('WORD '+zh+' | '+v.py+' | '+v.ja+' | '+v.count));
+console.log('=== END SHARED BANK ENGLISH INVENTORY ===');
