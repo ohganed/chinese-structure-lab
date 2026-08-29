@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ja">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -10,35 +10,43 @@
 </head>
 <body>
 <div class="app">
-<a class="back" href="./doorways.html">‹ Doorways</a>
-<div class="hero"><div class="tiny">LIGHT DAY · FAST PATH</div><h1>今日は、言葉に触れるだけ。</h1><p>気になる中国語を、自分で押してください。押した瞬間の反応を最優先にしています。</p></div>
-<div class="softnote">最初は中国語だけ。1回押すと音と発音、もう1回押すと意味、もう1回押すと中国語だけに戻ります。</div>
+<a class="back" id="back" href="./doorways.html">‹ Doorways</a>
+<div class="hero"><div class="tiny">LIGHT DAY · FAST PATH</div><h1 id="heroTitle">Just stay in touch with the language today.</h1><p id="heroText">Tap any Chinese that catches your attention. The app keeps the response immediate and light.</p></div>
+<div class="softnote" id="softnote">Start with Chinese only. Tap once for sound, again for meaning, again for details, and once more to return to Chinese only.</div>
 <main class="card" id="card">
 <section class="wordPhase" id="wordPhase">
-<div class="phasehead"><div><div class="tiny">WORDS FIRST</div><div class="phaseTitle">まず、言葉だけ。</div></div></div>
-<p class="phaseText">今日あとで出会う文章の言葉だけを先に置いています。順番はありません。気になるものから触れてください。</p>
+<div class="phasehead"><div><div class="tiny">WORDS FIRST</div><div class="phaseTitle" id="wordTitle">Words first.</div></div></div>
+<p class="phaseText" id="wordText">These are words from sentences you will meet in a moment. There is no required order—touch whichever one you want.</p>
 <div class="wordField" id="wordField"></div>
-<div class="quietHint">中国語 → 1回目：🔊 発音 → 2回目：意味 → 3回目：中国語</div>
-<button class="primary" onclick="enterSentences()">この言葉たちが文になる ›</button>
+<div class="quietHint" id="wordHint">Chinese → 1st tap: 🔊 sound → 2nd: meaning → 3rd: details → 4th: Chinese</div>
+<button class="primary" id="toSentences" onclick="enterSentences()">Let these words become sentences ›</button>
 </section>
 <section class="sentencePhase" id="sentencePhase">
-<div class="phasehead"><div><div class="tiny">WORDS BECOME SENTENCES</div><div class="phaseTitle">さっきの言葉が、文になる。</div></div><div class="progress" id="progress"></div></div>
+<div class="phasehead"><div><div class="tiny">WORDS BECOME SENTENCES</div><div class="phaseTitle" id="sentenceTitle">The words return inside a sentence.</div></div><div class="progress" id="progress"></div></div>
 <div class="scene"><div class="emoji" id="emoji"></div><div class="sceneTitle" id="sceneTitle"></div><div class="sceneText" id="sceneText"></div></div>
 <button class="sentenceTouch" id="sentenceTouch" onclick="touchSentence()"><span class="sentenceZh" id="zh"></span><span class="sentenceMeaning" id="meaning"></span></button>
-<div class="sentenceHint">文そのものを押すと音が聞こえ、そのあと意味が少しだけ現れます。</div>
-<button class="next" id="next" onclick="advance()">次の静かな場面 ›</button>
+<div class="sentenceHint" id="sentenceHint">Tap the sentence to hear it. Its meaning appears briefly afterward.</div>
+<button class="next" id="next" onclick="advance()">Next quiet moment ›</button>
 </section>
 </main>
-<div class="done" id="done"><b>今日はここまででも十分です。</b><p>先に触れた言葉が、文章の中で戻ってきました。操作中に貯めた履歴は、ここでまとめてLearning Profileへ統合します。</p><a href="./doorways.html">入口へ戻る</a></div>
+<div class="done" id="done"><b id="doneTitle">This is enough for today.</b><p id="doneText">The words you touched came back inside sentences. Your lightweight interaction history is merged only after you finish.</p><a id="doneBack" href="./doorways.html">Back to Doorways</a></div>
 </div>
 <div class="bottom"><div class="tabs"><a href="./index.html">Continue</a><a class="active" href="./doorways.html">Doorways</a><a href="./explore.html">Explore</a></div></div>
 <script src="./sentence-bank.js"></script>
 <script src="./sentence-bank-expansion-01.js"></script>
 <script src="./sentence-bank-expansion-02.js"></script>
 <script src="./sentence-bank-expansion-03.js"></script>
+<script src="./sentence-bank-english-data.js"></script>
+<script src="./sentence-bank-english-layer.js"></script>
 <script src="./light-event-buffer.js"></script>
 <script src="./word-touch-engine.js"></script>
 <script>
+var MODE='en';try{MODE=localStorage.getItem('csl_ui_language')==='ja'?'ja':'en'}catch(e){}document.documentElement.lang=MODE;
+function tr(en,ja){return MODE==='ja'?ja:en}
+function applyLanguage(){
+ back.textContent=tr('‹ Doorways','‹ 入口');heroTitle.textContent=tr('Just stay in touch with the language today.','今日は、言葉に触れるだけ。');heroText.textContent=tr('Tap any Chinese that catches your attention. The app keeps the response immediate and light.','気になる中国語を、自分で押してください。押した瞬間の反応を最優先にしています。');softnote.textContent=tr('Start with Chinese only. Tap once for sound, again for meaning, again for details, and once more to return to Chinese only.','最初は中国語だけ。1回押すと音声、もう1回押すと意味、さらに押すと詳細情報、もう1回押すと中国語だけに戻ります。');wordTitle.textContent=tr('Words first.','まず、言葉だけ。');wordText.textContent=tr('These are words from sentences you will meet in a moment. There is no required order—touch whichever one you want.','今日あとで出会う文章の言葉だけを先に置いています。順番はありません。気になるものから触れてください。');wordHint.textContent=tr('Chinese → 1st tap: 🔊 sound → 2nd: meaning → 3rd: details → 4th: Chinese','中国語 → 1回目：🔊 音声 → 2回目：意味 → 3回目：詳細 → 4回目：中国語');toSentences.textContent=tr('Let these words become sentences ›','この言葉たちが文になる ›');sentenceTitle.textContent=tr('The words return inside a sentence.','さっきの言葉が、文になる。');sentenceHint.textContent=tr('Tap the sentence to hear it. Its meaning appears briefly afterward.','文そのものを押すと音が聞こえ、そのあと意味が少しだけ現れます。');doneTitle.textContent=tr('This is enough for today.','今日はここまででも十分です。');doneText.textContent=tr('The words you touched came back inside sentences. Your lightweight interaction history is merged only after you finish.','先に触れた言葉が、文章の中で戻ってきました。操作中に貯めた履歴は、ここでまとめてLearning Profileへ統合します。');doneBack.textContent=tr('Back to Doorways','入口へ戻る')
+}
+applyLanguage();
 var BANK=window.CSLSentenceBank,ITEMS=BANK?BANK.forCourse('tired'):[],KEY='csl_tired_course_v1',state={};
 try{state=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){}
 var rawSeen=Array.isArray(state.seen)?state.seen:[],seen=[];
@@ -47,15 +55,15 @@ var pool=ITEMS.filter(function(x){return seen.indexOf(x.id)<0});if(pool.length<4
 for(var k=pool.length-1;k>0;k--){var j=Math.floor(Math.random()*(k+1)),tmp=pool[k];pool[k]=pool[j];pool[j]=tmp}
 var route=pool.slice(0,Math.min(4,pool.length)),pos=0,meaningTimer=null,storageLoading=false;
 function recordEvent(type,data){try{if(window.CSLLightEventBuffer)CSLLightEventBuffer.emit(type,data||{})}catch(e){}}
-function parseWord(s,n){var parts=String(s).split(' · '),left=parts[0]||'',ja=parts.slice(1).join(' · ')||'',bits=left.split(' '),zh=bits.shift()||left,py=bits.join(' ');return{id:'word-'+zh,zh:zh,py:py,ja:ja,n:n}}
-function todaysWords(){var out=[],have={};route.forEach(function(x){(x.words||[]).forEach(function(s){var w=parseWord(s,out.length);if(w.zh&&!have[w.zh]){have[w.zh]=1;out.push(w)}})});return out}
+function parseWord(s,n,item){if(s&&typeof s==='object')return s;var parts=String(s).split(' · '),left=parts[0]||'',ja=parts.slice(1).join(' · ')||'',bits=left.split(' '),zh=bits.shift()||left,py=bits.join(' ');return{id:(item&&item.id?item.id:'word')+'-w'+n,zh:zh,py:py,ja:ja,en:''}}
+function todaysWords(){var out=[],have={};route.forEach(function(x){(x.words||[]).forEach(function(s){var w=parseWord(s,out.length,x);if(w.zh&&!have[w.zh]){have[w.zh]=1;out.push(w)}})});return out}
 function saveLightState(){try{localStorage.setItem(KEY,JSON.stringify({schemaVersion:3,seen:seen.slice(-48),lastAt:new Date().toISOString()}))}catch(e){}}
 function mountWords(){if(!window.CSLWordTouch)return;CSLWordTouch.mount(document.getElementById('wordField'),todaysWords(),{course:'tired-word-first',sentenceId:null});recordEvent('tired_word_phase_open',{sentenceIds:route.map(function(x){return x.id}),wordCount:todaysWords().length,learnerInitiated:false})}
 function enterSentences(){document.getElementById('wordPhase').classList.add('off');document.getElementById('sentencePhase').classList.add('on');renderSentence();recordEvent('tired_sentence_phase_enter',{sentenceIds:route.map(function(x){return x.id}),learnerInitiated:true})}
-function renderSentence(){if(!route.length)return;var x=route[pos],btn=document.getElementById('sentenceTouch');document.getElementById('progress').textContent=(pos+1)+' / '+route.length;document.getElementById('emoji').textContent=x.emoji;document.getElementById('sceneTitle').textContent=x.title;document.getElementById('sceneText').textContent=x.context;document.getElementById('zh').textContent=x.zh;document.getElementById('meaning').textContent=x.ja;btn.classList.remove('meaning','sounding');document.getElementById('next').textContent=pos===route.length-1?'今日はここまで':'次の静かな場面 ›';if(seen.indexOf(x.id)<0)seen.push(x.id);saveLightState();recordEvent('tired_course_view',{sentenceId:x.id,sentence:x.zh,position:pos,source:'shared-sentence-bank'})}
-function touchSentence(){var x=route[pos],btn=document.getElementById('sentenceTouch');if(meaningTimer)clearTimeout(meaningTimer);btn.classList.remove('meaning');btn.classList.add('sounding');recordEvent('sentence_touch',{sentenceId:x.id,sentence:x.zh,course:'tired',learnerInitiated:true});CSLWordTouch.speak(x.zh,.88,function(){btn.classList.remove('sounding');btn.classList.add('meaning');recordEvent('sentence_meaning_revealed',{sentenceId:x.id,course:'tired',learnerInitiated:true,temporary:true});meaningTimer=setTimeout(function(){btn.classList.remove('meaning')},1800)})}
+function renderSentence(){if(!route.length)return;var x=route[pos],btn=document.getElementById('sentenceTouch');progress.textContent=(pos+1)+' / '+route.length;emoji.textContent=x.emoji;sceneTitle.textContent=MODE==='ja'?x.title:tr('Everyday moment','日常の場面');sceneText.textContent=MODE==='ja'?x.context:x.contextEn;zh.textContent=x.zh;meaning.textContent=MODE==='ja'?x.ja:x.en;btn.classList.remove('meaning','sounding');next.textContent=pos===route.length-1?tr('Finish for today','今日はここまで'):tr('Next quiet moment ›','次の静かな場面 ›');if(seen.indexOf(x.id)<0)seen.push(x.id);saveLightState();recordEvent('tired_course_view',{sentenceId:x.id,sentence:x.zh,position:pos,source:'shared-sentence-bank',uiLanguage:MODE})}
+function touchSentence(){var x=route[pos],btn=document.getElementById('sentenceTouch');if(meaningTimer)clearTimeout(meaningTimer);btn.classList.remove('meaning');btn.classList.add('sounding');recordEvent('sentence_touch',{sentenceId:x.id,sentence:x.zh,course:'tired',learnerInitiated:true,uiLanguage:MODE});CSLWordTouch.speak(x.zh,.88,function(){btn.classList.remove('sounding');btn.classList.add('meaning');recordEvent('sentence_meaning_revealed',{sentenceId:x.id,course:'tired',learnerInitiated:true,temporary:true,uiLanguage:MODE});meaningTimer=setTimeout(function(){btn.classList.remove('meaning')},1800)})}
 function ensureStorageAndFlush(){if(window.CSLStorage){try{CSLLightEventBuffer.flush()}catch(e){};return}if(storageLoading)return;storageLoading=true;var s=document.createElement('script');s.src='./storage-core.js';s.onload=function(){storageLoading=false;try{CSLLightEventBuffer.flush()}catch(e){}};s.onerror=function(){storageLoading=false};document.head.appendChild(s)}
-function advance(){if(pos<route.length-1){pos++;renderSentence();return}recordEvent('tired_course_complete',{items:route.length,sentenceIds:route.map(function(x){return x.id})});document.getElementById('card').style.display='none';document.getElementById('done').classList.add('on');setTimeout(ensureStorageAndFlush,250)}
+function advance(){if(pos<route.length-1){pos++;renderSentence();return}recordEvent('tired_course_complete',{items:route.length,sentenceIds:route.map(function(x){return x.id})});card.style.display='none';done.classList.add('on');setTimeout(ensureStorageAndFlush,250)}
 mountWords();try{speechSynthesis.getVoices()}catch(e){}
 </script>
 <script src="./stale-session-recovery.js"></script></body>
