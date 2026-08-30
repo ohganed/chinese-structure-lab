@@ -1,1 +1,104 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Chinese Structure Lab · Garden</title><style>body{margin:0;background:#f5f4ef;color:#171717;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif}.app{max-width:760px;margin:auto;padding:18px 16px 95px}.top{display:flex;justify-content:space-between}.brand{font-size:14px;font-weight:700}.level{font-size:12px;color:#888;background:#ffffffa8;padding:7px 10px;border-radius:999px}.title{margin:34px 2px 14px;font-weight:700}.card{background:#ffffffc9;border:1px solid #0000000d;border-radius:22px;padding:18px}.network{display:flex;gap:8px;flex-wrap:wrap}.chip{background:#efede6;padding:9px 12px;border-radius:999px;font-size:14px}.note{font-size:13px;color:#666;line-height:1.6;margin-top:14px}.bottom{position:fixed;left:0;right:0;bottom:0;background:#f5f4eff2;border-top:1px solid #0000000d;padding:8px 16px calc(8px + env(safe-area-inset-bottom))}.tabs{max-width:760px;margin:auto;display:grid;grid-template-columns:repeat(3,1fr)}.tabs a{text-align:center;padding:13px 4px;color:#888;text-decoration:none}.tabs a.active{color:#111;font-weight:700}.version{text-align:center;color:#aaa;font-size:10px;margin-top:18px}</style></head><body><div class="app"><div class="top"><div class="brand">Chinese Structure Lab</div><div class="level">Garden</div></div><div class="title">Chinese Garden</div><div class="card"><div class="network"><span class="chip">学</span><span class="chip">学习</span><span class="chip">学生</span><span class="chip">学校</span><span class="chip">大学</span><span class="chip">科学</span></div><div class="note">No score. This simply shows the Chinese world you have started to recognize.</div></div><div class="version">prototype 0.1.3 · native HTML</div></div><div class="bottom"><div class="tabs"><a href="./index.html">Continue</a><a href="./explore.html">Explore</a><a class="active" href="./garden.html">Garden</a></div></div><script src="./storage-core.js"></script><script src="./feedback-layer.js"></script><script src="./session-guide.js"></script><script src="./platform-bridge.js"></script><script src="./audio-haptics-layer.js"></script><script src="./interactive-cues.js"></script><script src="./senior-accessibility.js"></script><script src="./a1-pedagogy-layer.js"></script><script src="./curriculum-pedagogy-layer.js"></script><script src="./interaction-ledger.js"></script><script src="./session-end-analyzer.js"></script><script src="./word-touch-engine.js"></script><script src="./legacy-word-touch-upgrader.js"></script><script src="./light-event-buffer.js"></script><script src="./stale-session-recovery.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Chinese Structure Lab · Garden</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--bg:#f5f4ef;--ink:#171717;--muted:#77736d;--card:#ffffffd7;--line:#0000000b;--soft:#efede6;--leaf:#e9eee8;--leaf2:#e3ebe4}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",sans-serif}
+.app{max-width:760px;margin:auto;padding:18px 16px 112px}
+.top{display:flex;justify-content:space-between;align-items:center}.brand{font-size:14px;font-weight:760}.level{font-size:12px;color:#777;background:#ffffffa8;padding:7px 11px;border-radius:999px}
+.hero{margin:38px 2px 24px}.eyebrow{font-size:10px;letter-spacing:.11em;color:#aaa;font-weight:760}.hero h1{font-size:34px;line-height:1.08;margin:8px 0 9px}.hero p{margin:0;color:var(--muted);line-height:1.65;font-size:15px;max-width:600px}
+.gardenIntro{background:linear-gradient(145deg,#edf1e9,#f7f6f1);border:1px solid var(--line);border-radius:28px;padding:22px 20px;margin-bottom:18px;overflow:hidden;position:relative}.gardenIntro:after{content:'葉';position:absolute;right:-8px;bottom:-30px;font-size:110px;font-weight:800;color:#6c81660a;transform:rotate(-9deg)}.gardenIntro b{font-size:17px;position:relative;z-index:1}.gardenIntro p{margin:7px 0 0;color:#6c7269;line-height:1.6;font-size:13px;position:relative;z-index:1}
+.section{margin-top:28px}.sectionHead{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin:0 2px 10px}.sectionTitle{font-size:20px;font-weight:790}.sectionHint{font-size:11px;color:#aaa;text-align:right}.card{background:var(--card);border:1px solid var(--line);border-radius:25px;padding:17px;box-shadow:0 10px 32px #00000005}.wordGrid{display:flex;gap:9px;flex-wrap:wrap}.wordGrid .csl-word-touch{min-width:0;min-height:52px;border:0;border-radius:17px;background:var(--soft);padding:10px 14px;font:760 21px/1.2 -apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;color:var(--ink);transition:transform .08s ease,background .15s ease}.wordGrid .csl-word-touch:active{transform:scale(.975)}.wordGrid .garden-growing{background:var(--leaf)}.wordGrid .garden-returning{background:var(--leaf2);box-shadow:inset 0 0 0 1px #6e8a6a12}.wordGrid .csl-word-detail{width:100%;text-align:left}
+.empty{display:none;text-align:left;padding:9px 2px}.empty.on{display:block}.empty .sprout{font-size:34px}.empty h2{font-size:20px;margin:9px 0 5px}.empty p{font-size:13px;color:#777;line-height:1.65;margin:0}.empty a{display:inline-block;margin-top:14px;background:#171717;color:#fff;text-decoration:none;padding:11px 15px;border-radius:999px;font-weight:730;font-size:13px}
+.familyList{display:grid;gap:11px}.family{background:#f2f1eb;border-radius:21px;padding:14px}.familyTop{display:flex;align-items:center;gap:12px;margin-bottom:10px}.rootChar{display:grid;place-items:center;width:50px;height:50px;border-radius:16px;background:#fff;font-size:27px;font-weight:800}.familyText b{display:block;font-size:14px}.familyText span{font-size:11px;color:#999}.family .wordGrid .csl-word-touch{font-size:17px;min-height:45px;padding:9px 12px;background:#fff}.family .wordGrid .csl-word-detail{width:100%}
+.allControls{margin-top:12px}.quietButton{border:0;background:transparent;color:#78746e;font-weight:700;padding:8px 2px;font-size:12px}.philosophy{margin:25px 2px 0;font-size:12px;line-height:1.65;color:#9a9690}.version{text-align:center;color:#b0aca6;font-size:10px;margin:28px 0 8px}
+.bottom{position:fixed;left:0;right:0;bottom:0;background:#f5f4eff3;border-top:1px solid #0000000d;padding:8px 16px calc(8px + env(safe-area-inset-bottom));backdrop-filter:blur(12px)}.tabs{max-width:760px;margin:auto;display:grid;grid-template-columns:repeat(3,1fr)}.tabs a{text-align:center;padding:13px 4px;color:#96928d;text-decoration:none;font-weight:650}.tabs a.active{color:#111;font-weight:790}
+@media(max-width:430px){.app{padding-left:14px;padding-right:14px}.hero h1{font-size:31px}.card{padding:15px}.wordGrid{gap:8px}.wordGrid .csl-word-touch{font-size:20px;padding:10px 13px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top"><div class="brand">Chinese Structure Lab</div><div class="level">Garden</div></div>
+  <div class="hero">
+    <div class="eyebrow" id="heroEyebrow">YOUR LANGUAGE, GROWING QUIETLY</div>
+    <h1 id="heroTitle">Your Chinese Garden</h1>
+    <p id="heroText">Words you have actually touched gather here. Nothing is graded. Come back whenever you want to hear them again.</p>
+  </div>
+
+  <div class="gardenIntro"><b id="introTitle">This garden grows from encounters.</b><p id="introText">A word appears here only after you meet it while learning. Repeated meetings make it feel a little more established, but no number is shown.</p></div>
+
+  <section class="section" id="recentSection">
+    <div class="sectionHead"><div class="sectionTitle" id="recentTitle">Recently met</div><div class="sectionHint" id="recentHint">the newest arrivals</div></div>
+    <div class="card"><div class="wordGrid" id="recentWords"></div><div class="empty" id="emptyGarden"><div class="sprout">🌱</div><h2 id="emptyTitle">The garden is still quiet.</h2><p id="emptyText">Touch words while learning. The words you choose to hear will begin to appear here.</p><a href="./index.html" id="emptyLink">Continue learning</a></div></div>
+  </section>
+
+  <section class="section" id="returningSection" hidden>
+    <div class="sectionHead"><div class="sectionTitle" id="returningTitle">Words that keep coming back</div><div class="sectionHint" id="returningHint">familiar paths, not scores</div></div>
+    <div class="card"><div class="wordGrid" id="returningWords"></div></div>
+  </section>
+
+  <section class="section" id="connectionsSection" hidden>
+    <div class="sectionHead"><div class="sectionTitle" id="connectionsTitle">Connections taking shape</div><div class="sectionHint" id="connectionsHint">shared characters among words you met</div></div>
+    <div class="card"><div class="familyList" id="familyList"></div></div>
+  </section>
+
+  <section class="section" id="allSection" hidden>
+    <div class="sectionHead"><div class="sectionTitle" id="allTitle">The whole garden</div><div class="sectionHint" id="allHint">everything you have touched</div></div>
+    <div class="card"><div class="wordGrid" id="allWords"></div><div class="allControls"><button class="quietButton" id="showAll" type="button"></button></div></div>
+  </section>
+
+  <p class="philosophy" id="philosophy">No score. No streak. No test. This is simply a place where the Chinese you have met can remain visible and meet you again.</p>
+  <div class="version">prototype 0.2 · living garden</div>
+</div>
+<div class="bottom"><div class="tabs"><a href="./index.html" id="tabContinue">Continue</a><a href="./explore.html" id="tabExplore">Explore</a><a class="active" href="./garden.html">Garden</a></div></div>
+
+<script src="./sentence-bank.js"></script>
+<script src="./sentence-bank-expansion-01.js"></script>
+<script src="./sentence-bank-expansion-02.js"></script>
+<script src="./sentence-bank-expansion-03.js"></script>
+<script src="./sentence-bank-english-data.js"></script>
+<script src="./sentence-bank-english-layer.js"></script>
+<script src="./storage-core.js"></script>
+<script src="./word-touch-engine.js"></script>
+<script>
+(function(){
+'use strict';
+var LANG=(function(){try{return localStorage.getItem('csl_ui_language')==='ja'?'ja':'en'}catch(e){return'en'}})();
+var COPY={
+ en:{heroEyebrow:'YOUR LANGUAGE, GROWING QUIETLY',heroTitle:'Your Chinese Garden',heroText:'Words you have actually touched gather here. Nothing is graded. Come back whenever you want to hear them again.',introTitle:'This garden grows from encounters.',introText:'A word appears here only after you meet it while learning. Repeated meetings make it feel a little more established, but no number is shown.',recentTitle:'Recently met',recentHint:'the newest arrivals',emptyTitle:'The garden is still quiet.',emptyText:'Touch words while learning. The words you choose to hear will begin to appear here.',emptyLink:'Continue learning',returningTitle:'Words that keep coming back',returningHint:'familiar paths, not scores',connectionsTitle:'Connections taking shape',connectionsHint:'shared characters among words you met',allTitle:'The whole garden',allHint:'everything you have touched',showAll:'Show the rest',showLess:'Show less',philosophy:'No score. No streak. No test. This is simply a place where the Chinese you have met can remain visible and meet you again.',tabContinue:'Continue',tabExplore:'Explore',family:'A character connecting words you have met'},
+ ja:{heroEyebrow:'出会った中国語が、静かに育つ場所',heroTitle:'わたしの中国語の庭',heroText:'自分で触れてきた言葉だけが、ここに集まります。採点はありません。聞きたくなったら、いつでもまた触れられます。',introTitle:'この庭は「出会い」から育ちます。',introText:'学習中に自分で触れた言葉だけが現れます。何度か再会した言葉は少し落ち着いて見えますが、回数は表示しません。',recentTitle:'最近出会った言葉',recentHint:'新しく庭に来た言葉',emptyTitle:'まだ静かな庭です。',emptyText:'学習中に言葉へ触れてみてください。自分で音を聞いた言葉が、ここに少しずつ現れます。',emptyLink:'学習を続ける',returningTitle:'何度も戻ってきた言葉',returningHint:'点数ではなく、再会の跡',connectionsTitle:'つながりが見えてきた言葉',connectionsHint:'出会った語の中にある共通の文字',allTitle:'庭全体を見る',allHint:'これまで自分で触れた言葉',showAll:'続きを見る',showLess:'少なく表示',philosophy:'点数なし。連続日数なし。テストなし。自分が出会ってきた中国語が残り、また再会できる場所です。',tabContinue:'Continue',tabExplore:'Explore',family:'出会った語をつなぐ文字'}
+};
+var C=COPY[LANG];Object.keys(C).forEach(function(id){var el=document.getElementById(id);if(el)el.textContent=C[id]});document.documentElement.lang=LANG;
+
+function hanOnly(s){return (String(s||'').match(/[\u3400-\u9fff]/g)||[]).join('')}
+function buildLexicon(){var map={};try{var all=window.CSLSentenceBank&&CSLSentenceBank.all?CSLSentenceBank.all():[];all.forEach(function(s){(s.words||[]).forEach(function(w){if(!w)return;var o=typeof w==='object'?w:null,zh=o?(o.zh||o.word||''):String(w).split(/\s/)[0];if(!zh)return;var cur=map[zh]||{id:'garden-'+zh,zh:zh,py:'',en:'',ja:''};if(o){cur.py=cur.py||o.py||o.pinyin||'';cur.en=cur.en||o.en||o.meaningEn||'';cur.ja=cur.ja||o.ja||o.meaningJa||''}map[zh]=cur})})}catch(e){}return map}
+function collect(){var profile=null;try{profile=window.CSLStorage&&CSLStorage.load?CSLStorage.load():null}catch(e){}var events=profile&&profile.learning&&Array.isArray(profile.learning.events)?profile.learning.events:[],map={};events.forEach(function(ev){if(!ev||!/^word_(touch|audio_played|meaning_revealed|detail_revealed|returned_to_chinese)$/.test(ev.type||''))return;var d=ev.data||{},zh=String(d.word||'').trim();if(!hanOnly(zh))return;var x=map[zh]||(map[zh]={zh:zh,audio:0,touch:0,meaning:0,detail:0,firstAt:ev.at||'',lastAt:ev.at||'',days:{},wordId:d.wordId||null});if(ev.type==='word_audio_played')x.audio++;if(ev.type==='word_touch')x.touch++;if(ev.type==='word_meaning_revealed')x.meaning++;if(ev.type==='word_detail_revealed')x.detail++;if(ev.at){if(!x.firstAt||ev.at<x.firstAt)x.firstAt=ev.at;if(!x.lastAt||ev.at>x.lastAt)x.lastAt=ev.at;x.days[String(ev.at).slice(0,10)]=1}if(d.wordId&&!x.wordId)x.wordId=d.wordId});return Object.keys(map).map(function(k){var x=map[k];x.dayCount=Object.keys(x.days).length;x.strength=(x.audio*3)+(x.meaning*2)+x.detail+Math.min(x.touch,4)+(x.dayCount*4);return x})}
+function itemFor(x,lex){var b=lex[x.zh]||{};return{id:x.wordId||b.id||('garden-'+x.zh),zh:x.zh,py:b.py||'',en:b.en||'',ja:b.ja||'',_garden:x}}
+function growthClass(x){if(x.dayCount>=2||x.audio>=4)return'garden-returning';if(x.audio>=2||x.meaning>=2||x.detail>=1)return'garden-growing';return''}
+function mount(host,list,lex,limit){if(!host||!window.CSLWordTouch)return;var arr=(list||[]).slice(0,limit==null?list.length:limit).map(function(x){return itemFor(x,lex)});CSLWordTouch.mount(host,arr,{course:'garden',sentenceId:null});Array.prototype.forEach.call(host.children,function(el,i){var c=arr[i]&&growthClass(arr[i]._garden);if(c)el.classList.add(c)})}
+function connections(words){var families={},seen={};words.forEach(function(w){var h=hanOnly(w.zh);if(h.length<2)return;Array.from(new Set(h.split(''))).forEach(function(ch){if(!families[ch])families[ch]=[];families[ch].push(w)})});Object.keys(families).forEach(function(ch){var uniq=[];families[ch].forEach(function(w){if(!seen[ch+'|'+w.zh]){seen[ch+'|'+w.zh]=1;uniq.push(w)}});families[ch]=uniq});return Object.keys(families).map(function(ch){return{ch:ch,words:families[ch]}}).filter(function(f){return f.words.length>=3}).sort(function(a,b){return b.words.length-a.words.length}).slice(0,3)}
+function renderFamilies(fams,lex){var host=document.getElementById('familyList');host.innerHTML='';fams.forEach(function(f,idx){var box=document.createElement('div');box.className='family';var top=document.createElement('div');top.className='familyTop';var root=document.createElement('div');root.className='rootChar';root.textContent=f.ch;var tx=document.createElement('div');tx.className='familyText';var b=document.createElement('b');b.textContent=f.ch;var s=document.createElement('span');s.textContent=C.family;tx.appendChild(b);tx.appendChild(s);top.appendChild(root);top.appendChild(tx);var row=document.createElement('div');row.className='wordGrid';row.id='familyWords'+idx;box.appendChild(top);box.appendChild(row);host.appendChild(box);mount(row,f.words.slice(0,8),lex)})}
+
+var lex=buildLexicon(),words=collect();
+if(!words.length){document.getElementById('emptyGarden').classList.add('on');return}
+words.sort(function(a,b){return String(b.lastAt).localeCompare(String(a.lastAt))});mount(document.getElementById('recentWords'),words,lex,14);
+var returning=words.filter(function(x){return x.dayCount>=2||x.audio>=3}).sort(function(a,b){return b.strength-a.strength||String(b.lastAt).localeCompare(String(a.lastAt))});if(returning.length){document.getElementById('returningSection').hidden=false;mount(document.getElementById('returningWords'),returning,lex,16)}
+var fams=connections(words);if(fams.length){document.getElementById('connectionsSection').hidden=false;renderFamilies(fams,lex)}
+document.getElementById('allSection').hidden=false;var allSorted=words.slice().sort(function(a,b){return b.strength-a.strength||String(b.lastAt).localeCompare(String(a.lastAt))}),expanded=false;
+function renderAll(){mount(document.getElementById('allWords'),allSorted,lex,expanded?allSorted.length:36);var btn=document.getElementById('showAll');if(allSorted.length<=36){btn.hidden=true}else{btn.hidden=false;btn.textContent=expanded?C.showLess:C.showAll}}
+renderAll();document.getElementById('showAll').addEventListener('click',function(){expanded=!expanded;renderAll()});
+})();
+</script>
+<script src="./feedback-layer.js"></script>
+<script src="./platform-bridge.js"></script>
+<script src="./audio-haptics-layer.js"></script>
+<script src="./interactive-cues.js"></script>
+<script src="./senior-accessibility.js"></script>
+<script src="./light-event-buffer.js"></script>
+<script src="./stale-session-recovery.js"></script>
+</body>
+</html>
