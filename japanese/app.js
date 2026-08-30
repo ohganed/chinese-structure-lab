@@ -73,6 +73,23 @@ function render(){
     $('morphology').appendChild(box);
   });
 
+  $('transforms').innerHTML='';
+  (l.transforms||[]).forEach(x=>{
+    const box=document.createElement('article');
+    box.className='transform';
+    box.innerHTML=`<div class="transform-label">${x.label}</div><div class="transform-from">${x.from}</div><div class="transform-arrow">↓ ${x.change}</div><button type="button" class="transform-reveal">変えた文を見る</button><div class="transform-to" hidden>${x.to}</div><p hidden>${x.why}</p>`;
+    const btn=box.querySelector('.transform-reveal');
+    const answer=box.querySelector('.transform-to');
+    const why=box.querySelector('p');
+    btn.addEventListener('click',()=>{
+      const opening=answer.hidden;
+      answer.hidden=!opening;why.hidden=!opening;
+      btn.textContent=opening?'隠す':'変えた文を見る';
+      if(opening)speak(x.to,.92);
+    });
+    $('transforms').appendChild(box);
+  });
+
   $('rebuildPrompt').textContent=l.rebuild.prompt;
   $('rebuildAnswer').textContent=l.rebuild.answer;
   $('rebuildAnswer').hidden=true;
