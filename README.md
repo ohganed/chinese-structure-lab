@@ -1,1 +1,1 @@
-# Chinese Structure Lab
+# chinese-structure-lab
