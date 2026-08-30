@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Japanese Structure Lab</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div>
+        <div class="brand">Japanese Structure Lab</div>
+        <div class="sub">Listen → Meaning → Structure → Rebuild → Listen again</div>
+      </div>
+    </header>
+
+    <section class="lesson-nav">
+      <button id="prevLesson" type="button">‹</button>
+      <select id="lessonPicker" aria-label="Lesson"></select>
+      <button id="nextLesson" type="button">›</button>
+    </section>
+
+    <section class="card situation-card">
+      <div class="eyebrow">SITUATION</div>
+      <h1 id="sceneTitle"></h1>
+      <p id="sceneText"></p>
+    </section>
+
+    <section class="card sentence-card">
+      <div class="eyebrow">LISTEN FIRST</div>
+      <div class="sentence" id="sentence"></div>
+      <div class="reading" id="reading" hidden></div>
+      <div class="translation" id="translation" hidden></div>
+      <div class="actions">
+        <button data-rate="0.92">▶ Natural</button>
+        <button data-rate="0.72">Slow</button>
+        <button id="toggleReading">よみ</button>
+        <button id="toggleMeaning">意味</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="eyebrow">OPEN THE WORDS</div>
+      <div class="tokens" id="tokens"></div>
+    </section>
+
+    <section class="card">
+      <div class="eyebrow">STRUCTURE</div>
+      <div class="structure" id="structure"></div>
+    </section>
+
+    <section class="card">
+      <div class="eyebrow">REBUILD</div>
+      <div id="rebuildPrompt" class="rebuild-prompt"></div>
+      <button id="showRebuild" type="button">答えを見る</button>
+      <div id="rebuildAnswer" class="rebuild-answer" hidden></div>
+    </section>
+  </main>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
