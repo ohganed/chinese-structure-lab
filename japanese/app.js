@@ -43,9 +43,18 @@ function render(){
   l.words.forEach(w=>{
     const b=document.createElement('button');
     b.type='button';b.className='token';
-    b.innerHTML=`<b>${w.surface}</b><span>${w.reading} · ${w.meaning_en}</span><span class="detail">${w.pos} · ${w.role}${w.morphology?`<br>${w.morphology}`:''}</span>`;
+    const spoken=w.spoken?` · 発音 ${w.spoken}`:'';
+    b.innerHTML=`<b>${w.surface}</b><span>${w.reading}${spoken} · ${w.meaning_en}</span><span class="detail">${w.pos} · ${w.role}${w.morphology?`<br>${w.morphology}`:''}</span>`;
     b.addEventListener('click',()=>b.classList.toggle('open'));
     $('tokens').appendChild(b);
+  });
+
+  $('insights').innerHTML='';
+  (l.insights||[]).forEach(x=>{
+    const box=document.createElement('article');
+    box.className='insight';
+    box.innerHTML=`<div class="insight-label">${x.label}</div><b>${x.focus}</b><p>${x.detail}</p>`;
+    $('insights').appendChild(box);
   });
 
   $('structure').innerHTML='';
@@ -54,6 +63,14 @@ function render(){
     row.className='structure-row';
     row.innerHTML=`<b>${x.label}</b><span>${x.text}</span>`;
     $('structure').appendChild(row);
+  });
+
+  $('morphology').innerHTML='';
+  (l.forms||[]).forEach(x=>{
+    const box=document.createElement('article');
+    box.className='form-card';
+    box.innerHTML=`<div class="form-path"><b>${x.surface}</b><span>→</span><b>${x.base}</b></div><div class="form-kind">${x.kind}</div><p>${x.detail}</p>`;
+    $('morphology').appendChild(box);
   });
 
   $('rebuildPrompt').textContent=l.rebuild.prompt;
