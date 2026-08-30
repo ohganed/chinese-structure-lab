@@ -1,35 +1,53 @@
 [
   {
-    "schema_version":"1.0","id":"ja-a1-001","level":"A1","title":"はじめまして","situation":"初対面で、自分の名前を伝えます。","sentence":"私は田中です。","reading":"わたしは たなかです。","translation_en":"I am Tanaka.",
+    "schema_version":"1.1","id":"ja-a1-001","level":"A1","title":"はじめまして","situation":"初対面で、自分の名前を伝えます。","sentence":"私は田中です。","reading":"わたしは たなかです。","translation_en":"I am Tanaka.",
     "words":[
       {"surface":"私","reading":"わたし","meaning_en":"I / me","pos":"代名詞","role":"話し手を表す"},
-      {"surface":"は","reading":"は","meaning_en":"topic marker","pos":"助詞","role":"話題を示す。ここでは『わ』と読む"},
+      {"surface":"は","reading":"は","spoken":"わ","meaning_en":"topic marker","pos":"助詞","role":"話題を示す"},
       {"surface":"田中","reading":"たなか","meaning_en":"Tanaka","pos":"固有名詞","role":"話し手の名前"},
       {"surface":"です","reading":"です","meaning_en":"be / polite copula","pos":"助動詞","role":"丁寧に同定する"}
     ],
+    "insights":[
+      {"label":"表記と音が違う","focus":"は → わ","detail":"助詞の「は」は文字では「は」と書きますが、この使い方では「わ」と発音します。"},
+      {"label":"は = 主語、とは限らない","focus":"私は","detail":"「は」は単純な subject marker ではなく、いま何について話すかという topic を示します。"},
+      {"label":"日本語は主語を省ける","focus":"田中です。","detail":"文脈で話し手が明らかなら「私は」を省いて「田中です」と言うことも自然です。"}
+    ],
     "structure":[{"label":"TOPIC","text":"私 + は"},{"label":"IDENTITY","text":"田中 + です"},{"label":"PATTERN","text":"X は Y です"}],
+    "forms":[{"surface":"です","base":"だ","kind":"丁寧な文末","detail":"このA1段階では「です」を一まとまりとして使います。普通体の「だ」との対応は後の段階で扱います。"}],
     "rebuild":{"prompt":"『I am Tanaka.』を日本語で言ってみましょう。","answer":"私は田中です。"}
   },
   {
-    "schema_version":"1.0","id":"ja-a1-002","level":"A1","title":"カフェで注文する","situation":"カフェでコーヒーを一つ頼みます。","sentence":"コーヒーをお願いします。","reading":"コーヒーを おねがいします。","translation_en":"Coffee, please.",
+    "schema_version":"1.1","id":"ja-a1-002","level":"A1","title":"カフェで注文する","situation":"カフェでコーヒーを一つ頼みます。","sentence":"コーヒーをお願いします。","reading":"コーヒーを おねがいします。","translation_en":"Coffee, please.",
     "words":[
       {"surface":"コーヒー","reading":"コーヒー","meaning_en":"coffee","pos":"名詞","role":"頼むもの"},
-      {"surface":"を","reading":"を","meaning_en":"object marker","pos":"助詞","role":"対象を示す。通常『お』と発音する"},
+      {"surface":"を","reading":"を","spoken":"お","meaning_en":"object marker","pos":"助詞","role":"対象を示す"},
       {"surface":"お願いします","reading":"おねがいします","meaning_en":"please / I request","pos":"定型表現","role":"丁寧に依頼する","morphology":"願う → お願いする → お願いします"}
     ],
+    "insights":[
+      {"label":"を の発音","focus":"を → お","detail":"助詞の「を」は現代標準語では通常「お」と発音します。"},
+      {"label":"動詞を直訳しすぎない","focus":"お願いします","detail":"英語の please 一語と完全に一致する語ではありません。依頼する場面で自然に使う定型表現として覚えます。"},
+      {"label":"対象 + を","focus":"コーヒーを","detail":"「を」は動作や依頼の対象を示します。ここでは、お願いする対象がコーヒーです。"}
+    ],
     "structure":[{"label":"OBJECT","text":"コーヒー + を"},{"label":"REQUEST","text":"お願いします"},{"label":"PATTERN","text":"X をお願いします"}],
+    "forms":[{"surface":"お願いします","base":"お願いする","kind":"ます形","detail":"「お願いする」の丁寧な形です。名詞「お願い」+「する」が一つの表現として働きます。"}],
     "rebuild":{"prompt":"『Coffee, please.』を日本語で言ってみましょう。","answer":"コーヒーをお願いします。"}
   },
   {
-    "schema_version":"1.0","id":"ja-a1-003","level":"A1","title":"駅をたずねる","situation":"街で駅の場所が分からず、近くの人に尋ねます。","sentence":"駅はどこですか。","reading":"えきは どこですか。","translation_en":"Where is the station?",
+    "schema_version":"1.1","id":"ja-a1-003","level":"A1","title":"駅をたずねる","situation":"街で駅の場所が分からず、近くの人に尋ねます。","sentence":"駅はどこですか。","reading":"えきは どこですか。","translation_en":"Where is the station?",
     "words":[
       {"surface":"駅","reading":"えき","meaning_en":"station","pos":"名詞","role":"場所を尋ねる対象"},
-      {"surface":"は","reading":"は","meaning_en":"topic marker","pos":"助詞","role":"駅を話題として提示する"},
+      {"surface":"は","reading":"は","spoken":"わ","meaning_en":"topic marker","pos":"助詞","role":"駅を話題として提示する"},
       {"surface":"どこ","reading":"どこ","meaning_en":"where","pos":"疑問詞","role":"未知の場所を尋ねる"},
       {"surface":"です","reading":"です","meaning_en":"be / polite copula","pos":"助動詞","role":"丁寧な文末を作る"},
       {"surface":"か","reading":"か","meaning_en":"question marker","pos":"助詞","role":"文を疑問にする"}
     ],
+    "insights":[
+      {"label":"疑問詞を前に出さない","focus":"駅はどこですか","detail":"英語の Where is ...? のように疑問詞を文頭へ移動させず、知りたい位置に「どこ」を置きます。"},
+      {"label":"か が質問を作る","focus":"です + か","detail":"丁寧な文では文末の「か」が質問であることをはっきり示します。"},
+      {"label":"は は topic","focus":"駅は","detail":"駅を「これから話す対象」として提示し、その場所について尋ねています。"}
+    ],
     "structure":[{"label":"TOPIC","text":"駅 + は"},{"label":"UNKNOWN","text":"どこ"},{"label":"QUESTION","text":"です + か"},{"label":"PATTERN","text":"X は どこですか"}],
+    "forms":[{"surface":"ですか","base":"です + か","kind":"丁寧な疑問文","detail":"丁寧な文末「です」に質問を示す「か」を加えています。"}],
     "rebuild":{"prompt":"『Where is the station?』を日本語で言ってみましょう。","answer":"駅はどこですか。"}
   }
 ]
