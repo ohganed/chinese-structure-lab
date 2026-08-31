@@ -11,14 +11,29 @@
     <header class="topbar">
       <div>
         <div class="brand">Japanese Structure Lab</div>
-        <div class="sub">Listen → Meaning → Structure → Transform → Rebuild → Listen again</div>
+        <div class="sub">Listen → Open → Structure → Transform → Rebuild → Listen again</div>
       </div>
     </header>
 
     <section class="lesson-nav">
-      <button id="prevLesson" type="button">‹</button>
+      <button id="prevLesson" type="button" aria-label="前の教材">‹</button>
       <select id="lessonPicker" aria-label="Lesson"></select>
-      <button id="nextLesson" type="button">›</button>
+      <button id="nextLesson" type="button" aria-label="次の教材">›</button>
+    </section>
+
+    <section class="flow-card" aria-label="学習の流れ">
+      <div class="flow-head">
+        <div><div class="eyebrow">LEARNING FLOW</div><b id="flowStatus">0 / 6</b></div>
+        <span id="completionBadge" hidden>✓ COMPLETE</span>
+      </div>
+      <div class="flow-track" id="flowTrack">
+        <button type="button" data-flow="listen" data-target="listenCard"><span>1</span>聞く</button>
+        <button type="button" data-flow="words" data-target="wordsCard"><span>2</span>語を開く</button>
+        <button type="button" data-flow="structure" data-target="structureCard"><span>3</span>構造</button>
+        <button type="button" data-flow="transform" data-target="transformCard"><span>4</span>変える</button>
+        <button type="button" data-flow="rebuild" data-target="rebuildCard"><span>5</span>作る</button>
+        <button type="button" data-flow="relisten" data-target="finishCard"><span>6</span>もう一度</button>
+      </div>
     </section>
 
     <section class="card situation-card">
@@ -27,8 +42,8 @@
       <p id="sceneText"></p>
     </section>
 
-    <section class="card sentence-card">
-      <div class="eyebrow">LISTEN FIRST</div>
+    <section class="card sentence-card" id="listenCard">
+      <div class="eyebrow">1 · LISTEN FIRST</div>
       <div class="sentence" id="sentence"></div>
       <div class="reading" id="reading" hidden></div>
       <div class="translation" id="translation" hidden></div>
@@ -40,8 +55,9 @@
       </div>
     </section>
 
-    <section class="card">
-      <div class="eyebrow">OPEN THE WORDS</div>
+    <section class="card" id="wordsCard">
+      <div class="eyebrow">2 · OPEN THE WORDS</div>
+      <p class="section-hint">気になる語をタップすると、読み・役割・形を確認できます。</p>
       <div class="tokens" id="tokens"></div>
     </section>
 
@@ -50,9 +66,10 @@
       <div id="insights" class="insights"></div>
     </section>
 
-    <section class="card">
-      <div class="eyebrow">STRUCTURE</div>
+    <section class="card" id="structureCard">
+      <div class="eyebrow">3 · STRUCTURE</div>
       <div class="structure" id="structure"></div>
+      <button class="observe-button" id="observeStructure" type="button">この構造をつかんだ</button>
     </section>
 
     <section class="card morphology-card">
@@ -60,17 +77,26 @@
       <div id="morphology" class="morphology"></div>
     </section>
 
-    <section class="card transform-card">
-      <div class="eyebrow">TRANSFORM</div>
-      <p class="section-hint">一部だけ変えて、同じ構造を別の場面で使います。</p>
+    <section class="card transform-card" id="transformCard">
+      <div class="eyebrow">4 · TRANSFORM</div>
+      <p class="section-hint">一部だけ変えて、同じ構造を別の場面で使います。まず頭の中で作ってから開いてください。</p>
       <div id="transforms" class="transforms"></div>
     </section>
 
-    <section class="card">
-      <div class="eyebrow">REBUILD</div>
+    <section class="card" id="rebuildCard">
+      <div class="eyebrow">5 · REBUILD</div>
       <div id="rebuildPrompt" class="rebuild-prompt"></div>
       <button id="showRebuild" type="button">答えを見る</button>
       <div id="rebuildAnswer" class="rebuild-answer" hidden></div>
+    </section>
+
+    <section class="card finish-card" id="finishCard">
+      <div class="eyebrow">6 · LISTEN AGAIN</div>
+      <h2>最後に、意味を考えず音としてもう一度。</h2>
+      <p>最初に聞いたときより、文のまとまりが自然に聞こえるか確かめます。</p>
+      <button id="listenAgain" class="finish-listen" type="button">▶ Natural でもう一度聞く</button>
+      <div id="lessonCompleteText" class="complete-text" hidden>このレッスンを1周しました。</div>
+      <button id="continueLesson" class="continue-button" type="button" hidden>次のレッスンへ →</button>
     </section>
   </main>
   <script type="module" src="./app.js"></script>
