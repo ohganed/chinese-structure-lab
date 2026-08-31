@@ -29,12 +29,21 @@ for(const lesson of lessons){
 const app=fs.readFileSync(path.join(root,'japanese','app.js'),'utf8');
 assert(app.includes("u.lang='ja-JP'"),'Japanese TTS language must be ja-JP');
 assert(app.includes("./data/lessons-a1.json"),'app must load A1 lesson data');
-assert(app.includes("$('transforms')"),'app must render transforms');
+assert(app.includes("const STORAGE_KEY='JSL_PROGRESS_V1'"),'Japanese progress must use an isolated storage namespace');
+assert(app.includes("FLOW_STEPS=['listen','words','structure','transform','rebuild','relisten']"),'guided flow must contain six learning stages');
+assert(app.includes("markStep('words')"),'word interaction must advance flow');
+assert(app.includes("markStep('structure')"),'structure confirmation must advance flow');
+assert(app.includes("markStep('transform')"),'transform interaction must advance flow');
+assert(app.includes("markStep('rebuild')"),'rebuild interaction must advance flow');
+assert(app.includes("markStep('relisten')"),'final listening must advance flow');
 assert(app.includes("speak(x.to,.92)"),'revealed transform should be speakable');
 
 const html=fs.readFileSync(path.join(root,'japanese','index.html'),'utf8');
-for(const id of ['sentence','reading','translation','tokens','insights','structure','morphology','transforms','rebuildAnswer']){
+for(const id of ['flowTrack','flowStatus','completionBadge','listenCard','wordsCard','sentence','reading','translation','tokens','insights','structureCard','structure','morphology','transformCard','transforms','rebuildCard','rebuildAnswer','finishCard','listenAgain','continueLesson']){
   assert(html.includes(`id="${id}"`),`missing UI target: ${id}`);
 }
+for(const step of ['listen','words','structure','transform','rebuild','relisten']){
+  assert(html.includes(`data-flow="${step}"`),`missing flow navigation step: ${step}`);
+}
 
-console.log(`PASS Japanese Structure Lab foundation: ${lessons.length} lessons with transforms`);
+console.log(`PASS Japanese Structure Lab guided flow: ${lessons.length} lessons, 6-stage loop`);
