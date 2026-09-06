@@ -36,7 +36,7 @@
     "structure":[{"label":"SOURCE","text":"日本 + から"},{"label":"ACTION","text":"来ました"},{"label":"PATTERN","text":"X から 来ました"}],
     "forms":[{"surface":"来ました","base":"来る","kind":"ます形・過去","detail":"丁寧な過去形です。現在・未来の「来ます」と区別します。"}],
     "transforms":[{"label":"国を変える","from":"日本から来ました。","to":"カナダから来ました。","change":"日本 → カナダ","why":"起点 X を変えるだけで出身地を言えます。"}],
-    "connections":{"reuses":["ellipsis"],"prepares":["particle-kara","polite-past"]},
+    "connections":{"reuses":["ellipsis"],"prepares":["particle-kara","polite-past","verb-masu"]},
     "rebuild":{"prompt":"『I came from Japan.』を日本語で言ってみましょう。","answer":"日本から来ました。"}
   },
   {
@@ -46,7 +46,7 @@
     "structure":[{"label":"TOPIC","text":"これ + は"},{"label":"UNKNOWN PRICE","text":"いくら"},{"label":"QUESTION","text":"です + か"}],
     "forms":[{"surface":"ですか","base":"です + か","kind":"丁寧な疑問文","detail":"Lesson 3 と同じ質問の形を再利用しています。"}],
     "transforms":[{"label":"指す物を変える","from":"これはいくらですか。","to":"それはいくらですか。","change":"これ → それ","why":"話し手から少し離れた物には「それ」を使います。"}],
-    "connections":{"reuses":["topic-ha","question-ka"],"prepares":["demonstratives","interrogative-ikura"]},
+    "connections":{"reuses":["topic-ha","question-ka","x-wa-y-desu"],"prepares":["demonstratives","interrogative-ikura"]},
     "rebuild":{"prompt":"『How much is this?』を日本語で言ってみましょう。","answer":"これはいくらですか。"}
   },
   {
@@ -66,7 +66,7 @@
     "structure":[{"label":"OBJECT","text":"朝ごはん + を"},{"label":"ACTION","text":"食べます"},{"label":"PATTERN","text":"X を Vます"}],
     "forms":[{"surface":"食べます","base":"食べる","kind":"ます形","detail":"丁寧な現在・習慣の形です。"}],
     "transforms":[{"label":"食べる物を変える","from":"朝ごはんを食べます。","to":"パンを食べます。","change":"朝ごはん → パン","why":"object X を変えて同じ動詞構造を使えます。"}],
-    "connections":{"reuses":["object-wo","ellipsis"],"prepares":["verb-masu"]},
+    "connections":{"reuses":["object-wo","ellipsis","verb-masu"],"prepares":["routine-action"]},
     "rebuild":{"prompt":"『I eat breakfast.』を日本語で言ってみましょう。","answer":"朝ごはんを食べます。"}
   },
   {
@@ -96,7 +96,7 @@
     "structure":[{"label":"TIME","text":"七時 + に"},{"label":"ACTION 1","text":"起きて"},{"label":"ACTION 2","text":"朝ごはん + を + 食べます"},{"label":"PATTERN","text":"TIME に Vて、X を Vます"}],
     "forms":[{"surface":"起きて","base":"起きる","kind":"て形","detail":"複数の行動をつなぐ基本形です。"},{"surface":"食べます","base":"食べる","kind":"ます形","detail":"Lesson 7 の形が再登場します。"}],
     "transforms":[{"label":"時間を変える","from":"七時に起きて、朝ごはんを食べます。","to":"六時に起きて、朝ごはんを食べます。","change":"七時 → 六時","why":"time slot だけを変えて同じ日課構造を使えます。"}],
-    "connections":{"reuses":["time-nanji","object-wo","verb-masu"],"prepares":["particle-ni-time","te-form-sequence"]},
+    "connections":{"reuses":["time-nanji","object-wo","verb-masu","routine-action"],"prepares":["particle-ni-time","te-form-sequence"]},
     "rebuild":{"prompt":"『I get up at seven and eat breakfast.』を日本語で言ってみましょう。","answer":"七時に起きて、朝ごはんを食べます。"}
   }
 ]
