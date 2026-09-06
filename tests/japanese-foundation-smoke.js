@@ -41,11 +41,23 @@ for(const key of requiredStructures){
   assert(reused.has(key),`core structure never reappears: ${key}`);
 }
 
+for(let i=0;i<lessons.length;i++){
+  const lesson=lessons[i];
+  for(const key of lesson.connections.reuses){
+    const prior=lessons.slice(0,i).some(x=>x.connections.prepares.includes(key));
+    assert(prior,`${lesson.id}: reuse '${key}' has no earlier prepared lesson`);
+  }
+}
+
 const app=fs.readFileSync(path.join(root,'japanese','app.js'),'utf8');
 assert(app.includes("u.lang='ja-JP'"),'Japanese TTS language must be ja-JP');
 assert(app.includes("./data/lessons-a1.json"),'app must load A1 lesson data');
 assert(app.includes("const STORAGE_KEY='JSL_PROGRESS_V1'"),'Japanese progress must use an isolated storage namespace');
 assert(app.includes("FLOW_STEPS=['listen','words','structure','transform','rebuild','relisten']"),'guided flow must contain six learning stages');
+assert(app.includes('function renderLearningMap()'),'app must render lesson connection map');
+assert(app.includes('function findPriorLessons'),'learning map must resolve prior structure encounters');
+assert(app.includes('function findNextLessons'),'learning map must resolve future structure encounters');
+assert(app.includes('STRUCTURE_LABELS'),'learning map must present human-readable structure labels');
 assert(app.includes("markStep('words')"),'word interaction must advance flow');
 assert(app.includes("markStep('structure')"),'structure confirmation must advance flow');
 assert(app.includes("markStep('transform')"),'transform interaction must advance flow');
@@ -54,11 +66,11 @@ assert(app.includes("markStep('relisten')"),'final listening must advance flow')
 assert(app.includes("speak(x.to,.92)"),'revealed transform should be speakable');
 
 const html=fs.readFileSync(path.join(root,'japanese','index.html'),'utf8');
-for(const id of ['flowTrack','flowStatus','completionBadge','listenCard','wordsCard','sentence','reading','translation','tokens','insights','structureCard','structure','morphology','transformCard','transforms','rebuildCard','rebuildAnswer','finishCard','listenAgain','continueLesson']){
+for(const id of ['flowTrack','flowStatus','completionBadge','learningMapCard','mapBefore','mapCurrent','mapNext','toggleFullMap','fullMap','listenCard','wordsCard','sentence','reading','translation','tokens','insights','structureCard','structure','morphology','transformCard','transforms','rebuildCard','rebuildAnswer','finishCard','listenAgain','continueLesson']){
   assert(html.includes(`id="${id}"`),`missing UI target: ${id}`);
 }
 for(const step of ['listen','words','structure','transform','rebuild','relisten']){
   assert(html.includes(`data-flow="${step}"`),`missing flow navigation step: ${step}`);
 }
 
-console.log(`PASS Japanese Structure Lab: ${lessons.length} connected A1 lessons, ${reuseLinks} re-use links, 6-stage loop`);
+console.log(`PASS Japanese Structure Lab: ${lessons.length} connected A1 lessons, ${reuseLinks} re-use links, visible Learning Map, 6-stage loop`);
