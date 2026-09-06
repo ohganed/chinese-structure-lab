@@ -7,7 +7,16 @@ function readProgress(){
   try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}')||{}}catch{return {}}
 }
 
+function ensureStyle(){
+  if(document.getElementById('reencounterStyle'))return;
+  const style=document.createElement('style');
+  style.id='reencounterStyle';
+  style.textContent=`.reencounter-card{background:#171717;color:#fff}.reencounter-card .eyebrow{color:#aaa}.reencounter-card h2{margin:7px 0 10px;font-size:20px}.reencounter-title{font-size:21px;font-weight:800;line-height:1.45}.reencounter-card p{color:#c9c9c9;line-height:1.6}.reencounter-card button{border:0;border-radius:15px;padding:12px 14px;background:#fff;color:#111;font-weight:800}`;
+  document.head.appendChild(style);
+}
+
 export function ensureReencounterCard(){
+  ensureStyle();
   if(document.getElementById('reencounterCard'))return;
   const anchor=document.getElementById('learningMapCard');
   if(!anchor)return;
