@@ -42,6 +42,31 @@
       <p id="sceneText"></p>
     </section>
 
+    <section class="card map-card" id="learningMapCard">
+      <div class="map-head">
+        <div>
+          <div class="eyebrow">LEARNING MAP</div>
+          <h2>この文は、どこから来てどこへ行く？</h2>
+        </div>
+        <button id="toggleFullMap" type="button">A1全体を見る</button>
+      </div>
+      <div class="map-relations">
+        <div class="map-column">
+          <div class="map-label">BEFORE · 前にも出た</div>
+          <div id="mapBefore" class="map-links"></div>
+        </div>
+        <div class="map-current">
+          <div class="map-label">NOW · 今の構造</div>
+          <div id="mapCurrent" class="map-structures"></div>
+        </div>
+        <div class="map-column">
+          <div class="map-label">NEXT · この先につながる</div>
+          <div id="mapNext" class="map-links"></div>
+        </div>
+      </div>
+      <div id="fullMap" class="full-map" hidden></div>
+    </section>
+
     <section class="card sentence-card" id="listenCard">
       <div class="eyebrow">1 · LISTEN FIRST</div>
       <div class="sentence" id="sentence"></div>
