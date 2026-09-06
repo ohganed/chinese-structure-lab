@@ -65,6 +65,17 @@ assert(app.includes("markStep('rebuild')"),'rebuild interaction must advance flo
 assert(app.includes("markStep('relisten')"),'final listening must advance flow');
 assert(app.includes("speak(x.to,.92)"),'revealed transform should be speakable');
 
+const engine=fs.readFileSync(path.join(root,'japanese','reencounter-engine.js'),'utf8');
+assert(engine.includes('export function scoreLesson'),'re-encounter engine must expose scoring');
+assert(engine.includes('export function chooseNextLesson'),'re-encounter engine must choose a next lesson');
+assert(engine.includes('incompleteBonus'),'re-encounter scoring must prioritize incomplete learning');
+assert(engine.includes('reuseBonus'),'re-encounter scoring must value structural reuse');
+
+const recommendationUI=fs.readFileSync(path.join(root,'japanese','reencounter-ui.js'),'utf8');
+assert(recommendationUI.includes("const STORAGE_KEY='JSL_PROGRESS_V1'"),'recommendation UI must read the isolated Japanese progress namespace');
+assert(recommendationUI.includes('chooseNextLesson'),'recommendation UI must use the re-encounter engine');
+assert(recommendationUI.includes("fetch('./data/lessons-a1.json')"),'recommendation UI must use the same lesson data');
+
 const html=fs.readFileSync(path.join(root,'japanese','index.html'),'utf8');
 for(const id of ['flowTrack','flowStatus','completionBadge','learningMapCard','mapBefore','mapCurrent','mapNext','toggleFullMap','fullMap','listenCard','wordsCard','sentence','reading','translation','tokens','insights','structureCard','structure','morphology','transformCard','transforms','rebuildCard','rebuildAnswer','finishCard','listenAgain','continueLesson']){
   assert(html.includes(`id="${id}"`),`missing UI target: ${id}`);
@@ -72,5 +83,6 @@ for(const id of ['flowTrack','flowStatus','completionBadge','learningMapCard','m
 for(const step of ['listen','words','structure','transform','rebuild','relisten']){
   assert(html.includes(`data-flow="${step}"`),`missing flow navigation step: ${step}`);
 }
+assert(html.includes('./reencounter-ui.js'),'page must load re-encounter recommendation UI');
 
-console.log(`PASS Japanese Structure Lab: ${lessons.length} connected A1 lessons, ${reuseLinks} re-use links, visible Learning Map, 6-stage loop`);
+console.log(`PASS Japanese Structure Lab: ${lessons.length} connected A1 lessons, ${reuseLinks} re-use links, Learning Map, Re-encounter Engine, 6-stage loop`);
