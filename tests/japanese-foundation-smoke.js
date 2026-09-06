@@ -6,10 +6,13 @@ const lessons=JSON.parse(fs.readFileSync(lessonPath,'utf8'));
 
 function assert(ok,msg){if(!ok)throw new Error(msg)}
 assert(Array.isArray(lessons),'lessons must be an array');
-assert(lessons.length>=3,'v0.1 requires at least three lessons');
+assert(lessons.length>=10,'A1 foundation requires at least ten connected lessons');
 
+const ids=new Set();
+let reuseLinks=0;
 for(const lesson of lessons){
   assert(/^ja-a1-\d{3}$/.test(lesson.id),`bad id: ${lesson.id}`);
+  assert(!ids.has(lesson.id),`duplicate id: ${lesson.id}`);ids.add(lesson.id);
   assert(lesson.level==='A1',`${lesson.id}: expected A1`);
   assert(lesson.sentence&&lesson.reading&&lesson.translation_en,`${lesson.id}: missing sentence/read/translation`);
   assert(Array.isArray(lesson.words)&&lesson.words.length>0,`${lesson.id}: missing words`);
@@ -17,6 +20,9 @@ for(const lesson of lessons){
   assert(Array.isArray(lesson.structure)&&lesson.structure.length>0,`${lesson.id}: missing structure`);
   assert(Array.isArray(lesson.forms)&&lesson.forms.length>0,`${lesson.id}: missing form data`);
   assert(Array.isArray(lesson.transforms)&&lesson.transforms.length>0,`${lesson.id}: missing transforms`);
+  assert(lesson.connections&&Array.isArray(lesson.connections.reuses)&&Array.isArray(lesson.connections.prepares),`${lesson.id}: missing structure-network links`);
+  assert(lesson.connections.prepares.length>0,`${lesson.id}: must prepare at least one reusable structure`);
+  reuseLinks+=lesson.connections.reuses.length;
   assert(lesson.rebuild&&lesson.rebuild.prompt&&lesson.rebuild.answer,`${lesson.id}: missing rebuild`);
   for(const word of lesson.words){
     assert(word.surface&&word.reading&&word.meaning_en&&word.pos&&word.role,`${lesson.id}: incomplete word record`);
@@ -24,6 +30,15 @@ for(const lesson of lessons){
   for(const transform of lesson.transforms){
     assert(transform.label&&transform.from&&transform.to&&transform.change&&transform.why,`${lesson.id}: incomplete transform`);
   }
+}
+assert(reuseLinks>=8,'A1 should contain meaningful re-encounters, not isolated lesson sentences');
+
+const requiredStructures=['topic-ha','object-wo','question-ka','verb-masu'];
+const prepared=new Set(lessons.flatMap(l=>l.connections.prepares));
+const reused=new Set(lessons.flatMap(l=>l.connections.reuses));
+for(const key of requiredStructures){
+  assert(prepared.has(key),`missing prepared core structure: ${key}`);
+  assert(reused.has(key),`core structure never reappears: ${key}`);
 }
 
 const app=fs.readFileSync(path.join(root,'japanese','app.js'),'utf8');
@@ -46,4 +61,4 @@ for(const step of ['listen','words','structure','transform','rebuild','relisten'
   assert(html.includes(`data-flow="${step}"`),`missing flow navigation step: ${step}`);
 }
 
-console.log(`PASS Japanese Structure Lab guided flow: ${lessons.length} lessons, 6-stage loop`);
+console.log(`PASS Japanese Structure Lab: ${lessons.length} connected A1 lessons, ${reuseLinks} re-use links, 6-stage loop`);
