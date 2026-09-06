@@ -1,74 +1,29 @@
 (function(){
 'use strict';
-/* Legacy Word Touch Upgrader v4
-   Preserves legacy English word glosses when converting old .word buttons.
-   This fixes false "English meaning unavailable" states where the source
-   lesson already contains an English gloss.
+/* Legacy Word Touch Upgrader v5
+   A1/A2 migration path:
+   - hide initially visible sentence/pinyin/meanings
+   - blank word/chunk buttons
+   - sound -> pinyin -> English -> Japanese -> Hanzi/details
+   - add a whole-sentence discovery button
+   Legacy higher-level pages keep their old behavior.
 */
-var VERSION=4,seen=new WeakSet();
+var VERSION=5,seen=new WeakSet(),lessonSeen=new WeakSet();
 function txt(el,sel){var x=el&&el.querySelector&&el.querySelector(sel);return x?(x.textContent||'').trim():''}
 function nearestLesson(btn){return btn.closest('.lesson,.card,.item,.entry,article,section')||btn.parentElement}
-function chineseOnly(raw){
- var parts=String(raw||'').match(/[\u3400-\u9FFF\uF900-\uFAFF]+/g);
- return parts&&parts.length?parts.join(''):String(raw||'').trim();
-}
-function englishGloss(btn,zh){
- var direct=txt(btn,'.wordgloss')||txt(btn,'[data-en]');
- if(direct)return direct;
- var small=btn&&btn.querySelector&&btn.querySelector('small');
- if(small){var s=(small.textContent||'').trim();if(/[A-Za-z]/.test(s))return s}
- var raw=(btn&&btn.textContent||'').replace(/[▶🔊🔉🔈]/g,' ').replace(/\s+/g,' ').trim();
- if(zh&&raw.indexOf(zh)===0)raw=raw.slice(zh.length).trim();
- return /[A-Za-z]/.test(raw)?raw:'';
-}
-function japaneseGloss(btn){
- var direct=txt(btn,'.wordja')||txt(btn,'[data-ja]');
- if(direct)return direct;
- var small=btn&&btn.querySelector&&btn.querySelector('small');
- if(small){var s=(small.textContent||'').trim();if(/[\u3040-\u30ff\u3400-\u9fff]/.test(s)&&!/[A-Za-z]/.test(s))return s}
- return '';
-}
-function parseLegacy(btn){
- var zh=txt(btn,'.wordzh')||chineseOnly(btn.textContent||'');
- var en=englishGloss(btn,zh),ja=japaneseGloss(btn);
- var lesson=nearestLesson(btn),sentence=txt(lesson,'.zh'),sentencePy=txt(lesson,'.py'),sentenceEn=txt(lesson,'.en'),sentenceJa=txt(lesson,'.ja');
- var examples=[];
- if(sentence)examples.push({zh:sentence,en:sentenceEn||'',ja:sentenceJa||''});
- return{
-  id:'legacy-word-'+zh,
-  zh:zh,
-  en:en,
-  ja:ja,
-  detailEn:sentencePy?('Sentence pinyin: '+sentencePy):'',
-  detailJa:sentencePy?('文全体の拼音: '+sentencePy):'',
-  examples:examples
- };
-}
-function ensureStyle(){
- if(document.getElementById('cslLegacyWordTouchStyle'))return;
- var st=document.createElement('style');st.id='cslLegacyWordTouchStyle';st.textContent=
- '.csl-word-touch{border:0;background:#efede7;border-radius:18px;min-width:104px;min-height:64px;padding:14px 16px;font:780 24px/1.25 -apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;color:#171717;text-align:left;box-shadow:none}' +
- '.csl-word-touch [data-csl-word-zh]{display:block;font-size:1em;line-height:1.25}' +
- '.csl-word-touch [data-csl-word-helper]{font-size:17px!important;line-height:1.45!important;margin-top:7px!important;font-weight:650!important;white-space:pre-line!important;color:#555}' +
- '.csl-word-touch.csl-word-detail{display:block;width:100%;max-width:100%;padding:16px 18px}' +
- '.csl-word-touch.csl-word-detail [data-csl-word-helper]{font-size:16px!important;font-weight:560!important}' +
- '.senior .csl-word-touch{font-size:30px;min-height:74px;padding:16px 18px}' +
- '.senior .csl-word-touch [data-csl-word-helper]{font-size:21px!important}' +
- '@media(max-width:430px){.csl-word-touch{font-size:23px;min-width:112px}.csl-word-touch [data-csl-word-helper]{font-size:17px!important}}';
- document.head.appendChild(st);
-}
-function upgrade(btn){
- if(!btn||seen.has(btn)||btn.classList.contains('csl-word-touch'))return;
- if(!window.CSLWordTouch)return;
- seen.add(btn);ensureStyle();
- var item=parseLegacy(btn),holder=document.createElement('span');
- CSLWordTouch.mount(holder,[item],{course:location.pathname.split('/').pop()||'legacy-course',sentenceId:null});
- var newBtn=holder.firstChild;if(!newBtn)return;
- newBtn.classList.add('csl-legacy-upgraded-word');
- newBtn.removeAttribute('onclick');
- btn.parentNode.replaceChild(newBtn,btn);
-}
-function scan(root){if(!window.CSLWordTouch)return;(root||document).querySelectorAll('.word').forEach(upgrade)}
-function start(){ensureStyle();scan(document);var mo=new MutationObserver(function(ms){ms.forEach(function(m){m.addedNodes.forEach(function(n){if(n.nodeType!==1)return;if(n.matches&&n.matches('.word'))upgrade(n);scan(n)})})});mo.observe(document.documentElement,{childList:true,subtree:true});window.CSLLegacyWordTouchUpgrader={version:VERSION,scan:scan,upgrade:upgrade,chineseOnly:chineseOnly,parseLegacy:parseLegacy}}
+function chineseOnly(raw){var parts=String(raw||'').match(/[\u3400-\u9FFF\uF900-\uFAFF]+/g);return parts&&parts.length?parts.join(''):String(raw||'').trim()}
+function hanOnly(s){return (String(s||'').match(/[\u3400-\u9FFF\uF900-\uFAFF]/g)||[]).join('')}
+function isA1A2(){var probe=(document.title+' '+(document.body&&document.body.textContent||'').slice(0,1600));return /(^|\W)A1(\W|$)|(^|\W)A2(\W|$)/i.test(probe)}
+function englishGloss(btn,zh){var direct=txt(btn,'.wordgloss')||txt(btn,'[data-en]');if(direct)return direct;var small=btn&&btn.querySelector&&btn.querySelector('small');if(small){var s=(small.textContent||'').trim();if(/[A-Za-z]/.test(s))return s}var raw=(btn&&btn.textContent||'').replace(/[▶🔊🔉🔈]/g,' ').replace(/\s+/g,' ').trim();if(zh&&raw.indexOf(zh)===0)raw=raw.slice(zh.length).trim();return /[A-Za-z]/.test(raw)?raw:''}
+function japaneseGloss(btn){var direct=txt(btn,'.wordja')||txt(btn,'[data-ja]');if(direct)return direct;return ''}
+function pinyinTokens(s){return String(s||'').replace(/[，。！？、；：“”‘’（）,.!?;:()]/g,' ').split(/\s+/).filter(Boolean)}
+function derivePinyin(lesson,zh){var sentence=txt(lesson,'.zh'),fullPy=txt(lesson,'.py');if(!sentence||!fullPy||!zh)return'';var hs=hanOnly(sentence),hw=hanOnly(zh),start=hs.indexOf(hw);if(start<0)return'';var toks=pinyinTokens(fullPy);if(toks.length<start+hw.length)return'';return toks.slice(start,start+hw.length).join(' ')}
+function parseLegacy(btn){var zh=txt(btn,'.wordzh')||chineseOnly(btn.textContent||''),lesson=nearestLesson(btn);var en=englishGloss(btn,zh),ja=japaneseGloss(btn),py=derivePinyin(lesson,zh);var sentence=txt(lesson,'.zh'),sentenceEn=txt(lesson,'.en'),sentenceJa=txt(lesson,'.ja');return{id:'legacy-word-'+zh,zh:zh,pinyin:py,en:en,ja:ja,detailEn:'From sentence: '+sentence+(sentenceEn?' · '+sentenceEn:''),detailJa:sentenceJa?('文全体: '+sentenceJa):''}}
+function ensureStyle(){if(document.getElementById('cslLegacyWordTouchStyle'))return;var st=document.createElement('style');st.id='cslLegacyWordTouchStyle';st.textContent='.csl-word-touch{border:0;background:#efede7;border-radius:18px;min-width:104px;min-height:68px;padding:14px 16px;font:780 24px/1.25 -apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;color:#171717;text-align:center;box-shadow:none}.csl-word-touch [data-csl-word-zh]{display:block}.csl-word-touch [data-csl-word-helper]{font-size:16px!important;line-height:1.4!important;margin-top:7px!important;font-weight:560!important;white-space:pre-line!important;color:#555}.csl-word-touch.csl-word-detail{width:100%;max-width:100%}.csl-a1a2-sentence{display:block!important;width:100%!important;margin-top:14px;background:#171717!important;color:white!important}.csl-a1a2-sentence [data-csl-word-helper]{color:#ddd!important}.csl-a1a2-hidden-source{display:none!important}@media(max-width:430px){.csl-word-touch{font-size:22px;min-width:96px}}';document.head.appendChild(st)}
+function sentenceItem(lesson){return{zh:txt(lesson,'.zh'),pinyin:txt(lesson,'.py'),en:txt(lesson,'.en'),ja:txt(lesson,'.ja'),detailEn:txt(lesson,'.note'),detailJa:txt(lesson,'.note')}}
+function upgradeLesson(lesson){if(!lesson||lessonSeen.has(lesson)||!isA1A2()||!window.CSLWordTouch)return;var item=sentenceItem(lesson);if(!item.zh)return;lessonSeen.add(lesson);var anchors=['.zh','.py','.en','.ja'];anchors.forEach(function(sel){var e=lesson.querySelector(sel);if(e)e.classList.add('csl-a1a2-hidden-source')});var holder=document.createElement('div');holder.className='csl-a1a2-sentence-holder';CSLWordTouch.mount(holder,[item],{course:location.pathname.split('/').pop()||'legacy-course',discovery:true,sentence:true});var b=holder.firstChild;if(b)b.classList.add('csl-a1a2-sentence');var words=lesson.querySelector('.words');if(words&&words.parentNode)words.parentNode.insertBefore(holder,words.nextSibling);else lesson.appendChild(holder)}
+function upgrade(btn){if(!btn||seen.has(btn)||btn.classList.contains('csl-word-touch')||!window.CSLWordTouch)return;seen.add(btn);ensureStyle();var lesson=nearestLesson(btn),item=parseLegacy(btn),holder=document.createElement('span'),discovery=isA1A2();CSLWordTouch.mount(holder,[item],{course:location.pathname.split('/').pop()||'legacy-course',sentenceId:null,discovery:discovery});var newBtn=holder.firstChild;if(!newBtn)return;newBtn.classList.add('csl-legacy-upgraded-word');btn.parentNode.replaceChild(newBtn,btn);if(discovery)upgradeLesson(lesson)}
+function scan(root){if(!window.CSLWordTouch)return;(root||document).querySelectorAll('.word').forEach(upgrade);if(isA1A2())(root||document).querySelectorAll('.lesson,.card').forEach(function(l){if(l.querySelector('.word,.csl-word-touch'))upgradeLesson(l)})}
+function start(){ensureStyle();scan(document);var mo=new MutationObserver(function(ms){ms.forEach(function(m){m.addedNodes.forEach(function(n){if(n.nodeType!==1)return;if(n.matches&&n.matches('.word'))upgrade(n);scan(n)})})});mo.observe(document.documentElement,{childList:true,subtree:true});window.CSLLegacyWordTouchUpgrader={version:VERSION,scan:scan,upgrade:upgrade,derivePinyin:derivePinyin,isA1A2:isA1A2}}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
 })();
