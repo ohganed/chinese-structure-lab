@@ -75,6 +75,8 @@ const recommendationUI=fs.readFileSync(path.join(root,'japanese','reencounter-ui
 assert(recommendationUI.includes("const STORAGE_KEY='JSL_PROGRESS_V1'"),'recommendation UI must read the isolated Japanese progress namespace');
 assert(recommendationUI.includes('chooseNextLesson'),'recommendation UI must use the re-encounter engine');
 assert(recommendationUI.includes("fetch('./data/lessons-a1.json')"),'recommendation UI must use the same lesson data');
+assert(recommendationUI.includes("card.id='reencounterCard'"),'recommendation UI must create its card without hard-coupling app markup');
+assert(recommendationUI.includes('ensureStyle()'),'recommendation card styling must remain self-contained');
 
 const html=fs.readFileSync(path.join(root,'japanese','index.html'),'utf8');
 for(const id of ['flowTrack','flowStatus','completionBadge','learningMapCard','mapBefore','mapCurrent','mapNext','toggleFullMap','fullMap','listenCard','wordsCard','sentence','reading','translation','tokens','insights','structureCard','structure','morphology','transformCard','transforms','rebuildCard','rebuildAnswer','finishCard','listenAgain','continueLesson']){
