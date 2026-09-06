@@ -9,13 +9,16 @@ export function scoreLesson({lesson,index,currentIndex,progress}){
   return incompleteBonus+reuseBonus+prepareBonus-exposurePenalty-distancePenalty;
 }
 
-export function chooseNextLesson({lessons,currentIndex,progress}){
-  if(!Array.isArray(lessons)||!lessons.length)return null;
-  const ranked=lessons
+export function rankLessons({lessons,currentIndex,progress}){
+  if(!Array.isArray(lessons)||!lessons.length)return [];
+  return lessons
     .map((lesson,index)=>({lesson,index,score:scoreLesson({lesson,index,currentIndex,progress})}))
     .filter(x=>x.index!==currentIndex)
     .sort((a,b)=>b.score-a.score||a.index-b.index);
-  return ranked[0]||null;
+}
+
+export function chooseNextLesson({lessons,currentIndex,progress}){
+  return rankLessons({lessons,currentIndex,progress})[0]||null;
 }
 
 export function buildReencounterReason({lesson,progress}){
