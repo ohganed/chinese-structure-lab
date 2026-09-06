@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {scoreLesson,chooseNextLesson,buildReencounterReason} from '../japanese/reencounter-engine.js';
+import {scoreLesson,rankLessons,chooseNextLesson,buildReencounterReason} from '../japanese/reencounter-engine.js';
 
 const lessons=[
   {id:'ja-a1-001',connections:{reuses:[],prepares:['topic-ha']}},
@@ -8,6 +8,11 @@ const lessons=[
 ];
 
 const empty={};
+const ranked=rankLessons({lessons,currentIndex:0,progress:empty});
+assert.equal(ranked.length,2,'ranking should exclude the current lesson');
+assert.equal(ranked[0].lesson.id,'ja-a1-002','ranking should prefer the nearest incomplete structural re-encounter');
+assert.ok(ranked[0].score>=ranked[1].score,'ranking must be score-descending');
+
 const first=chooseNextLesson({lessons,currentIndex:0,progress:empty});
 assert.equal(first.lesson.id,'ja-a1-002','nearest incomplete structural re-encounter should be preferred');
 
@@ -23,4 +28,4 @@ const completedScore=scoreLesson({lesson:lessons[1],index:1,currentIndex:0,progr
 assert.ok(incompleteScore>completedScore,'incomplete lesson score should be higher in this scenario');
 assert.match(buildReencounterReason({lesson:lessons[2],progress}),/まだ1周していない/);
 
-console.log('PASS Japanese re-encounter engine behavior');
+console.log('PASS Japanese re-encounter engine behavior and ranking');
