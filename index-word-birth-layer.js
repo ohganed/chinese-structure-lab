@@ -58,7 +58,7 @@ function injectStyle(){if(document.getElementById('csl-word-birth-style'))return
 function render(){
  renderQueued=false;host=document.getElementById('words');if(!host)return;var sc=currentScene();if(!sc||!Array.isArray(sc.words))return;
  var signature=(sc.title||sc.titleJa||'')+'|'+sc.words.map(function(w){return w[0]}).join(',');if(host.dataset.birthSignature===signature&&host.querySelector('.csl-born-word'))return;
- host.dataset.birthSignature=signature;host.innerHTML='';sc.words.forEach(function(w,i){host.appendChild(make(wordData(w,i))});
+ host.dataset.birthSignature=signature;host.innerHTML='';sc.words.forEach(function(w,i){host.appendChild(make(wordData(w,i)))});
 }
 function queue(){if(renderQueued)return;renderQueued=true;setTimeout(render,0)}
 function start(){injectStyle();queue();var title=document.getElementById('sceneTitle'),words=document.getElementById('words');observer=new MutationObserver(queue);if(title)observer.observe(title,{childList:true,subtree:true,characterData:true});if(words)observer.observe(words,{childList:true,subtree:false});document.addEventListener('csl:language-changed',queue);window.addEventListener('storage',queue)}
