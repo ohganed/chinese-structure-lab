@@ -1,5 +1,21 @@
 const STORAGE_KEY='JSL_PROGRESS_V1';
 const FLOW_STEPS=['listen','words','structure','transform','rebuild','relisten'];
+const STRUCTURE_LABELS={
+  'topic-ha':'は · topic',
+  'object-wo':'を · object',
+  'question-ka':'か · question',
+  'verb-masu':'ます · polite action',
+  'identity-desu':'です · identity',
+  'location-doko':'どこ · location question',
+  'request-onegaishimasu':'お願いします · request',
+  'demonstrative-kore':'これ · this',
+  'price-ikura':'いくら · price question',
+  'destination-ni':'に · destination/time',
+  'movement-ikimasu':'行きます · movement',
+  'time-ni':'に · time',
+  'family-counter':'人 · people counter',
+  'te-connection':'て · action connection'
+};
 const state={lessons:[],index:0,progress:{}};
 const $=id=>document.getElementById(id);
 
@@ -59,6 +75,69 @@ function speak(text,rate){
   const u=new SpeechSynthesisUtterance(text);
   u.lang='ja-JP';u.rate=rate;u.pitch=1;
   speechSynthesis.speak(u);
+}
+
+function structureName(key){return STRUCTURE_LABELS[key]||key.replaceAll('-',' ')}
+function lessonButton(lesson,label){
+  const b=document.createElement('button');
+  b.type='button';b.className='map-lesson-link';
+  b.innerHTML=`<span>${lesson.id.replace('ja-a1-','L')}</span><b>${lesson.title}</b><small>${label||lesson.sentence}</small>`;
+  b.addEventListener('click',()=>{
+    const i=state.lessons.findIndex(x=>x.id===lesson.id);
+    if(i>=0){state.index=i;render();window.scrollTo({top:0,behavior:'smooth'})}
+  });
+  return b;
+}
+function findPriorLessons(index,reuses){
+  return state.lessons.slice(0,index).filter(l=>(l.connections?.prepares||[]).some(k=>reuses.includes(k))).reverse();
+}
+function findNextLessons(index,prepares){
+  return state.lessons.slice(index+1).filter(l=>(l.connections?.reuses||[]).some(k=>prepares.includes(k)));
+}
+function renderLearningMap(){
+  const l=currentLesson();
+  const reuses=l.connections?.reuses||[];
+  const prepares=l.connections?.prepares||[];
+  const before=findPriorLessons(state.index,reuses);
+  const next=findNextLessons(state.index,prepares);
+
+  $('mapBefore').innerHTML='';
+  if(!before.length){$('mapBefore').innerHTML='<div class="map-empty">ここが最初の出会いです。</div>'}
+  before.slice(0,3).forEach(prev=>{
+    const shared=(prev.connections?.prepares||[]).filter(k=>reuses.includes(k));
+    $('mapBefore').appendChild(lessonButton(prev,shared.map(structureName).join(' · ')));
+  });
+
+  $('mapCurrent').innerHTML='';
+  const now=[...new Set([...reuses,...prepares])];
+  now.forEach(key=>{
+    const chip=document.createElement('span');
+    chip.className=`map-structure-chip ${reuses.includes(key)?'reused':'new'}`;
+    chip.textContent=structureName(key);
+    $('mapCurrent').appendChild(chip);
+  });
+
+  $('mapNext').innerHTML='';
+  if(!next.length){$('mapNext').innerHTML='<div class="map-empty">A1のこの先で再登場予定です。</div>'}
+  next.slice(0,3).forEach(future=>{
+    const shared=(future.connections?.reuses||[]).filter(k=>prepares.includes(k));
+    $('mapNext').appendChild(lessonButton(future,shared.map(structureName).join(' · ')));
+  });
+
+  renderFullMap();
+}
+function renderFullMap(){
+  $('fullMap').innerHTML='';
+  state.lessons.forEach((lesson,i)=>{
+    const row=document.createElement('button');
+    row.type='button';
+    row.className=`full-map-row${i===state.index?' current':''}`;
+    const p=state.progress[lesson.id];
+    const structures=[...(lesson.connections?.reuses||[]),...(lesson.connections?.prepares||[])];
+    row.innerHTML=`<span class="map-number">${i+1}</span><span class="map-lesson-main"><b>${lesson.title}</b><small>${lesson.sentence}</small></span><span class="map-mini-structures">${[...new Set(structures)].slice(0,3).map(structureName).join(' · ')}</span><span class="map-state">${p?.complete?'✓':'→'}</span>`;
+    row.addEventListener('click',()=>{state.index=i;render();$('fullMap').hidden=true;window.scrollTo({top:0,behavior:'smooth'})});
+    $('fullMap').appendChild(row);
+  });
 }
 
 function render(){
@@ -127,6 +206,8 @@ function render(){
   $('rebuildPrompt').textContent=l.rebuild.prompt;
   $('rebuildAnswer').textContent=l.rebuild.answer;
   $('rebuildAnswer').hidden=true;
+  $('observeStructure').textContent='この構造をつかんだ';
+  renderLearningMap();
   renderFlow();
 }
 
@@ -143,6 +224,10 @@ document.querySelectorAll('[data-flow]').forEach(b=>b.addEventListener('click',(
   const target=$(b.dataset.target);
   if(target)target.scrollIntoView({behavior:'smooth',block:'start'});
 }));
+$('toggleFullMap').addEventListener('click',()=>{
+  $('fullMap').hidden=!$('fullMap').hidden;
+  $('toggleFullMap').textContent=$('fullMap').hidden?'A1全体を見る':'閉じる';
+});
 $('toggleReading').addEventListener('click',()=>{$('reading').hidden=!$('reading').hidden});
 $('toggleMeaning').addEventListener('click',()=>{$('translation').hidden=!$('translation').hidden});
 $('observeStructure').addEventListener('click',()=>{markStep('structure');$('observeStructure').textContent='✓ 構造を確認しました'});
