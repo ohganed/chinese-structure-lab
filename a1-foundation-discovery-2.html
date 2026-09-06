@@ -1,0 +1,47 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>A1 Foundation Discovery II</title><style>body{margin:0;background:#f5f4ef;color:#171717;font-family:-apple-system,sans-serif}.app{max-width:760px;margin:auto;padding:20px 16px 80px}.back{color:#666;text-decoration:none}.hero{margin:28px 0}.hero h1{font-size:31px;margin:5px 0}.hero p{color:#666;line-height:1.6}.chapter{font-size:12px;color:#888;font-weight:700;letter-spacing:.08em;margin:28px 2px 9px}.discovery-card{background:#fff;border-radius:24px;padding:20px;margin:14px 0}.mental-scene{text-align:center;font-size:42px;min-height:54px}.discovery-prompt{text-align:center;color:#888;font-size:13px;margin:4px 0 18px}.discovery-words{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}.discovery-word{min-width:78px;min-height:72px;border:0;border-radius:18px;background:#f0eee7;padding:10px 12px}.dw-main{display:block;font-size:19px;font-weight:750}.dw-sub{display:block;font-size:11px;color:#666;margin-top:5px}.discovery-word.deep{background:#e7edf1}.discovery-sentence{display:block;width:100%;border:0;border-radius:18px;background:#171717;color:#fff;padding:15px;margin-top:16px}.ds-main{display:block;font-weight:750}.ds-sub{display:block;font-size:12px;color:#ddd;margin-top:6px}.discovery-sentence.deep{background:#334}.discovery-details{border-top:1px solid #eee;margin-top:14px;padding-top:12px}.dd-body{font-size:13px;color:#555;line-height:1.65;margin-top:8px}</style></head><body><div class="app"><a class="back" href="./explore.html">‹ Explore</a><div class="hero"><div>A1 · FOUNDATION DISCOVERY II · 40</div><h1>Describe, ask, choose, move</h1><p>Core Mandarin returns across ordinary life. Start from the scene and sound; let the writing appear later.</p></div><div id="course"></div></div><script src="./a1a2-discovery-engine.js"></script><script>
+var L={
+'我':['wǒ','I','私'],'你':['nǐ','you','あなた'],'他':['tā','he','彼'],'她':['tā','she','彼女'],'我们':['wǒmen','we','私たち'],'这个':['zhège','this one','これ'],'那个':['nàge','that one','あれ'],'很':['hěn','very / linking degree','とても'],'不太':['bú tài','not very','あまり〜ない'],'太贵了':['tài guì le','too expensive','高すぎる'],'真好':['zhēn hǎo','really nice','本当にいい'],'有点儿冷':['yǒudiǎnr lěng','a little cold','少し寒い'],'大':['dà','big','大きい'],'小':['xiǎo','small','小さい'],'快':['kuài','fast','速い'],'慢':['màn','slow','遅い'],'远':['yuǎn','far','遠い'],'近':['jìn','near','近い'],'漂亮':['piàoliang','pretty','きれい'],'好吃':['hǎochī','delicious','おいしい'],'忙':['máng','busy','忙しい'],'累':['lèi','tired','疲れている'],'喜欢':['xǐhuan','like','好き'],'想':['xiǎng','want to / would like','〜したい'],'要':['yào','want / need','欲しい・必要'],'会':['huì','know how to / can','〜できる'],'能':['néng','can / be able','できる'],'可以':['kěyǐ','may / can','〜してよい・できる'],'不会':['bú huì','cannot / do not know how','できない'],'不能':['bù néng','cannot','できない'],'不可以':['bù kěyǐ','may not','してはいけない'],'说中文':['shuō Zhōngwén','speak Chinese','中国語を話す'],'游泳':['yóuyǒng','swim','泳ぐ'],'开车':['kāichē','drive','運転する'],'坐这里':['zuò zhèlǐ','sit here','ここに座る'],'进去':['jìnqu','go in','中へ入る'],'现在':['xiànzài','now','今'],'今天':['jīntiān','today','今日'],'明天':['míngtiān','tomorrow','明日'],'早上':['zǎoshang','morning','朝'],'晚上':['wǎnshang','evening','夜'],'几点':['jǐ diǎn','what time','何時'],'什么时候':['shénme shíhou','when','いつ'],'每天':['měitiān','every day','毎日'],'常常':['chángcháng','often','よく'],'有时候':['yǒushíhou','sometimes','時々'],'在':['zài','at / in','〜にいる・ある'],'家':['jiā','home','家'],'学校':['xuéxiào','school','学校'],'公司':['gōngsī','company / office','会社'],'车站':['chēzhàn','station','駅'],'旁边':['pángbiān','beside','そば'],'前面':['qiánmiàn','in front','前'],'后面':['hòumiàn','behind','後ろ'],'里面':['lǐmiàn','inside','中'],'左边':['zuǒbian','left side','左'],'右边':['yòubian','right side','右'],'哪儿':['nǎr','where','どこ'],'怎么':['zěnme','how','どうやって'],'为什么':['wèishénme','why','なぜ'],'谁':['shéi','who','誰'],'什么':['shénme','what','何'],'哪个':['nǎge','which one','どれ'],'多少':['duōshao','how many / how much','いくつ・いくら'],'几':['jǐ','how many','いくつ'],'呢':['ne','and...?/topic question','〜は？'],'吗':['ma','yes/no question particle','〜ですか'],'去':['qù','go','行く'],'来':['lái','come','来る'],'回家':['huí jiā','go home','家に帰る'],'吃饭':['chīfàn','eat / have a meal','食事する'],'喝茶':['hē chá','drink tea','お茶を飲む'],'看书':['kàn shū','read','本を読む'],'学习':['xuéxí','study','勉強する'],'工作':['gōngzuò','work','働く']};
+function W(s){return s.split('|').map(function(k){var x=L[k];return {zh:k,pinyin:x[0],en:x[1],ja:x[2]}})}
+var R=[
+['🌆🙂','今天很好。','jīntiān hěn hǎo','Today is nice.','今日はいい日です。','很 links an adjective naturally to its subject.','今天|很|真好'],
+['🥡🙂','这个很好吃。','zhège hěn hǎochī','This is delicious.','これはおいしいです。','Adjectives can predicate directly without 是.','这个|很|好吃'],
+['🏙️✨','这里很漂亮。','zhèlǐ hěn piàoliang','It is beautiful here.','ここはきれいです。','Place topic + 很 + adjective.','很|漂亮'],
+['😓📚','我今天很忙。','wǒ jīntiān hěn máng','I am very busy today.','今日はとても忙しいです。','Time precedes the descriptive predicate.','我|今天|很|忙'],
+['😴','我有点儿累。','wǒ yǒudiǎnr lèi','I am a little tired.','少し疲れています。','有点儿 often introduces an undesirable degree.','我|有点儿冷|累'],
+['🧥🥶','今天有点儿冷。','jīntiān yǒudiǎnr lěng','It is a little cold today.','今日は少し寒いです。','A frequent weather pattern.','今天|有点儿冷'],
+['💴😬','这个太贵了。','zhège tài guì le','This is too expensive.','これは高すぎます。','太…了 expresses excessive degree.','这个|太贵了'],
+['🙂☕','我很喜欢咖啡。','wǒ hěn xǐhuan kāfēi','I really like coffee.','コーヒーがとても好きです。','喜欢 behaves as a verb.','我|很|喜欢'],
+['🙂🍵','我也喜欢喝茶。','wǒ yě xǐhuan hē chá','I also like drinking tea.','私もお茶を飲むのが好きです。','也 normally comes before the verb phrase.','我|喜欢|喝茶'],
+['🌶️😅','我不太喜欢辣的。','wǒ bú tài xǐhuan là de','I do not really like spicy food.','辛いものはあまり好きではありません。','不太 softens a negative judgment.','我|不太|喜欢'],
+['🗣️🇨🇳','我会说中文。','wǒ huì shuō Zhōngwén','I can speak Chinese.','中国語を話せます。','会 often means learned ability.','我|会|说中文'],
+['🏊❓','你会游泳吗？','nǐ huì yóuyǒng ma','Can you swim?','泳げますか。','会…吗 asks about learned ability.','你|会|游泳|吗'],
+['🚗❌','我不会开车。','wǒ bú huì kāichē','I cannot drive.','運転できません。','不会 = do not know how to.','我|不会|开车'],
+['🤒🚶❌','我今天不能去。','wǒ jīntiān bù néng qù','I cannot go today.','今日は行けません。','不能 expresses inability/restriction in the situation.','我|今天|不能|去'],
+['💺❓','这里可以坐吗？','zhèlǐ kěyǐ zuò ma','May I sit here?','ここに座ってもいいですか。','可以…吗 asks permission.','可以|坐这里|吗'],
+['🚪⛔','这里不可以进去。','zhèlǐ bù kěyǐ jìnqu','You may not go in here.','ここには入れません。','不可以 marks prohibition.','不可以|进去'],
+['☕🙂','我想喝茶。','wǒ xiǎng hē chá','I would like tea.','お茶を飲みたいです。','想 + action expresses desire/intention.','我|想|喝茶'],
+['🍜❓','你想吃什么？','nǐ xiǎng chī shénme','What do you want to eat?','何を食べたいですか。','The question word stays in the object slot.','你|想|什么'],
+['🛍️👕','我要这个。','wǒ yào zhège','I want this one.','これをください。','我要… is a common choice/request frame.','我|要|这个'],
+['🚕❓','你要去哪儿？','nǐ yào qù nǎr','Where are you going?','どこへ行きますか。','哪儿 occupies the destination slot.','你|要|去|哪儿'],
+['🕒❓','现在几点？','xiànzài jǐ diǎn','What time is it now?','今何時ですか。','几点 asks clock time.','现在|几点'],
+['📅❓','你什么时候有时间？','nǐ shénme shíhou yǒu shíjiān','When are you free?','いつ時間がありますか。','什么时候 asks when.','你|什么时候'],
+['🌅7️⃣','我早上七点起床。','wǒ zǎoshang qī diǎn qǐchuáng','I get up at seven in the morning.','朝7時に起きます。','Broad time comes before exact time.','我|早上'],
+['🌙📖','我晚上看书。','wǒ wǎnshang kàn shū','I read in the evening.','夜、本を読みます。','Time frame precedes action.','我|晚上|看书'],
+['🔁☕','我每天喝咖啡。','wǒ měitiān hē kāfēi','I drink coffee every day.','毎日コーヒーを飲みます。','每天 marks routine.','我|每天'],
+['🔁📚','她常常在家学习。','tā chángcháng zài jiā xuéxí','She often studies at home.','彼女はよく家で勉強します。','Frequency + location + action.','她|常常|在|家|学习'],
+['🎬🙂','我们有时候看电影。','wǒmen yǒushíhou kàn diànyǐng','We sometimes watch movies.','私たちは時々映画を見ます。','有时候 marks occasional frequency.','我们|有时候'],
+['🏠📍','我在家。','wǒ zài jiā','I am at home.','家にいます。','在 locates the subject.','我|在|家'],
+['🏫👩','她在学校。','tā zài xuéxiào','She is at school.','彼女は学校にいます。','Same location frame in a new world.','她|在|学校'],
+['🏢👨','他在公司工作。','tā zài gōngsī gōngzuò','He works at the office.','彼は会社で働いています。','在 + place can locate an action.','他|在|公司|工作'],
+['🚉☕','咖啡店在车站旁边。','kāfēidiàn zài chēzhàn pángbiān','The café is beside the station.','カフェは駅のそばです。','Thing/place + 在 + location.','在|车站|旁边'],
+['🏫⬅️','学校在前面。','xuéxiào zài qiánmiàn','The school is ahead.','学校は前です。','Simple directional location.','学校|在|前面'],
+['🚪➡️','洗手间在右边。','xǐshǒujiān zài yòubian','The restroom is on the right.','トイレは右側です。','右边 is a location noun.','在|右边'],
+['📱🎒','手机在包里面。','shǒujī zài bāo lǐmiàn','The phone is inside the bag.','携帯はバッグの中です。','里面 locates an object inside something.','在|里面'],
+['👤📍❓','你在哪儿？','nǐ zài nǎr','Where are you?','どこにいますか。','哪儿 replaces the location.','你|在|哪儿'],
+['🏫➡️❓','你怎么去学校？','nǐ zěnme qù xuéxiào','How do you go to school?','どうやって学校へ行きますか。','怎么 fills the method slot.','你|怎么|去|学校'],
+['🤔❓','你为什么不去？','nǐ wèishénme bú qù','Why are you not going?','なぜ行かないのですか。','为什么 asks for reason.','你|为什么|去'],
+['👥❓','那个人是谁？','nàge rén shì shéi','Who is that person?','あの人は誰ですか。','谁 occupies the identity slot.','那个|谁'],
+['🛍️❓','你喜欢哪个？','nǐ xǐhuan nǎge','Which one do you like?','どれが好きですか。','哪个 asks which one.','你|喜欢|哪个'],
+['💴❓','这个多少钱？','zhège duōshao qián','How much is this?','これはいくらですか。','多少 asks an open quantity/amount.','这个|多少']
+];var D=R.map(function(r){return {scene:r[0],zh:r[1],pinyin:r[2],en:r[3],ja:r[4],note:r[5],words:W(r[6])}});A1A2Discovery.mount('#course',D);
+</script></body></html>
