@@ -1,6 +1,6 @@
 (function(){
 'use strict';
-/* Legacy Word Touch Upgrader v6
+/* Legacy Word Touch Upgrader v7
    A1/A2 migration path:
    - A1/A2 sentence text, pinyin and meanings never show initially
    - whole-sentence discovery always works, even when a legacy page has no word buttons
@@ -8,8 +8,13 @@
    - word/chunk sequence: sound -> pinyin -> English -> Japanese -> Hanzi/details
    - no mechanical one-Hanzi fallback segmentation
    Higher-level pages keep their legacy presentation.
+
+   IMPORTANT: index.html has its own dedicated word-birth controller.
+   Never upgrade the Connected World index here; otherwise both layers mutate
+   #words/.scene and can create duplicate Sentence UI and visible flicker.
 */
-var VERSION=6,seen=new WeakSet(),lessonSeen=new WeakSet();
+if(/\/(?:index\.html)?$/.test(location.pathname))return;
+var VERSION=7,seen=new WeakSet(),lessonSeen=new WeakSet();
 function txt(el,sel){var x=el&&el.querySelector&&el.querySelector(sel);return x?(x.textContent||'').trim():''}
 function nearestLesson(btn){return btn.closest('.lesson,.card,.item,.entry,.scene,article,section')||btn.parentElement}
 function chineseOnly(raw){var parts=String(raw||'').match(/[\u3400-\u9FFF\uF900-\uFAFF]+/g);return parts&&parts.length?parts.join(''):String(raw||'').trim()}
