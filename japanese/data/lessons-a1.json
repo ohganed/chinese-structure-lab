@@ -1,0 +1,102 @@
+[
+  {
+    "schema_version":"1.3","id":"ja-a1-001","level":"A1","title":"はじめまして","situation":"初対面で、自分の名前を伝えます。","sentence":"私は田中です。","reading":"わたしは たなかです。","translation_en":"I am Tanaka.",
+    "words":[{"surface":"私","reading":"わたし","meaning_en":"I / me","pos":"代名詞","role":"話し手を表す"},{"surface":"は","reading":"は","spoken":"わ","meaning_en":"topic marker","pos":"助詞","role":"話題を示す"},{"surface":"田中","reading":"たなか","meaning_en":"Tanaka","pos":"固有名詞","role":"話し手の名前"},{"surface":"です","reading":"です","meaning_en":"be / polite copula","pos":"助動詞","role":"丁寧に同定する"}],
+    "insights":[{"label":"表記と音が違う","focus":"は → わ","detail":"助詞の「は」は文字では「は」と書きますが、この使い方では「わ」と発音します。"},{"label":"は = 主語、とは限らない","focus":"私は","detail":"「は」は単純な subject marker ではなく、いま何について話すかという topic を示します。"},{"label":"日本語は主語を省ける","focus":"田中です。","detail":"文脈で話し手が明らかなら「私は」を省いて「田中です」と言うことも自然です。"}],
+    "structure":[{"label":"TOPIC","text":"私 + は"},{"label":"IDENTITY","text":"田中 + です"},{"label":"PATTERN","text":"X は Y です"}],
+    "forms":[{"surface":"です","base":"だ","kind":"丁寧な文末","detail":"このA1段階では「です」を一まとまりとして使います。普通体の「だ」との対応は後の段階で扱います。"}],
+    "transforms":[{"label":"名前を変える","from":"私は田中です。","to":"私は佐藤です。","change":"田中 → 佐藤","why":"X は Y です の Y を入れ替えるだけで、別の人を同定できます。"},{"label":"主語を省く","from":"私は田中です。","to":"田中です。","change":"私は → ∅","why":"話し手が明らかな場面では、topic を明示しなくても自然に通じます。"}],
+    "connections":{"reuses":[],"prepares":["topic-ha","x-wa-y-desu","ellipsis"]},
+    "rebuild":{"prompt":"『I am Tanaka.』を日本語で言ってみましょう。","answer":"私は田中です。"}
+  },
+  {
+    "schema_version":"1.3","id":"ja-a1-002","level":"A1","title":"カフェで注文する","situation":"カフェでコーヒーを一つ頼みます。","sentence":"コーヒーをお願いします。","reading":"コーヒーを おねがいします。","translation_en":"Coffee, please.",
+    "words":[{"surface":"コーヒー","reading":"コーヒー","meaning_en":"coffee","pos":"名詞","role":"頼むもの"},{"surface":"を","reading":"を","spoken":"お","meaning_en":"object marker","pos":"助詞","role":"対象を示す"},{"surface":"お願いします","reading":"おねがいします","meaning_en":"please / I request","pos":"定型表現","role":"丁寧に依頼する","morphology":"願う → お願いする → お願いします"}],
+    "insights":[{"label":"を の発音","focus":"を → お","detail":"助詞の「を」は現代標準語では通常「お」と発音します。"},{"label":"動詞を直訳しすぎない","focus":"お願いします","detail":"英語の please 一語と完全に一致する語ではありません。依頼する場面で自然に使う定型表現として覚えます。"},{"label":"対象 + を","focus":"コーヒーを","detail":"「を」は動作や依頼の対象を示します。ここでは、お願いする対象がコーヒーです。"}],
+    "structure":[{"label":"OBJECT","text":"コーヒー + を"},{"label":"REQUEST","text":"お願いします"},{"label":"PATTERN","text":"X をお願いします"}],
+    "forms":[{"surface":"お願いします","base":"お願いする","kind":"ます形","detail":"「お願いする」の丁寧な形です。名詞「お願い」+「する」が一つの表現として働きます。"}],
+    "transforms":[{"label":"注文するものを変える","from":"コーヒーをお願いします。","to":"お茶をお願いします。","change":"コーヒー → お茶","why":"依頼の対象 X を入れ替えれば、同じ構造を別の注文に再利用できます。"},{"label":"水を頼む","from":"コーヒーをお願いします。","to":"水をお願いします。","change":"コーヒー → 水","why":"X をお願いします は、さまざまな注文や依頼に使える基本パターンです。"}],
+    "connections":{"reuses":[],"prepares":["object-wo","polite-request"]},
+    "rebuild":{"prompt":"『Coffee, please.』を日本語で言ってみましょう。","answer":"コーヒーをお願いします。"}
+  },
+  {
+    "schema_version":"1.3","id":"ja-a1-003","level":"A1","title":"駅をたずねる","situation":"街で駅の場所が分からず、近くの人に尋ねます。","sentence":"駅はどこですか。","reading":"えきは どこですか。","translation_en":"Where is the station?",
+    "words":[{"surface":"駅","reading":"えき","meaning_en":"station","pos":"名詞","role":"場所を尋ねる対象"},{"surface":"は","reading":"は","spoken":"わ","meaning_en":"topic marker","pos":"助詞","role":"駅を話題として提示する"},{"surface":"どこ","reading":"どこ","meaning_en":"where","pos":"疑問詞","role":"未知の場所を尋ねる"},{"surface":"です","reading":"です","meaning_en":"be / polite copula","pos":"助動詞","role":"丁寧な文末を作る"},{"surface":"か","reading":"か","meaning_en":"question marker","pos":"助詞","role":"文を疑問にする"}],
+    "insights":[{"label":"疑問詞を前に出さない","focus":"駅はどこですか","detail":"英語の Where is ...? のように疑問詞を文頭へ移動させず、知りたい位置に「どこ」を置きます。"},{"label":"か が質問を作る","focus":"です + か","detail":"丁寧な文では文末の「か」が質問であることをはっきり示します。"},{"label":"は は topic","focus":"駅は","detail":"駅をこれから話す対象として提示し、その場所について尋ねています。"}],
+    "structure":[{"label":"TOPIC","text":"駅 + は"},{"label":"UNKNOWN","text":"どこ"},{"label":"QUESTION","text":"です + か"},{"label":"PATTERN","text":"X は どこですか"}],
+    "forms":[{"surface":"ですか","base":"です + か","kind":"丁寧な疑問文","detail":"丁寧な文末「です」に質問を示す「か」を加えています。"}],
+    "transforms":[{"label":"探す場所を変える","from":"駅はどこですか。","to":"トイレはどこですか。","change":"駅 → トイレ","why":"X はどこですか の X を変えるだけで、場所を尋ねる質問を作れます。"},{"label":"出口を尋ねる","from":"駅はどこですか。","to":"出口はどこですか。","change":"駅 → 出口","why":"疑問詞「どこ」の位置はそのまま保ち、topic だけを置き換えます。"}],
+    "connections":{"reuses":["topic-ha","x-wa-y-desu"],"prepares":["question-ka","interrogative-doko"]},
+    "rebuild":{"prompt":"『Where is the station?』を日本語で言ってみましょう。","answer":"駅はどこですか。"}
+  },
+  {
+    "schema_version":"1.3","id":"ja-a1-004","level":"A1","title":"出身を言う","situation":"自己紹介で、自分がどこから来たか伝えます。","sentence":"日本から来ました。","reading":"にほんから きました。","translation_en":"I came from Japan.",
+    "words":[{"surface":"日本","reading":"にほん","meaning_en":"Japan","pos":"固有名詞","role":"出発点"},{"surface":"から","reading":"から","meaning_en":"from","pos":"助詞","role":"起点を示す"},{"surface":"来ました","reading":"きました","meaning_en":"came","pos":"動詞","role":"移動を表す","morphology":"来る → 来ます → 来ました"}],
+    "insights":[{"label":"主語は省ける","focus":"日本から来ました","detail":"自己紹介の流れでは話し手が明らかなので「私は」を言わない方が自然なことも多いです。"},{"label":"から = 起点","focus":"日本から","detail":"「から」は移動や時間の出発点を示します。"}],
+    "structure":[{"label":"SOURCE","text":"日本 + から"},{"label":"ACTION","text":"来ました"},{"label":"PATTERN","text":"X から 来ました"}],
+    "forms":[{"surface":"来ました","base":"来る","kind":"ます形・過去","detail":"丁寧な過去形です。現在・未来の「来ます」と区別します。"}],
+    "transforms":[{"label":"国を変える","from":"日本から来ました。","to":"カナダから来ました。","change":"日本 → カナダ","why":"起点 X を変えるだけで出身地を言えます。"}],
+    "connections":{"reuses":["ellipsis"],"prepares":["particle-kara","polite-past","verb-masu"]},
+    "rebuild":{"prompt":"『I came from Japan.』を日本語で言ってみましょう。","answer":"日本から来ました。"}
+  },
+  {
+    "schema_version":"1.3","id":"ja-a1-005","level":"A1","title":"値段をたずねる","situation":"店で商品の値段を聞きます。","sentence":"これはいくらですか。","reading":"これは いくらですか。","translation_en":"How much is this?",
+    "words":[{"surface":"これ","reading":"これ","meaning_en":"this","pos":"指示詞","role":"近くの物を指す"},{"surface":"は","reading":"は","spoken":"わ","meaning_en":"topic marker","pos":"助詞","role":"これを話題にする"},{"surface":"いくら","reading":"いくら","meaning_en":"how much","pos":"疑問詞","role":"値段を尋ねる"},{"surface":"です","reading":"です","meaning_en":"be / polite copula","pos":"助動詞","role":"丁寧な文末"},{"surface":"か","reading":"か","meaning_en":"question marker","pos":"助詞","role":"質問を作る"}],
+    "insights":[{"label":"既習構造の再登場","focus":"X は 〜 ですか","detail":"駅はどこですか と同じ骨格を使い、疑問詞だけを「いくら」に変えています。"},{"label":"これ は一語","focus":"これ","detail":"近くにある物を指す指示詞です。"}],
+    "structure":[{"label":"TOPIC","text":"これ + は"},{"label":"UNKNOWN PRICE","text":"いくら"},{"label":"QUESTION","text":"です + か"}],
+    "forms":[{"surface":"ですか","base":"です + か","kind":"丁寧な疑問文","detail":"Lesson 3 と同じ質問の形を再利用しています。"}],
+    "transforms":[{"label":"指す物を変える","from":"これはいくらですか。","to":"それはいくらですか。","change":"これ → それ","why":"話し手から少し離れた物には「それ」を使います。"}],
+    "connections":{"reuses":["topic-ha","question-ka","x-wa-y-desu"],"prepares":["demonstratives","interrogative-ikura"]},
+    "rebuild":{"prompt":"『How much is this?』を日本語で言ってみましょう。","answer":"これはいくらですか。"}
+  },
+  {
+    "schema_version":"1.3","id":"ja-a1-006","level":"A1","title":"何時か聞く","situation":"予定を確認するため、今の時刻を尋ねます。","sentence":"今、何時ですか。","reading":"いま、なんじですか。","translation_en":"What time is it now?",
+    "words":[{"surface":"今","reading":"いま","meaning_en":"now","pos":"名詞・副詞","role":"時間の基準"},{"surface":"何時","reading":"なんじ","meaning_en":"what time","pos":"疑問表現","role":"時刻を尋ねる"},{"surface":"です","reading":"です","meaning_en":"be / polite copula","pos":"助動詞","role":"丁寧な文末"},{"surface":"か","reading":"か","meaning_en":"question marker","pos":"助詞","role":"質問を作る"}],
+    "insights":[{"label":"topic を必ず言わなくてよい","focus":"今、何時ですか","detail":"日本語では必要な情報だけを置けるため、「今は何時ですか」と言わなくても自然です。"},{"label":"何 の読みが変わる","focus":"何時 → なんじ","detail":"「何」は後ろの語によって読み方が変わります。ここでは「なん」です。"}],
+    "structure":[{"label":"TIME FRAME","text":"今"},{"label":"UNKNOWN TIME","text":"何時"},{"label":"QUESTION","text":"です + か"}],
+    "forms":[{"surface":"何時","base":"何 + 時","kind":"疑問表現","detail":"「何」と「時」が組み合わさって時刻を尋ねます。"}],
+    "transforms":[{"label":"予定の時間を聞く","from":"今、何時ですか。","to":"授業は何時ですか。","change":"今 → 授業は","why":"同じ「何時ですか」で予定の時刻も尋ねられます。"}],
+    "connections":{"reuses":["question-ka","ellipsis"],"prepares":["time-nanji"]},
+    "rebuild":{"prompt":"『What time is it now?』を日本語で言ってみましょう。","answer":"今、何時ですか。"}
+  },
+  {
+    "schema_version":"1.3","id":"ja-a1-007","level":"A1","title":"朝ごはんを食べる","situation":"朝の行動について話します。","sentence":"朝ごはんを食べます。","reading":"あさごはんを たべます。","translation_en":"I eat breakfast.",
+    "words":[{"surface":"朝ごはん","reading":"あさごはん","meaning_en":"breakfast","pos":"名詞","role":"食べる対象"},{"surface":"を","reading":"を","spoken":"お","meaning_en":"object marker","pos":"助詞","role":"対象を示す"},{"surface":"食べます","reading":"たべます","meaning_en":"eat","pos":"動詞","role":"行動を表す","morphology":"食べる → 食べます"}],
+    "insights":[{"label":"を が再登場","focus":"朝ごはんを","detail":"Lesson 2 の「コーヒーを」と同じ object marking が、今度は動作の対象として現れます。"},{"label":"主語なしが自然","focus":"朝ごはんを食べます","detail":"文脈で自分の話だと分かれば「私は」は省けます。"}],
+    "structure":[{"label":"OBJECT","text":"朝ごはん + を"},{"label":"ACTION","text":"食べます"},{"label":"PATTERN","text":"X を Vます"}],
+    "forms":[{"surface":"食べます","base":"食べる","kind":"ます形","detail":"丁寧な現在・習慣の形です。"}],
+    "transforms":[{"label":"食べる物を変える","from":"朝ごはんを食べます。","to":"パンを食べます。","change":"朝ごはん → パン","why":"object X を変えて同じ動詞構造を使えます。"}],
+    "connections":{"reuses":["object-wo","ellipsis","verb-masu"],"prepares":["routine-action"]},
+    "rebuild":{"prompt":"『I eat breakfast.』を日本語で言ってみましょう。","answer":"朝ごはんを食べます。"}
+  },
+  {
+    "schema_version":"1.3","id":"ja-a1-008","level":"A1","title":"学校へ行く","situation":"普段の移動について話します。","sentence":"学校へ行きます。","reading":"がっこうへ いきます。","translation_en":"I go to school.",
+    "words":[{"surface":"学校","reading":"がっこう","meaning_en":"school","pos":"名詞","role":"目的地"},{"surface":"へ","reading":"へ","spoken":"え","meaning_en":"toward / to","pos":"助詞","role":"移動の方向を示す"},{"surface":"行きます","reading":"いきます","meaning_en":"go","pos":"動詞","role":"移動を表す","morphology":"行く → 行きます"}],
+    "insights":[{"label":"へ の発音","focus":"へ → え","detail":"助詞の「へ」は、この使い方では「え」と発音します。"},{"label":"方向を示す","focus":"学校へ","detail":"「へ」は移動の向かう方向を示します。"}],
+    "structure":[{"label":"DESTINATION","text":"学校 + へ"},{"label":"ACTION","text":"行きます"},{"label":"PATTERN","text":"X へ 行きます"}],
+    "forms":[{"surface":"行きます","base":"行く","kind":"ます形","detail":"丁寧な現在・未来の形です。"}],
+    "transforms":[{"label":"行き先を変える","from":"学校へ行きます。","to":"駅へ行きます。","change":"学校 → 駅","why":"destination X を入れ替えて使えます。Lesson 3 の「駅」が別の構造で再登場します。"}],
+    "connections":{"reuses":["verb-masu"],"prepares":["particle-e","destination"]},
+    "rebuild":{"prompt":"『I go to school.』を日本語で言ってみましょう。","answer":"学校へ行きます。"}
+  },
+  {
+    "schema_version":"1.3","id":"ja-a1-009","level":"A1","title":"家族について話す","situation":"家族の人数について話します。","sentence":"家族は四人です。","reading":"かぞくは よにんです。","translation_en":"There are four people in my family.",
+    "words":[{"surface":"家族","reading":"かぞく","meaning_en":"family","pos":"名詞","role":"話題"},{"surface":"は","reading":"は","spoken":"わ","meaning_en":"topic marker","pos":"助詞","role":"家族を話題にする"},{"surface":"四人","reading":"よにん","meaning_en":"four people","pos":"数量表現","role":"人数を示す"},{"surface":"です","reading":"です","meaning_en":"be / polite copula","pos":"助動詞","role":"丁寧に述べる"}],
+    "insights":[{"label":"最初の構造が戻ってくる","focus":"X は Y です","detail":"Lesson 1 と同じ骨格が、名前ではなく人数を述べるために再利用されています。"},{"label":"四人 = よにん","focus":"四人","detail":"人を数えるとき、四人は「よにん」と読みます。"}],
+    "structure":[{"label":"TOPIC","text":"家族 + は"},{"label":"QUANTITY","text":"四人"},{"label":"PATTERN","text":"X は Y です"}],
+    "forms":[{"surface":"四人","base":"四 + 人","kind":"人数表現","detail":"人を数える counter expression です。"}],
+    "transforms":[{"label":"人数を変える","from":"家族は四人です。","to":"家族は三人です。","change":"四人 → 三人","why":"Y の部分を数量表現に入れ替えます。"}],
+    "connections":{"reuses":["topic-ha","x-wa-y-desu"],"prepares":["counter-nin"]},
+    "rebuild":{"prompt":"『There are four people in my family.』を日本語で言ってみましょう。","answer":"家族は四人です。"}
+  },
+  {
+    "schema_version":"1.3","id":"ja-a1-010","level":"A1","title":"毎日の流れ","situation":"朝の習慣を短く説明します。","sentence":"七時に起きて、朝ごはんを食べます。","reading":"しちじに おきて、あさごはんを たべます。","translation_en":"I get up at seven and eat breakfast.",
+    "words":[{"surface":"七時","reading":"しちじ","meaning_en":"seven o'clock","pos":"時間表現","role":"時刻"},{"surface":"に","reading":"に","meaning_en":"at","pos":"助詞","role":"時点を示す"},{"surface":"起きて","reading":"おきて","meaning_en":"get up and...","pos":"動詞","role":"最初の行動を次へつなぐ","morphology":"起きる → 起きて"},{"surface":"朝ごはん","reading":"あさごはん","meaning_en":"breakfast","pos":"名詞","role":"食べる対象"},{"surface":"を","reading":"を","spoken":"お","meaning_en":"object marker","pos":"助詞","role":"対象を示す"},{"surface":"食べます","reading":"たべます","meaning_en":"eat","pos":"動詞","role":"後半の行動","morphology":"食べる → 食べます"}],
+    "insights":[{"label":"既習語がつながる","focus":"七時 + 朝ごはんを食べます","detail":"Lesson 6 の時刻と Lesson 7 の食事表現を一つの文に結びます。"},{"label":"て形で次の行動へ","focus":"起きて、〜","detail":"「起きて」は動作を次の動作へつなぐ働きをします。"}],
+    "structure":[{"label":"TIME","text":"七時 + に"},{"label":"ACTION 1","text":"起きて"},{"label":"ACTION 2","text":"朝ごはん + を + 食べます"},{"label":"PATTERN","text":"TIME に Vて、X を Vます"}],
+    "forms":[{"surface":"起きて","base":"起きる","kind":"て形","detail":"複数の行動をつなぐ基本形です。"},{"surface":"食べます","base":"食べる","kind":"ます形","detail":"Lesson 7 の形が再登場します。"}],
+    "transforms":[{"label":"時間を変える","from":"七時に起きて、朝ごはんを食べます。","to":"六時に起きて、朝ごはんを食べます。","change":"七時 → 六時","why":"time slot だけを変えて同じ日課構造を使えます。"}],
+    "connections":{"reuses":["time-nanji","object-wo","verb-masu","routine-action"],"prepares":["particle-ni-time","te-form-sequence"]},
+    "rebuild":{"prompt":"『I get up at seven and eat breakfast.』を日本語で言ってみましょう。","answer":"七時に起きて、朝ごはんを食べます。"}
+  }
+]

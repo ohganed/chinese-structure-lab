@@ -1,0 +1,49 @@
+name: Japanese Structure Lab Foundation
+
+on:
+  pull_request:
+    paths:
+      - 'japanese/**'
+      - 'tests/japanese-*'
+      - '.github/workflows/japanese-foundation.yml'
+  push:
+    branches:
+      - 'feature/japanese-structure-lab-v0.1'
+    paths:
+      - 'japanese/**'
+      - 'tests/japanese-*'
+      - '.github/workflows/japanese-foundation.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check Japanese JavaScript syntax
+        run: |
+          node --check japanese/app.js
+          node --check japanese/reencounter-engine.js
+          node --check japanese/reencounter-ui.js
+      - name: Verify Japanese Structure Lab foundation
+        run: node tests/japanese-foundation-smoke.js
+      - name: Verify re-encounter engine behavior
+        run: node tests/japanese-reencounter-engine.mjs
+      - name: Verify static relative paths
+        shell: bash
+        run: |
+          python3 -m http.server 8000 >/tmp/jsl-http.log 2>&1 &
+          server_pid=$!
+          trap 'kill $server_pid' EXIT
+          for i in {1..20}; do
+            if curl -fsS http://127.0.0.1:8000/japanese/ >/dev/null; then break; fi
+            sleep 0.25
+          done
+          curl -fsS http://127.0.0.1:8000/japanese/ >/dev/null
+          curl -fsS http://127.0.0.1:8000/japanese/app.js >/dev/null
+          curl -fsS http://127.0.0.1:8000/japanese/reencounter-engine.js >/dev/null
+          curl -fsS http://127.0.0.1:8000/japanese/reencounter-ui.js >/dev/null
+          curl -fsS http://127.0.0.1:8000/japanese/data/lessons-a1.json >/dev/null
