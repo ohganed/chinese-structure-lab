@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#f6f5f1">
+  <title>Kotonoha / 言の葉</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <h1>Kotonoha <span aria-hidden="true">/</span> 言の葉</h1>
+        <p>解くほど、日本語が育つ。</p>
+      </div>
+      <div class="stats" aria-label="学習の記録">
+        <span class="stat">出会い <strong id="encounterCount">0</strong></span>
+        <span class="stat">ことば <strong id="gardenCount">0</strong></span>
+      </div>
+    </header>
+
+    <section class="question-card" aria-live="polite">
+      <div class="eyebrow">Reading · Level 1 · <span id="questionGenre">日本語</span></div>
+      <p id="questionText" class="question-text"></p>
+      <p id="questionPrompt" class="prompt"></p>
+      <div id="choices" class="choices" role="group" aria-label="選択肢"></div>
+
+      <div class="help">
+        <div class="help-title">気になることばがあれば、いつでも確認できます。</div>
+        <div id="vocabHelp"></div>
+      </div>
+
+      <div id="feedback" class="feedback hidden"></div>
+      <div class="actions">
+        <button id="checkButton" class="primary" disabled>答えを確かめる</button>
+        <button id="nextButton" class="primary hidden">次へ</button>
+      </div>
+    </section>
+
+    <div class="footer-tools">
+      <button id="resetButton" class="text-button">この端末のデモ履歴をリセット</button>
+    </div>
+  </main>
+
+  <script src="./data/questions.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
