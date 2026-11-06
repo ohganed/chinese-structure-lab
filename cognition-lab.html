@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f5f4ef">
+<title>意味から構造へ · Chinese Structure Lab</title>
+<style>
+:root{--bg:#f5f4ef;--ink:#1c2925;--muted:#68736f;--line:#e0e5df;--card:#fff;--green:#e6efe5;--blue:#e7eef6;--gold:#f6ecdc}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 -apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif}
+button{font:inherit;cursor:pointer}button:focus-visible,a:focus-visible{outline:3px solid #517e6b;outline-offset:3px}
+.app{max-width:820px;margin:auto;padding:22px 16px 90px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.back{color:#506257;text-decoration:none;font-size:14px;font-weight:750}
+.quiet{color:var(--muted)}.small{font-size:13px}.eyebrow{font-size:11px;letter-spacing:.1em;color:#6f8073;font-weight:800}
+h1{font-size:clamp(27px,5vw,39px);line-height:1.3;margin:11px 0}h2{font-size:20px;margin:0 0 12px}
+.lead{font-size:15px;color:#56645c;max-width:680px;margin:0 0 20px}
+.panel{border:1px solid var(--line);border-radius:25px;background:var(--card);padding:20px;margin:15px 0;box-shadow:0 7px 22px #1a2b2510}
+.theories{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:19px 0}
+.theory{border-radius:17px;padding:12px;background:#e9eee6;min-height:100px}
+.theory:nth-child(2){background:#e9edf2}.theory:nth-child(3){background:#f1ebdf}
+.theory b{display:block;font-size:13px;margin-bottom:7px}.theory span{font-size:12px;color:#51625b}
+.step{display:inline-flex;background:#eef0eb;border-radius:999px;padding:5px 12px;color:#4d6557;font-weight:800;font-size:12px;margin-bottom:11px}
+.pills{display:flex;gap:9px;flex-wrap:wrap}
+.pill{border:1px solid #cad5cd;border-radius:999px;background:#fff;padding:11px 15px;color:#25332b;font-weight:750}
+.pill[aria-pressed="true"]{background:#263d32;color:#fff;border-color:#263d32}
+.scene{background:linear-gradient(160deg,#edf4ee,#f7f5ec);border-radius:23px;padding:20px;margin:14px 0}
+.scene-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:space-between}
+.scene-frame{flex:1;min-width:185px;background:#ffffffb0;border:1px solid #dce5dc;border-radius:18px;padding:16px;min-height:166px}
+.scene-name{font-size:12px;font-weight:800;color:#66796d}
+.floor{display:flex;justify-content:center;align-items:end;gap:10px;height:100px}
+.table-leg{display:flex;flex-direction:column;align-items:center}
+.tabletop{border-bottom:10px solid #bca48b;border-radius:5px;width:125px;height:66px;display:flex;align-items:end;justify-content:center;font-size:36px}
+.tablebase{height:25px;width:7px;background:#ac9077;box-shadow:63px 0 #ac9077}
+.item{font-size:36px}.after-move .tabletop{align-items:center}
+.arrow{font-size:24px;color:#7d9585}
+.zh{font-size:clamp(26px,5vw,36px);font-weight:800;line-height:1.5;letter-spacing:.01em}
+.py{color:#53675b;font-size:15px}
+.answer{padding:14px;border-radius:18px;background:#f2f4ef}
+.choices{display:grid;grid-template-columns:1fr;gap:9px}
+.choice{border:1px solid #dce3dc;background:#fbfcfb;color:#25382c;padding:12px 15px;text-align:left;border-radius:14px;font-size:17px}
+.choice[aria-pressed="true"]{background:#e2efe4;border-color:#678e75}
+.feedback{display:none;margin-top:12px;padding:12px 15px;border-radius:14px;background:#f5efe1;color:#3e4638;font-size:14px}
+.feedback.show{display:block}.feedback.correct{background:#e6efe5}
+.tree{display:flex;flex-wrap:wrap;gap:8px;margin:15px 0}
+.node{border:1px solid #d9e2da;background:#f4f7f3;border-radius:13px;min-width:65px;padding:8px 12px;text-align:center}
+.node b{font-size:21px;display:block}.node span{font-size:11px;color:#637368}
+.tree .core{background:#e8ebf5}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px}
+.primary{background:#263d32;color:white;border:0;border-radius:13px;padding:12px 17px;font-weight:800}
+.secondary{background:#ecf0e9;border:0;border-radius:13px;padding:12px 17px;color:#294536;font-weight:750}
+#sentenceArea[hidden],#recallHidden[hidden],#recallShown[hidden]{display:none}
+.note{font-size:13px;color:#677269}
+.progressline{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:750;color:#64756b}
+.dot{width:9px;height:9px;border-radius:50%;background:#bdcabf}.dot.on{background:#4c8b68}
+.footerlinks{display:flex;gap:15px;flex-wrap:wrap;margin-top:24px;font-size:13px}
+.footerlinks a{color:#42634f}
+.notice{margin-top:12px;color:#526758;font-size:13px}
+@media(max-width:620px){.theories{grid-template-columns:1fr}.theory{min-height:0}.scene-row{flex-direction:column}.scene-frame{width:100%}.arrow{transform:rotate(90deg)}.panel{padding:17px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="top"><a class="back" href="./explore.html">‹ Explore に戻る</a><span class="eyebrow">COGNITION LAB · PILOT 01</span></header>
+<main>
+<h1>意味から文をつくる。</h1>
+<p class="lead">場面を見る、伝える目的を決める、文の構造を選ぶ、別の場面で使う。中国語を「暗記した文の再生」だけでなく、意味から組み立てる練習です。</p>
+<div class="theories" aria-label="学習設計の3つの視点">
+<div class="theory"><b>Pecher / Zwaan</b><span>場面・身体・知覚を意味理解の手がかりにする</span></div>
+<div class="theory"><b>Albus / Meystel</b><span>状況を捉え、目的を設定し、行動を考える</span></div>
+<div class="theory"><b>Chomsky</b><span>語の列だけでなく、まとまりと文法的制約を考える</span></div>
+</div>
+<section class="panel" aria-labelledby="observe">
+<div class="step">STEP 1 · 状況をつかむ</div><h2 id="observe">本は、どこにある？　何が起きる？</h2>
+<p class="small quiet">まず中国語の文字ではなく、出来事と変化に注目してください。</p>
+<div class="scene">
+<div class="scene-row">
+<div class="scene-frame"><div class="scene-name">BEFORE · 最初</div><div class="floor"><span id="beforeItem" class="item">📕</span><div class="table-leg"><div class="tabletop"></div><div class="tablebase"></div></div></div></div>
+<span class="arrow" aria-hidden="true">→</span>
+<div class="scene-frame"><div class="scene-name" id="afterName">AFTER · 置いた後</div><div class="floor"><div class="table-leg after-move"><div class="tabletop" id="afterItem">📕</div><div class="tablebase"></div></div></div></div>
+</div>
+</div>
+<p class="small"><strong>伝えたいのはどちらですか？</strong></p>
+<div class="pills" role="group" aria-label="発話の目的">
+<button class="pill" id="goalState" aria-pressed="false" type="button">本の場所を伝える</button>
+<button class="pill" id="goalAction" aria-pressed="true" type="button">本を置いた動作を伝える</button>
+</div>
+<p class="notice" id="intentText" aria-live="polite">本が移動して、机の上に置かれました。動作とその結果を伝えます。</p>
+</section>
+<section class="panel" aria-labelledby="generate">
+<div class="step">STEP 2 · 意図から文を選ぶ</div><h2 id="generate">どの中国語が、今の意図に合う？</h2>
+<div class="choices" role="group" aria-label="中国語の選択肢">
+<button type="button" class="choice" data-answer="state" aria-pressed="false">书在桌子上。 <span class="small quiet">shū zài zhuōzi shàng</span></button>
+<button type="button" class="choice" data-answer="action" aria-pressed="false">我把书放在桌子上了。 <span class="small quiet">wǒ bǎ shū fàng zài zhuōzi shàng le</span></button>
+<button type="button" class="choice" data-answer="wrong" aria-pressed="false">我把书在桌子上了。 <span class="small quiet">wǒ bǎ shū zài zhuōzi shàng le</span></button>
+</div>
+<div class="feedback" id="feedback" role="status" aria-live="polite"></div>
+</section>
+<section class="panel" aria-labelledby="structure">
+<div class="step">STEP 3 · 文の階層構造を見る</div><h2 id="structure">文字の順番だけでは見えない関係</h2>
+<div id="sentenceArea">
+<div class="answer"><div class="zh" id="zh">我把书放在桌子上了。</div><div class="py" id="py">wǒ bǎ shū fàng zài zhuōzi shàng le</div><div class="quiet small" id="ja">私は本を机の上に置きました。</div></div>
+<div class="tree" id="tree"></div>
+<p class="small" id="structureNote"></p>
+<div class="actions"><button type="button" class="secondary" id="speak">▶ 中国語を聞く</button></div>
+</div>
+<p class="note">これは学習者向けの機能的なまとまりの図です。ChomskyのMinimalist構文木そのものを再現したものではありません。</p>
+</section>
+<section class="panel" aria-labelledby="transfer">
+<div class="step">STEP 4 · 別の場面へ転用する</div><h2 id="transfer">「本」を「コップ」に替えると？</h2>
+<div class="pills" role="group" aria-label="物を選ぶ">
+<button class="pill" type="button" id="bookBtn" aria-pressed="true">📕 本（书）</button>
+<button class="pill" type="button" id="cupBtn" aria-pressed="false">🥛 コップ（杯子）</button>
+</div>
+<p class="small quiet">単語を一つ替えても、伝える目的と文のまとまりは維持されるか確かめます。</p>
+<div class="answer" id="transferArea" style="margin-top:14px"><div class="zh" id="transferZh">我把书放在桌子上了。</div><div class="py" id="transferPy">wǒ bǎ shū fàng zài zhuōzi shàng le</div></div>
+<div class="actions"><button class="secondary" type="button" id="hideRecall">文を隠して、自分で言う</button><button class="secondary" type="button" id="hearTransfer">▶ 聞く</button></div>
+<div id="recallHidden" hidden class="notice">場面と目的だけを見て中国語で言ってください。言えたら答えを表示します。 <button type="button" class="secondary" id="showRecall">答えを表示</button></div>
+<div id="recallShown" hidden class="notice">自分の言い方と比べ、どこが同じで何が変わったか考えてください。</div>
+<p class="small" style="margin-top:20px"><strong>今日の自己評価</strong></p>
+<div class="pills" role="group" aria-label="学習記録">
+<button class="pill" type="button" data-reflect="clear">説明できる</button>
+<button class="pill" type="button" data-reflect="partial">少し曖昧</button>
+<button class="pill" type="button" data-reflect="again">もう一度</button>
+</div>
+<div class="notice" id="savedStatus" role="status" aria-live="polite"></div>
+</section>
+<section class="panel">
+<h2>この試作で確かめたい仮説</h2>
+<p class="small">同じ構文をただ繰り返す場合と比べて、場面・目的・階層構造を関連づけると、<strong>新しい名詞への転用</strong>や<strong>学習後の保持</strong>が改善するか。学習効果はまだ検証していません。</p>
+<p class="small quiet">研究上の位置づけ：身体性認知と生成文法は同一理論ではありません。ここでは、意味形成と構造的制約を異なる観察レベルとして扱います。</p>
+<div class="footerlinks"><a href="https://www.nist.gov/publications/engineering-mind-introduction-science-intelligent-systems" target="_blank" rel="noopener noreferrer">Albus / Meystel</a><a href="https://www.cambridge.org/core/books/grounding-cognition/9B5D06C4CEBEE15C23BCF9AE51AE805F" target="_blank" rel="noopener noreferrer">Pecher / Zwaan</a><a href="https://pubmed.ncbi.nlm.nih.gov/27368638/" target="_blank" rel="noopener noreferrer">Chomsky</a><a href="./memory.html">学習記録を見る</a></div>
+</section>
+</main>
+</div>
+<script src="./storage-core.js"></script>
+<script>
+(function(){
+'use strict';
+var goal='action',item='book';
+var lessons={
+ book:{n:'书',p:'shū',emoji:'📕'},
+ cup:{n:'杯子',p:'bēizi',emoji:'🥛'}
+};
+var $=function(id){return document.getElementById(id)};
+function line(){
+ var it=lessons[item];
+ return goal==='action'?{zh:'我把'+it.n+'放在桌子上了。',py:'wǒ bǎ '+it.p+' fàng zài zhuōzi shàng le',ja:'私は'+(item==='book'?'本':'コップ')+'を机の上に置きました。'}:{zh:it.n+'在桌子上。',py:it.p+' zài zhuōzi shàng',ja:(item==='book'?'本':'コップ')+'は机の上にあります。'};
+}
+function markGoal(){
+ $('goalState').setAttribute('aria-pressed',String(goal==='state'));
+ $('goalAction').setAttribute('aria-pressed',String(goal==='action'));
+ $('intentText').textContent=goal==='state'?'置く動作は言わず、今どこにあるかを伝えます。':'物が移動して、机の上に置かれました。動作とその結果を伝えます。';
+ $('afterName').textContent=goal==='state'?'NOW · 今ある場所':'AFTER · 置いた後';
+ document.querySelectorAll('[data-answer]').forEach(function(b){b.setAttribute('aria-pressed','false')});
+ $('feedback').className='feedback'; $('feedback').textContent='';
+}
+function treeNode(word,role,core){
+ var d=document.createElement('div');d.className='node'+(core?' core':'');
+ var b=document.createElement('b');b.textContent=word;
+ var s=document.createElement('span');s.textContent=role;d.appendChild(b);d.appendChild(s);return d;
+}
+function render(){
+ markGoal();
+ var l=line();$('zh').textContent=l.zh;$('py').textContent=l.py;$('ja').textContent=l.ja;
+ $('transferZh').textContent=l.zh;$('transferPy').textContent=l.py;
+ $('beforeItem').textContent=lessons[item].emoji;$('afterItem').textContent=lessons[item].emoji;
+ $('bookBtn').setAttribute('aria-pressed',String(item==='book'));$('cupBtn').setAttribute('aria-pressed',String(item==='cup'));
+ var tree=$('tree');tree.replaceChildren();
+ if(goal==='action'){
+ [['我','動作主'],['把'+lessons[item].n,'対象'],['放','動作'],['在桌子上','到達・位置'],['了','完了・変化']].forEach(function(x,i){tree.appendChild(treeNode(x[0],x[1],i===1||i===2))});
+ $('structureNote').textContent='「把＋対象」は動作の影響を受けるものを先に提示します。「放在桌子上」が置く動作と到達先を表します。了はここでは出来事の成立と結びついています。';
+ }else{
+ [[lessons[item].n,'話題となる物'],['在桌子上','位置を表す述語']].forEach(function(x,i){tree.appendChild(treeNode(x[0],x[1],i===1))});
+ $('structureNote').textContent='こちらは物の位置を表す状態文です。把で動作を組み立てる文とは、伝える焦点も構造も違います。';
+ }
+ $('transferArea').hidden=false;$('recallHidden').hidden=true;$('recallShown').hidden=true;
+}
+function chooseGoal(g){goal=g;render()}
+$('goalState').addEventListener('click',function(){chooseGoal('state')});
+$('goalAction').addEventListener('click',function(){chooseGoal('action')});
+$('bookBtn').addEventListener('click',function(){item='book';render()});
+$('cupBtn').addEventListener('click',function(){item='cup';render()});
+document.querySelectorAll('[data-answer]').forEach(function(btn){btn.addEventListener('click',function(){
+ document.querySelectorAll('[data-answer]').forEach(function(x){x.setAttribute('aria-pressed','false')});
+ btn.setAttribute('aria-pressed','true');
+ var answer=btn.getAttribute('data-answer'),ok=answer===goal;var f=$('feedback');
+ f.className='feedback show'+(ok?' correct':'');
+ if(ok){f.textContent='その通りです。意味だけでなく、その目的を表す構文を選べました。'}
+ else if(answer==='wrong'){f.textContent='この形は通常の把構文として不適切です。把＋対象のあとには、対象に働きかける動作の述語が必要です。ここでは「放在」を使います。'}
+ else if(goal==='state'){f.textContent='選んだ文は「置いた」という動作を表します。今の場所だけを言いたい場合は「书在桌子上。」です。'}
+ else{f.textContent='選んだ文は本の位置を示します。「置いた」という動作と結果を伝えるなら把構文を選びます。'}
+ if(window.CSLStorage&&CSLStorage.addEvent){CSLStorage.addEvent('cognition_choice',{lessonId:'csl-cognition-ba-01',goal:goal,item:item,answer:answer,correct:ok})}
+ })});
+function speak(){
+ if(!('speechSynthesis' in window)){ $('savedStatus').textContent='このブラウザでは音声読み上げが使えません。';return}
+ window.speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(line().zh);u.lang='zh-CN';u.rate=.82;window.speechSynthesis.speak(u);
+}
+$('speak').addEventListener('click',speak);$('hearTransfer').addEventListener('click',speak);
+$('hideRecall').addEventListener('click',function(){$('transferArea').hidden=true;$('recallHidden').hidden=false;$('recallShown').hidden=true});
+$('showRecall').addEventListener('click',function(){$('transferArea').hidden=false;$('recallHidden').hidden=true;$('recallShown').hidden=false});
+document.querySelectorAll('[data-reflect]').forEach(function(btn){btn.addEventListener('click',function(){
+ var value=btn.getAttribute('data-reflect');
+ document.querySelectorAll('[data-reflect]').forEach(function(x){x.setAttribute('aria-pressed',String(x===btn))});
+ if(window.CSLStorage&&CSLStorage.addEvent){
+ try{CSLStorage.addEvent('cognition_reflection',{lessonId:'csl-cognition-ba-01',goal:goal,item:item,reflection:value,sentence:line().zh});$('savedStatus').textContent='学習記録に保存しました。既存のMemory Weaveバックアップにも含まれます。'}
+ catch(e){$('savedStatus').textContent='記録を保存できませんでした。ブラウザの保存設定を確認してください。'}
+ }else{$('savedStatus').textContent='学習記録機能を読み込めませんでした。'}
+ })});
+render();
+})();
+</script>
+</body>
+</html>
