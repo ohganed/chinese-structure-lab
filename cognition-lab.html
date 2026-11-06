@@ -76,7 +76,7 @@ h1{font-size:clamp(27px,5vw,39px);line-height:1.3;margin:11px 0}h2{font-size:20p
 <p class="small quiet">まず中国語の文字ではなく、出来事と変化に注目してください。</p>
 <div class="scene">
 <div class="scene-row">
-<div class="scene-frame"><div class="scene-name">BEFORE · 最初</div><div class="floor"><span id="beforeItem" class="item">📕</span><div class="table-leg"><div class="tabletop"></div><div class="tablebase"></div></div></div></div>
+<div class="scene-frame"><div class="scene-name">BEFORE · 最初</div><div class="floor"><span id="beforeItem" class="item">📕</span><div class="table-leg"><div class="tabletop"><span id="beforeTableItem" hidden></span></div><div class="tablebase"></div></div></div></div>
 <span class="arrow" aria-hidden="true">→</span>
 <div class="scene-frame"><div class="scene-name" id="afterName">AFTER · 置いた後</div><div class="floor"><div class="table-leg after-move"><div class="tabletop" id="afterItem">📕</div><div class="tablebase"></div></div></div></div>
 </div>
@@ -165,7 +165,7 @@ function render(){
  markGoal();
  var l=line();$('zh').textContent=l.zh;$('py').textContent=l.py;$('ja').textContent=l.ja;
  $('transferZh').textContent=l.zh;$('transferPy').textContent=l.py;
- $('beforeItem').textContent=lessons[item].emoji;$('afterItem').textContent=lessons[item].emoji;
+ $('beforeItem').textContent=lessons[item].emoji;$('beforeItem').hidden=goal==='state';$('beforeTableItem').textContent=lessons[item].emoji;$('beforeTableItem').hidden=goal==='action';$('afterItem').textContent=lessons[item].emoji;
  $('bookBtn').setAttribute('aria-pressed',String(item==='book'));$('cupBtn').setAttribute('aria-pressed',String(item==='cup'));
  var tree=$('tree');tree.replaceChildren();
  if(goal==='action'){
