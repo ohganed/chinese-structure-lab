@@ -133,7 +133,7 @@ footer a{margin-right:14px;display:inline-block}
 'use strict';
 var $=function(id){return document.getElementById(id)};
 var CASES=[
- {id:'rel-t-s-object',jp:'先生が知っている生徒が来ました。',a:'老师认识的学生来了。',b:'认识老师的学生来了。',correct:'a',pyA:'lǎoshī rènshi de xuésheng lái le',pyB:'rènshi lǎoshī de xuésheng lái le',frame:'[[老师 认识 __] 的 学生] 来了。',who:'先生 → 生徒',note:'老師（先生）が動作主で、学生（生徒）が「知る」の対象です。空所は認識される人物に対応します。'},
+ {id:'rel-t-s-object',jp:'先生が知っている生徒が来ました。',a:'老师认识的学生来了。',b:'认识老师的学生来了。',correct:'a',pyA:'lǎoshī rènshi de xuésheng lái le',pyB:'rènshi lǎoshī de xuésheng lái le',frame:'[[老师 认识 __] 的 学生] 来了。',who:'先生 → 生徒',note:'老师（先生）が動作主で、学生（生徒）が「知る」の対象です。空所は認識される人物に対応します。'},
  {id:'rel-t-s-subject',jp:'先生を知っている生徒が来ました。',a:'老师认识的学生来了。',b:'认识老师的学生来了。',correct:'b',pyA:'lǎoshī rènshi de xuésheng lái le',pyB:'rènshi lǎoshī de xuésheng lái le',frame:'[[__ 认识 老师] 的 学生] 来了。',who:'生徒 → 先生',note:'生徒が動作主で、先生が「知る」の対象です。空所は知っている側の人物に対応します。'},
  {id:'rel-d-p-object',jp:'医者が知っている患者が来ました。',a:'医生认识的病人来了。',b:'认识医生的病人来了。',correct:'a',pyA:'yīshēng rènshi de bìngrén lái le',pyB:'rènshi yīshēng de bìngrén lái le',frame:'[[医生 认识 __] 的 病人] 来了。',who:'医者 → 患者',note:'医者が知っている対象は患者です。「医生认识的」が「病人」を修飾します。'},
  {id:'rel-d-p-subject',jp:'医者を知っている患者が来ました。',a:'医生认识的病人来了。',b:'认识医生的病人来了。',correct:'b',pyA:'yīshēng rènshi de bìngrén lái le',pyB:'rènshi yīshēng de bìngrén lái le',frame:'[[__ 认识 医生] 的 病人] 来了。',who:'患者 → 医者',note:'患者が医者を知っています。「认识医生的」が「病人」を修飾します。'}
@@ -209,6 +209,9 @@ function grade(quality){
  $('saveStatus').textContent='保存機能が見つかりません。';return}
  try{
  var data=loadReview(),previous=data[c.id]||{},stage=Number(previous.stage)||0;
+ if(previous.dueAt&&new Date(previous.dueAt).getTime()>Date.now()&&quality!=='again'){
+  $('saveStatus').textContent='次の予定日は '+formatDue(previous.dueAt)+' です。予定日前に練習しても、復習間隔は自動的に延ばしません。';return;
+ }
  var days=[1,3,7,14,30],delay;
  if(quality==='good'){stage=Math.min(stage+1,5);delay=days[stage-1]*86400000}
  else if(quality==='hint'){stage=Math.max(0,stage-1);delay=86400000}
