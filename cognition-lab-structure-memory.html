@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f5f4ef">
+<title>文の見えない構造と記憶 · Chinese Structure Lab</title>
+<style>
+:root{--bg:#f5f4ef;--fg:#1b2922;--muted:#617368;--stroke:#dfe6dd;--accent:#355e49;--pale:#edf3eb}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.7 -apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif}
+main{max-width:780px;margin:auto;padding:22px 16px 100px}
+a{color:#355e49}button,textarea{font:inherit}
+button{cursor:pointer}
+button:focus-visible,textarea:focus-visible,a:focus-visible{outline:3px solid #5d9478;outline-offset:3px}
+header{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.back{font-size:14px;text-decoration:none;font-weight:750}
+.kicker{font-size:11px;letter-spacing:.09em;font-weight:800;color:#758578}
+h1{font-size:clamp(27px,5vw,39px);line-height:1.35;margin:20px 0 9px}
+h2{font-size:21px;line-height:1.4;margin:3px 0 12px}
+.intro{color:#58695e;max-width:650px;margin-bottom:23px}
+.card{background:#fff;border:1px solid var(--stroke);border-radius:25px;padding:22px;margin:16px 0;box-shadow:0 8px 24px #20382b09}
+.step{display:inline-flex;background:#edf3ed;border-radius:999px;color:#4a7657;padding:5px 12px;font-size:12px;font-weight:800;margin-bottom:8px}
+.theory-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
+.theory{background:#f0f4ed;border:1px solid #e6ebe3;border-radius:15px;padding:12px}
+.theory b{font-size:14px;display:block}.theory p{font-size:12px;line-height:1.6;color:#55665d;margin:5px 0 0}
+.prompt{font-size:17px;font-weight:750;background:#edf3ee;border-radius:17px;padding:18px;margin:12px 0}
+.tag{font-weight:800;color:#507360;font-size:12px;letter-spacing:.07em}
+.options{display:grid;gap:10px;margin:12px 0}
+.option{text-align:left;background:#f9faf7;border:1px solid #d7e0d6;border-radius:16px;padding:14px 17px;color:#253628;min-height:66px}
+.option.selected{border:2px solid #527b60;background:#e8f2e9}
+.option .hanzi{font-size:23px;font-weight:770;display:block}
+.option .pinyin{font-size:12px;color:#65736b}
+.feedback{border-radius:15px;padding:15px;background:#f2f4ee;margin:12px 0}
+.feedback.good{background:#e8f3e9}
+.feedback.warn{background:#f5eee1}
+[hidden]{display:none!important}
+.tree{border-radius:19px;background:#f1f5ef;padding:16px;margin:12px 0}
+.tree .bracket{font-size:20px;font-weight:800;line-height:2;overflow-wrap:anywhere}
+.tree p{margin:5px 0 0;font-size:14px;color:#536a58}
+.structure-parts{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}
+.part{display:flex;flex-direction:column;align-items:center;border-radius:14px;background:#fff;padding:8px 13px;border:1px solid #d9e6d9}
+.part b{font-size:18px}.part span{font-size:11px;color:#68796e}
+.controls{display:flex;gap:9px;flex-wrap:wrap;margin:14px 0}
+.btn{background:#355e49;border:0;border-radius:13px;color:#fff;padding:11px 16px;font-weight:780}
+.btn.alt{background:#edf2ec;color:#335442;border:1px solid #dce8db}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+textarea{display:block;width:100%;resize:vertical;min-height:95px;border:1px solid #bfcfc0;border-radius:15px;padding:13px;background:#fff;color:#222;font-size:21px}
+.label{font-size:13px;color:var(--muted);font-weight:700;margin-bottom:7px}
+.note{font-size:13px;color:#617268}
+.result{font-size:15px;color:#274534}
+.status{margin:12px 0;color:#31513f;font-size:14px}
+.due-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:12px 0}
+.due{padding:13px;border-radius:14px;background:#eff3ed}
+.due b{display:block}.due span{display:block;font-size:12px;color:#63746a}
+footer{margin-top:22px;font-size:13px;color:#68756b}
+footer a{margin-right:14px;display:inline-block}
+@media(max-width:560px){.card{padding:17px}.theory-grid,.due-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body><main>
+<header><a class="back" href="./cognition-lab.html">‹ Cognition Lab に戻る</a><span class="kicker">COGNITION LAB 02</span></header>
+<h1>言葉の裏側にある構造。</h1>
+<p class="intro">見た目の語順だけでなく「誰が・誰を・どうしたか」の関係を理解し、時間を置いて自分で文を作り直す練習です。中国語の連体修飾と「的」を扱います。</p>
+<section class="card">
+<span class="step">5つの研究視点を1つの学習へ</span>
+<div class="theory-grid">
+<div class="theory"><b>Pecher / Zwaan · 状況</b><p>まず人物・動作・関係を頭に描く</p></div>
+<div class="theory"><b>Albus / Meystel · 目標</b><p>どちらの関係を相手に伝えたいか決める</p></div>
+<div class="theory"><b>Chomsky · 階層</b><p>語句のまとまりと依存関係に注目する</p></div>
+<div class="theory"><b>Moro · 制約</b><p>線形の語順だけでは説明できない関係を比べる</p></div>
+<div class="theory"><b>Arden · 練習習慣</b><p>思い出す練習と時間を置く復習を継続する</p></div>
+</div>
+<p class="note">この組合せは本アプリの教育設計仮説です。5人の著者が共通の教育理論を提唱したという意味ではありません。</p>
+</section>
+<section class="card" aria-labelledby="observationTitle">
+<span class="step">01 · 場面と関係を理解する</span>
+<h2 id="observationTitle">誰が、誰を知っている？</h2>
+<p class="note">同じ人物が登場しても、動作主と対象を入れ替えると、別の意味になります。</p>
+<div class="controls"><button type="button" class="btn alt" id="prevCase">‹ 前の場面</button><button type="button" class="btn alt" id="nextCase">次の場面 ›</button></div>
+<div class="prompt" id="jpPrompt"></div>
+<div class="label">意味が合う中国語を選んでください。</div>
+<div class="options">
+<button type="button" class="option" id="optionA"><span class="hanzi"></span><span class="pinyin"></span></button>
+<button type="button" class="option" id="optionB"><span class="hanzi"></span><span class="pinyin"></span></button>
+</div>
+<div id="choiceFeedback" class="feedback" aria-live="polite" hidden></div>
+</section>
+<section class="card">
+<span class="step">02 · 階層を発見する</span>
+<h2>語順と、文の内部構造</h2>
+<div class="tree" id="structure">
+<div class="tag">意味のまとまり</div><div id="bracket" class="bracket"></div>
+<p id="structNote"></p><div class="structure-parts" id="parts"></div>
+</div>
+<p class="note">空所 __ は、直後の名詞が修飾節の中で果たす役割を示す学習用の記号です。この図は教育用の単純化であり、特定の生成文法モデルの厳密な構文木ではありません。</p>
+<p class="note">Moro の「不可能な文法」は、特定の中国語文が不自然だという意味ではありません。人間言語の文法がどのような計算規則に制約されるかという、より一般的な研究課題です。</p>
+</section>
+<section class="card" aria-labelledby="recallTitle">
+<span class="step">03 · 見ないで自分で作る</span>
+<h2 id="recallTitle">意味から中国語を再生成する</h2>
+<div class="prompt" id="recallPrompt"></div>
+<label class="label" for="typed">中国語を入力してください（簡体字）。句読点と空白は省略可能です。</label>
+<textarea id="typed" lang="zh-CN" autocapitalize="off" autocomplete="off" spellcheck="false" placeholder="ここに中国語を書いてください"></textarea>
+<div class="controls"><button type="button" class="btn" id="checkTyped">照合する</button><button type="button" class="btn alt" id="reveal">模範解答を見る</button><button type="button" class="btn alt" id="speak">▶ 発音を聞く</button></div>
+<div id="typedFeedback" class="feedback" hidden aria-live="polite"></div>
+<p class="note">文章を照合する簡易判定です。異なる自然な中国語の言い方をすべて判定するAIではありません。入力した答え自体は履歴に保存しません。</p>
+</section>
+<section class="card" aria-labelledby="reviewTitle">
+<span class="step">04 · 時間を置いて思い出す</span>
+<h2 id="reviewTitle">次の復習を予定する</h2>
+<div id="reviewSummary" class="status">復習状況を確認しています。</div>
+<p class="note">自力で再生成できたか、内容の理解は明確かをもとに記録してください。選択問題の正解だけでは「覚えた」と判定しません。</p>
+<div class="controls">
+<button type="button" class="btn" id="gradeGood">自力で再生成できた</button>
+<button type="button" class="btn alt" id="gradeHesitant">ヒントが必要だった</button>
+<button type="button" class="btn alt" id="gradeAgain">もう一度練習する</button>
+</div>
+<div class="status" id="saveStatus" role="status" aria-live="polite"></div>
+<div id="dueCards" class="due-grid"></div>
+<p class="note">復習日は試作の初期設定です（正答は段階的に1・3・7・14・30日、ヒントありは翌日、再練習は10分後）。通知は送信しません。アプリを開いたときに確認できます。</p>
+</section>
+<section class="card">
+<h2>検証する学習仮説</h2>
+<p>「語句の階層と意味上の関係を比較する練習」は、同じ文を繰り返し読む練習より、未習の人物や関係へ転用しやすいだろうか。また、時間を置いた自力再生は長期保持に寄与するだろうか。</p>
+<p class="note">本ページは検証のための教材実装であり、脳の神経回路変化を測定・保証するものではありません。根拠となる実証研究を参照しつつ、教材固有の効果は今後比較して確かめます。</p>
+<footer><a href="https://mitpress.mit.edu/9780262029858/the-boundaries-of-babel/" rel="noopener noreferrer" target="_blank">Moro — MIT Press</a><a href="https://www.wiley.com/en-ie/Rewire%2BYour%2BBrain%3A%2BThink%2BYour%2BWay%2Bto%2Ba%2BBetter%2BLife-p-9780470569849" rel="noopener noreferrer" target="_blank">Arden — Wiley</a><a href="https://www.nature.com/articles/s44159-022-00089-1" rel="noopener noreferrer" target="_blank">復習研究 — Nature Reviews Psychology</a><a href="./memory.html">Memory Weave</a></footer>
+</section>
+</main>
+<script src="./storage-core.js"></script>
+<script>
+(function(){
+'use strict';
+var $=function(id){return document.getElementById(id)};
+var CASES=[
+ {id:'rel-t-s-object',jp:'先生が知っている生徒が来ました。',a:'老师认识的学生来了。',b:'认识老师的学生来了。',correct:'a',pyA:'lǎoshī rènshi de xuésheng lái le',pyB:'rènshi lǎoshī de xuésheng lái le',frame:'[[老师 认识 __] 的 学生] 来了。',who:'先生 → 生徒',note:'老師（先生）が動作主で、学生（生徒）が「知る」の対象です。空所は認識される人物に対応します。'},
+ {id:'rel-t-s-subject',jp:'先生を知っている生徒が来ました。',a:'老师认识的学生来了。',b:'认识老师的学生来了。',correct:'b',pyA:'lǎoshī rènshi de xuésheng lái le',pyB:'rènshi lǎoshī de xuésheng lái le',frame:'[[__ 认识 老师] 的 学生] 来了。',who:'生徒 → 先生',note:'生徒が動作主で、先生が「知る」の対象です。空所は知っている側の人物に対応します。'},
+ {id:'rel-d-p-object',jp:'医者が知っている患者が来ました。',a:'医生认识的病人来了。',b:'认识医生的病人来了。',correct:'a',pyA:'yīshēng rènshi de bìngrén lái le',pyB:'rènshi yīshēng de bìngrén lái le',frame:'[[医生 认识 __] 的 病人] 来了。',who:'医者 → 患者',note:'医者が知っている対象は患者です。「医生认识的」が「病人」を修飾します。'},
+ {id:'rel-d-p-subject',jp:'医者を知っている患者が来ました。',a:'医生认识的病人来了。',b:'认识医生的病人来了。',correct:'b',pyA:'yīshēng rènshi de bìngrén lái le',pyB:'rènshi yīshēng de bìngrén lái le',frame:'[[__ 认识 医生] 的 病人] 来了。',who:'患者 → 医者',note:'患者が医者を知っています。「认识医生的」が「病人」を修飾します。'}
+];
+var reviewKey='csl_moro_arden_review_v1',index=0,choice='',typedChecked=false;
+function current(){return CASES[index]}
+function clean(s){return (s||'').replace(/[\s\u3000，。！？、,.!?；;：:\u200b]/g,'').trim()}
+function say(text){
+ if(!('speechSynthesis' in window)){ $('saveStatus').textContent='このブラウザは読み上げに対応していません。';return}
+ speechSynthesis.cancel();var utterance=new SpeechSynthesisUtterance(text);utterance.lang='zh-CN';utterance.rate=.88;speechSynthesis.speak(utterance);
+}
+function render(){
+ var c=current();choice='';typedChecked=false;$('jpPrompt').textContent=c.jp;$('recallPrompt').textContent=c.jp;
+ $('optionA').querySelector('.hanzi').textContent=c.a;$('optionA').querySelector('.pinyin').textContent=c.pyA;
+ $('optionB').querySelector('.hanzi').textContent=c.b;$('optionB').querySelector('.pinyin').textContent=c.pyB;
+ $('optionA').classList.remove('selected');$('optionB').classList.remove('selected');
+ $('choiceFeedback').hidden=true;$('typedFeedback').hidden=true;$('typed').value='';
+ $('bracket').textContent=c.frame;$('structNote').textContent=c.note;
+ var parts=$('parts');parts.replaceChildren();
+ [['登場する関係',c.who],['修飾される名詞',index<2?'学生':'病人'],['文全体の述語','来了']].forEach(function(data){
+ var div=document.createElement('div');div.className='part';
+ var b=document.createElement('b');b.textContent=data[1];var small=document.createElement('span');small.textContent=data[0];div.appendChild(b);div.appendChild(small);parts.appendChild(div);
+ });
+ $('saveStatus').textContent='';renderDue();
+}
+function clickOption(which){
+ var c=current();choice=which;
+ $('optionA').classList.toggle('selected',which==='a');$('optionB').classList.toggle('selected',which==='b');
+ var good=which===c.correct;
+ var f=$('choiceFeedback');f.className='feedback '+(good?'good':'warn');f.hidden=false;
+ f.textContent=good?'正解です。'+c.note:'もう一度、誰が「认识」するのかを考えてください。'+c.note;
+ if(window.CSLStorage&&typeof CSLStorage.addEvent==='function'){
+ try{CSLStorage.addEvent('csl_hierarchy_choice',{lessonId:c.id,selection:which,correct:good})}catch(e){}
+ }
+}
+$('optionA').addEventListener('click',function(){clickOption('a')});
+$('optionB').addEventListener('click',function(){clickOption('b')});
+$('prevCase').addEventListener('click',function(){index=(index+CASES.length-1)%CASES.length;render()});
+$('nextCase').addEventListener('click',function(){index=(index+1)%CASES.length;render()});
+$('speak').addEventListener('click',function(){var c=current();say(c[c.correct])});
+function showTyped(revealed){
+ var c=current(),typed=$('typed').value,answer=c[c.correct],good=clean(typed)===clean(answer);
+ typedChecked=true;
+ var f=$('typedFeedback');f.hidden=false;f.className='feedback '+(good?'good':'warn');
+ f.textContent=good&&!revealed?'模範解答と一致しました。構造を確認してください。':'模範解答：'+answer+'　構造：'+c.frame+'　'+c.note;
+}
+$('checkTyped').addEventListener('click',function(){showTyped(false)});
+$('reveal').addEventListener('click',function(){showTyped(true)});
+function loadReview(){try{
+ if(!window.CSLStorage)return {};
+ var p=CSLStorage.load();var r=p.progress&&p.progress[reviewKey];return r&&typeof r==='object'&&!Array.isArray(r)?r:{};
+ }catch(e){return {}}
+}
+function formatDue(t){
+ var d=new Date(t);if(!Number.isFinite(d.getTime()))return '未設定';
+ return new Intl.DateTimeFormat('ja-JP',{year:'numeric',month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'}).format(d);
+}
+function renderDue(){
+ var r=loadReview(),count=0,list=$('dueCards');list.replaceChildren();
+ CASES.forEach(function(c){
+ var rec=r[c.id];var due=!rec||!rec.dueAt||new Date(rec.dueAt).getTime()<=Date.now();
+ if(due)count++;
+ var node=document.createElement('div');node.className='due';
+ var b=document.createElement('b');b.textContent=(due?'復習対象 · ':'次回予定 · ')+c.jp;
+ var s=document.createElement('span');s.textContent=due?'今、復習できます':formatDue(rec.dueAt);
+ node.appendChild(b);node.appendChild(s);list.appendChild(node);
+ });
+ $('reviewSummary').textContent='現在、復習対象は '+count+' / '+CASES.length+' 場面です。';
+}
+function grade(quality){
+ var c=current();
+ if(!window.CSLStorage||typeof CSLStorage.setProgress!=='function'){
+ $('saveStatus').textContent='保存機能が見つかりません。';return}
+ try{
+ var data=loadReview(),previous=data[c.id]||{},stage=Number(previous.stage)||0;
+ var days=[1,3,7,14,30],delay;
+ if(quality==='good'){stage=Math.min(stage+1,5);delay=days[stage-1]*86400000}
+ else if(quality==='hint'){stage=Math.max(0,stage-1);delay=86400000}
+ else{stage=0;delay=600000}
+ var at=new Date().toISOString(),dueAt=new Date(Date.now()+delay).toISOString();
+ data[c.id]={stage:stage,attempts:(Number(previous.attempts)||0)+1,lastOutcome:quality,lastReviewedAt:at,dueAt:dueAt};
+ CSLStorage.setProgress(reviewKey,data);
+ if(typeof CSLStorage.addEvent==='function')CSLStorage.addEvent('csl_moro_arden_review',{lessonId:c.id,quality:quality,stage:stage,dueAt:dueAt,selfReported:true});
+ $('saveStatus').textContent='記録しました。次の復習：'+formatDue(dueAt)+'。ほかの場面へは「次の場面」から進めます。';
+ renderDue();
+ }catch(e){$('saveStatus').textContent='保存できませんでした。ストレージ設定を確認してください。'}
+}
+$('gradeGood').addEventListener('click',function(){grade('good')});
+$('gradeHesitant').addEventListener('click',function(){grade('hint')});
+$('gradeAgain').addEventListener('click',function(){grade('again')});
+render();
+})();
+</script>
+</body>
+</html>
