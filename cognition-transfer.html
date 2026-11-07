@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f4f5ef"><title>意味から新しい中国語を作る · Cognition Lab</title>
+<style>
+:root{--paper:#f4f5ef;--ink:#202e27;--muted:#66766b;--line:#dfe7db;--card:#fff;--green:#315840;--soft:#eaf2e8;--blue:#eaf0f8}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.65 -apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif}
+.app{width:min(850px,100%);margin:auto;padding:18px 16px 84px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:14px}
+a{color:#3b6650;text-decoration:none}a:hover{text-decoration:underline}
+h1{font-size:clamp(27px,5vw,40px);line-height:1.25;margin:27px 0 10px}
+h2{font-size:20px;margin:0 0 12px;line-height:1.4}
+p{margin:9px 0}
+.small{font-size:13px;color:var(--muted)}
+.micro{font-size:11px;color:#768779;font-weight:800;letter-spacing:.08em}
+.hero{color:#506556;max-width:680px;margin-bottom:25px}
+.card{border:1px solid var(--line);background:var(--card);border-radius:24px;padding:20px;margin:15px 0;box-shadow:0 10px 27px #192b1b07}
+.step{display:inline-block;padding:5px 12px;border-radius:999px;background:#e8f1e9;color:#46684f;font-size:12px;font-weight:800;margin-bottom:9px}
+button,select,textarea{font:inherit}button{cursor:pointer}
+button:focus-visible,select:focus-visible,textarea:focus-visible,a:focus-visible{outline:3px solid #6c9d7a;outline-offset:3px}
+button{border-radius:13px;padding:11px 15px;min-height:46px;font-weight:750;border:1px solid #d9e5d8;color:#254b32;background:#f4f8f2}
+button.primary{background:var(--green);border-color:var(--green);color:#fff}
+button[disabled]{opacity:.52;cursor:not-allowed}
+select{border:1px solid #cbd9cc;border-radius:12px;background:#fff;color:#203328;padding:12px;width:100%;min-height:50px}
+.controls{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin:12px 0}
+.badges{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.badge{background:#eaf0e7;color:#496a53;border-radius:999px;padding:5px 10px;font-size:12px;font-weight:750}
+.scene{background:linear-gradient(135deg,#e9f3eb,#f5f2e6);border-radius:19px;padding:18px;margin:14px 0}
+.scene .message{font-size:17px;font-weight:750;margin:12px 0}
+.scene-chain{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.scene-unit{background:#ffffffbb;border:1px solid #dae7d8;border-radius:12px;padding:11px;min-width:90px;flex:1}
+.scene-unit b{display:block;font-size:16px}.scene-unit span{display:block;font-size:11px;color:#65766b}
+.choice-list{display:grid;gap:10px;margin:12px 0}
+.choice{text-align:left;font-weight:700;background:#fafbf8}
+.choice[aria-pressed="true"]{background:#e6f1e7;border:2px solid #6c9a77}
+.hanzi{display:block;font-size:24px;line-height:1.55}
+.reading{color:#667967;font-size:13px;font-weight:500;display:block}
+.feedback{border-radius:14px;background:#f8f0de;padding:13px;color:#615330;margin:12px 0}
+.feedback.good{background:#e5f2e7;color:#355c3d}
+.tree{font-weight:800;background:#eff3ed;border-radius:15px;padding:13px;overflow-wrap:anywhere;margin:10px 0;font-size:18px}
+.chunks{display:flex;flex-wrap:wrap;gap:8px}
+.chunk{background:#edf4ea;border:1px solid #dbe9d8;border-radius:14px;padding:8px 11px}
+.chunk strong,.chunk small{display:block}.chunk strong{font-size:19px}.chunk small{font-size:11px;color:#58735f}
+.word-list{display:flex;flex-wrap:wrap;gap:9px}
+.word{background:#f1f4ed;border:1px solid #dbe3d8;border-radius:14px;text-align:left}
+.word span{font-size:19px;display:block}.word small{color:#64756a;font-size:11px;display:block}
+.entry{width:100%;min-height:91px;resize:vertical;border:1px solid #c3d2c2;border-radius:13px;padding:12px;font-size:22px;color:#203328;background:#fdfefc}
+.answer{border-radius:14px;background:#f1f5ef;padding:13px;margin:12px 0}
+.answer b{display:block;font-size:23px}
+.answer span{color:#66796b;font-size:13px}
+.status{color:#506753;font-size:13px;margin:9px 0}
+[data-hidden="true"]{display:none!important}
+@media(max-width:500px){.card{padding:16px}.scene-unit{min-width:130px}}
+</style></head>
+<body><div class="app">
+<header class="top"><a href="./explore.html">‹ Explore に戻る</a><span class="micro">COGNITION LAB · TRANSFER</span></header>
+<main>
+<h1>場面から、まだ見ぬ文へ。</h1>
+<p class="hero">場面を把握し、伝える目的を選び、構造を比較して、自分で中国語をつくります。5つの研究視点を、短い学習操作として統合した試作です。</p>
+<section class="card">
+<div class="step">LESSON LIBRARY · 8場面</div><h2>今日はどの関係を考える？</h2>
+<label class="small" for="selectLesson">教材を選ぶ</label>
+<select id="selectLesson"></select>
+<div class="controls"><button id="jumpDue" type="button">復習が必要な教材へ</button><button id="nextLesson" type="button">次の教材 ›</button></div>
+<p class="status" id="progressCount" role="status" aria-live="polite"></p>
+<div class="badges"><span class="badge">A1–B1</span><span class="badge">場面・行動</span><span class="badge">階層構造</span><span class="badge">再生成・転用</span></div>
+</section>
+<section class="card">
+<div class="step">1 · GROUNDED COGNITION</div><h2>まず状況を頭に描く</h2>
+<div class="scene">
+<div class="micro">誰が・何を・どのように</div>
+<p class="message" id="sceneText"></p>
+<div class="scene-chain">
+<div class="scene-unit"><span>人物・主体</span><b id="sceneActor"></b></div>
+<div class="scene-unit"><span>もの・関係する人</span><b id="sceneObject"></b></div>
+<div class="scene-unit"><span>変化・関係</span><b id="sceneMovement"></b></div>
+<div class="scene-unit"><span>結果・現在</span><b id="sceneResult"></b></div>
+</div></div>
+<div class="micro">ALBUS / MEYSTEL · 伝達目標</div>
+<p id="goalText" style="font-weight:750;font-size:18px"></p>
+</section>
+<section class="card">
+<div class="step">2 · SEMANTIC SELECTION</div><h2 id="questionText"></h2>
+<p class="small">訳や単語の形だけでなく、状況と文の意味が合うか考えてください。</p>
+<div class="choice-list" id="choices"></div>
+<div class="controls"><button type="button" id="togglePinyin">ピンインを見る</button><button type="button" id="hearTarget">▶ 正しい文の音声</button></div>
+<div id="choiceFeedback" class="feedback" data-hidden="true" role="status" aria-live="polite"></div>
+</section>
+<section class="card">
+<div class="step">3 · CHOMSKY / MORO</div><h2>文のまとまりと制約を見る</h2>
+<p class="small">問題に答えたあとに説明を開けます。正解しなくても続けられます。</p>
+<button id="openStructure" type="button">構造の説明を開く</button>
+<div id="structureArea" data-hidden="true">
+<div class="tree" id="brackets"></div><div id="chunks" class="chunks"></div>
+<p id="structureNote"></p><p class="small" id="boundaryNote"></p>
+<p class="small">角括弧は学習者用の模式図です。厳密なMinimalist構文木の表示ではありません。</p>
+<div class="micro">TAP TO HEAR · 単語の音声</div><div id="wordList" class="word-list"></div>
+</div>
+</section>
+<section class="card">
+<div class="step">4 · RECONSTRUCTION</div><h2>中国語を見ないで、文をつくる</h2>
+<p class="small" id="recallPrompt"></p>
+<textarea class="entry" id="recallInput" lang="zh-CN" aria-label="元の場面の中国語を入力" spellcheck="false" placeholder="中国語の文を入力"></textarea>
+<div class="controls"><button type="button" class="primary" id="checkRecall">答えを照合する</button><button type="button" id="revealRecall">模範解答を見る</button></div>
+<div id="recallFeedback" class="feedback" data-hidden="true" role="status" aria-live="polite"></div>
+</section>
+<section class="card">
+<div class="step">5 · TRANSFER</div><h2>初めての場面に転用する</h2>
+<p id="transferPrompt" style="font-size:18px;font-weight:730"></p>
+<textarea class="entry" id="transferInput" lang="zh-CN" aria-label="別の場面の中国語を入力" spellcheck="false" placeholder="中国語を自分で組み立てる"></textarea>
+<div class="controls"><button type="button" class="primary" id="checkTransfer">転用を照合する</button><button type="button" id="revealTransfer">転用の模範解答</button><button type="button" id="hearTransfer">▶ 転用文の音声</button></div>
+<div id="transferFeedback" class="feedback" data-hidden="true" role="status" aria-live="polite"></div>
+<p class="small" id="transferNote" data-hidden="true"></p>
+<div class="micro">YOUR DISCOVERY · 自分で見つけた関係</div>
+<p class="small">例：進と出を入れ替えると動作の方向だけが変わる。</p>
+<textarea class="entry" id="discoveryInput" maxlength="600" aria-label="自分の発見を記録" placeholder="気づいた構造や別の言語とのつながり"></textarea>
+<div class="controls"><button id="saveDiscovery" type="button">発見を学習記録へ保存</button></div>
+<p id="discoveryStatus" class="status" aria-live="polite"></p>
+</section>
+<section class="card">
+<div class="step">6 · ARDEN / SPACED RETRIEVAL</div><h2>次の復習につなぐ</h2>
+<p id="reviewSummary" class="small"></p>
+<p class="small">自分で文を再生成できたかを評価してください。模範文の機械的な文字照合だけでは学習者の理解を判定できません。</p>
+<div class="controls"><button class="primary" id="gradeGood" type="button">自力で作れた</button><button id="gradeHint" type="button">ヒントが必要</button><button id="gradeAgain" type="button">もう一度練習</button></div>
+<p id="saveStatus" class="status" role="status" aria-live="polite"></p>
+<p class="small">初期復習間隔は1・3・7・14・30日、ヒント時は翌日、再挑戦は10分後です。同日の繰り返し正答によって復習予定を不当に延長しません。自動通知はありません。</p>
+</section>
+<section class="card">
+<h2>何を検証するか</h2>
+<p>場面・目標・文の階層構造を結びつけると、単なる例文反復と比べて未習の場面への転用が改善するでしょうか。ここで扱うのは教育上の検証仮説であり、神経回路を実際に測定する機能ではありません。</p>
+<p class="small">選択問題・自力再生成・転用・自己評価を別々に記録します。入力した文そのものは保存しません。復習予定と発見メモは既存のCSLStorage内に保存され、既存の学習履歴を上書きしない設計です。</p>
+<p class="small">ほかの言語アプリには変更を加えていません。将来の移植に向け、学習ロジックと中国語教材を別ファイルに分離しています。</p>
+<div class="controls"><a href="./cognition-lab.html">← Cognition Lab 01</a><a href="./cognition-lab-structure-memory.html">Cognition Lab 02</a><a href="./memory.html">Memory Weave</a></div>
+</section>
+</main></div>
+<script src="./storage-core.js"></script>
+<script src="./cognition-engine-core.js"></script>
+<script src="./cognition-zh-lessons.js"></script>
+<script>
+(function(){
+'use strict';
+var $=function(id){return document.getElementById(id)};
+var engine=window.CognitionCore,lessons=window.CognitionChineseLessons,storage=window.CSLStorage;
+if(!engine||!Array.isArray(lessons)||!lessons.length){$('progressCount').textContent='教材データを読み込めませんでした。';return}
+var discoveryKey='csl_cognition_discoveries_v1';
+var index=0,state={};
+function fresh(){state={choiceMade:false,choiceCorrect:false,readingVisible:false,structureVisible:false,recallMatched:false,transferMatched:false,recallRevealed:false,transferRevealed:false};}
+function current(){return lessons[index]}
+function text(id,value){$(id).textContent=value||''}
+function show(id,visible){$(id).setAttribute('data-hidden',visible?'false':'true')}
+function speech(line,rate){
+ if(!('speechSynthesis' in window)){text('saveStatus','この端末では読み上げが利用できません。');return}
+ window.speechSynthesis.cancel();
+ var utter=new SpeechSynthesisUtterance(line);utter.lang='zh-CN';utter.rate=rate||.86;
+ var voices=window.speechSynthesis.getVoices(),preferred=voices.find(function(v){return /^zh-(CN|SG)/i.test(v.lang)})||voices.find(function(v){return /^zh/i.test(v.lang)});
+ if(preferred)utter.voice=preferred;
+ window.speechSynthesis.speak(utter);
+}
+function loadNotes(){try{var p=storage.load(),v=p.progress&&p.progress[discoveryKey];return v&&typeof v==='object'?v:{}}catch(e){return {}}}
+function humanDue(rec){
+ if(!rec||!rec.dueAt)return '初回の学習';
+ var stamp=new Date(rec.dueAt);if(!Number.isFinite(stamp.getTime()))return '復習日未設定';
+ return new Intl.DateTimeFormat('ja-JP',{dateStyle:'medium',timeStyle:'short'}).format(stamp);
+}
+function progress(){
+ var records=engine.readProgress(storage),due=lessons.filter(function(l){return engine.due(records[l.id])});
+ text('progressCount','現在の復習対象：'+due.length+' / '+lessons.length+' 題。記録はこの端末に保存します。');
+ var r=records[current().id];
+ text('reviewSummary',(!r?'この教材は未復習です。':'復習履歴：'+r.attempts+' 回 ／ 次の予定：'+humanDue(r))+'　正確な発音や文の自然さは、音声・説明と照らし合わせて確認してください。');
+}
+function drawChoices(){
+ var l=current(),order=index%2?[l.contrast,l.target]:[l.target,l.contrast];
+ var box=$('choices');box.replaceChildren();
+ order.forEach(function(o,i){
+  var btn=document.createElement('button');btn.type='button';btn.className='choice';
+  btn.setAttribute('aria-pressed','false');
+  var z=document.createElement('span');z.className='hanzi';z.textContent=o.text;
+  var py=document.createElement('span');py.className='reading';py.textContent=o.reading;py.hidden=!state.readingVisible;
+  btn.appendChild(z);btn.appendChild(py);
+  btn.addEventListener('click',function(){
+   state.choiceMade=true;state.choiceCorrect=o===l.target;
+   Array.from(box.children).forEach(function(b){b.setAttribute('aria-pressed',String(b===btn))});
+   var msg=state.choiceCorrect?'場面と目的に一致しています。':'こちらは別の関係・状態を表します。対照例として比較してみましょう。';
+   text('choiceFeedback',msg+'  '+l.structure.boundaryJa);
+   $('choiceFeedback').className='feedback'+(state.choiceCorrect?' good':'');
+   show('choiceFeedback',true);
+   engine.recordAttempt(storage,l.id,'selection',{correct:state.choiceCorrect,position:i});
+   if(state.structureVisible)showStructure();
+  });
+  box.appendChild(btn);
+ });
+}
+function showStructure(){
+ var l=current();state.structureVisible=true;
+ text('brackets',l.structure.brackets);text('structureNote',l.structure.noteJa);text('boundaryNote',l.structure.boundaryJa);
+ var chunks=$('chunks');chunks.replaceChildren();
+ l.structure.chunks.forEach(function(c){var span=document.createElement('span');span.className='chunk';var b=document.createElement('strong');b.textContent=c.text;var s=document.createElement('small');s.textContent=c.role;span.appendChild(b);span.appendChild(s);chunks.appendChild(span)});
+ var words=$('wordList');words.replaceChildren();
+ l.words.forEach(function(w){
+  var b=document.createElement('button');b.className='word';b.type='button';
+  var z=document.createElement('span');z.textContent=w.text;var py=document.createElement('small');py.textContent=w.reading+' · '+w.meaning;
+  b.appendChild(z);b.appendChild(py);b.setAttribute('aria-label',w.text+' の音声');
+  b.addEventListener('click',function(){speech(w.text,.84)});words.appendChild(b);
+ });
+ show('structureArea',true);
+}
+function render(){
+ fresh();var l=current();$('selectLesson').value=l.id;
+ text('sceneText',l.scene.ja);text('sceneActor',l.scene.actor);text('sceneObject',l.scene.object);text('sceneMovement',l.scene.movement);text('sceneResult',l.scene.result);
+ text('goalText',l.goal.ja);text('questionText',l.question.ja);text('recallPrompt',l.scene.ja+'　→　'+l.goal.ja);
+ text('transferPrompt',l.transfer.promptJa);
+ text('togglePinyin','ピンインを見る');
+ drawChoices();$('recallInput').value='';$('transferInput').value='';
+ show('choiceFeedback',false);show('structureArea',false);show('recallFeedback',false);show('transferFeedback',false);show('transferNote',false);
+ var notes=loadNotes();$('discoveryInput').value=String(notes[l.id]||'');text('discoveryStatus','');text('saveStatus','');
+ progress();
+}
+function check(id,kind,reveal){
+ var l=current(),trans=kind==='transfer',t=trans?l.transfer.target:l.target;
+ var input=$(trans?'transferInput':'recallInput').value;
+ var outcome=engine.evaluate(input,[t.text],l.language);
+ var good=outcome.match,flag=trans?'transferMatched':'recallMatched';
+ state[flag]=!reveal&&good;
+ if(reveal)state[trans?'transferRevealed':'recallRevealed']=true;
+ var help=(good&&!reveal?'模範例と一致しました。':'模範例：'+t.text+' （'+t.reading+'）');
+ if(trans)help+=' '+l.transfer.noteJa;
+ if(!good&&!reveal)help+=' ほかにも自然な表現があり得るため、文字列だけで誤文と断定しません。';
+ text(id,help);
+ $(id).className='feedback'+(good&&!reveal?' good':'');
+ show(id,true);
+ if(trans){text('transferNote',l.transfer.noteJa);show('transferNote',true)}
+ engine.recordAttempt(storage,l.id,trans?'transfer':'reconstruction',{match:good,revealed:!!reveal,empty:outcome.empty});
+}
+$('togglePinyin').addEventListener('click',function(){
+ state.readingVisible=!state.readingVisible;text('togglePinyin',state.readingVisible?'ピンインを隠す':'ピンインを見る');
+ Array.from($('choices').querySelectorAll('.reading')).forEach(function(el){el.hidden=!state.readingVisible});
+});
+$('hearTarget').addEventListener('click',function(){speech(current().target.text)});
+$('openStructure').addEventListener('click',function(){showStructure()});
+$('checkRecall').addEventListener('click',function(){check('recallFeedback','recall',false)});
+$('revealRecall').addEventListener('click',function(){check('recallFeedback','recall',true)});
+$('checkTransfer').addEventListener('click',function(){check('transferFeedback','transfer',false)});
+$('revealTransfer').addEventListener('click',function(){check('transferFeedback','transfer',true)});
+$('hearTransfer').addEventListener('click',function(){speech(current().transfer.target.text)});
+$('saveDiscovery').addEventListener('click',function(){
+ var raw=$('discoveryInput').value.trim().slice(0,600);
+ try{
+  var all=loadNotes();if(raw)all[current().id]=raw;else delete all[current().id];
+  storage.setProgress(discoveryKey,all);
+  engine.recordAttempt(storage,current().id,'discovery',{length:raw.length});
+  text('discoveryStatus',raw?'発見を保存しました。':'この教材のメモを空欄に更新しました。');
+ }catch(e){text('discoveryStatus','保存に失敗しました。端末の保存設定をご確認ください。')}
+});
+function grade(quality){
+ try{
+  var l=current(),outcome=engine.recordReview(storage,l.id,quality,{
+   choiceCorrect:state.choiceCorrect,choiceMade:state.choiceMade,
+   recallMatched:state.recallMatched,transferMatched:state.transferMatched,
+   recallRevealed:state.recallRevealed,transferRevealed:state.transferRevealed
+  });
+  text('saveStatus',outcome.scheduled?'復習を記録しました。次回は '+humanDue(outcome.record)+'。':'まだ復習予定日ではありません。次回は '+humanDue(outcome.record)+'。');
+  progress();
+ }catch(e){text('saveStatus','記録を保存できませんでした。端末の保存設定をご確認ください。')}
+}
+$('gradeGood').addEventListener('click',function(){grade('good')});
+$('gradeHint').addEventListener('click',function(){grade('hint')});
+$('gradeAgain').addEventListener('click',function(){grade('again')});
+$('nextLesson').addEventListener('click',function(){index=(index+1)%lessons.length;render()});
+$('jumpDue').addEventListener('click',function(){
+ var records=engine.readProgress(storage),newIdx=lessons.findIndex(function(l,j){return j!==index&&engine.due(records[l.id])});
+ if(newIdx<0)newIdx=lessons.findIndex(function(l){return engine.due(records[l.id])});
+ if(newIdx>=0){index=newIdx;render()}else{text('saveStatus','現在、予定日が到来した復習はありません。')}
+});
+$('selectLesson').addEventListener('change',function(){var n=lessons.findIndex(function(l){return l.id===$('selectLesson').value});if(n>=0){index=n;render()}});
+lessons.forEach(function(l){
+ var opt=document.createElement('option');opt.value=l.id;opt.textContent=l.level+' · '+l.category;
+ $('selectLesson').appendChild(opt);
+});
+var invalid=lessons.filter(function(l){return !engine.validateLesson(l).ok});
+if(invalid.length){text('progressCount','教材の検証で問題が見つかりました。');return}
+render();
+})();
+</script>
+</body></html>
