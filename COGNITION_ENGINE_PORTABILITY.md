@@ -114,3 +114,49 @@ For each structure, use matched groups or counterbalanced within-learner session
 - Moro (2008; second ed. 2015), [The Boundaries of Babel — MIT Press](https://mitpress.mit.edu/9780262029858/the-boundaries-of-babel/).
 - John B. Arden (2010), *Rewire Your Brain*, Wiley.
 - Relevant modern reviews of retrieval and distributed practice are needed to support the schedule; actual best intervals may vary by task and learner.
+
+
+## 2026-11-08 — Chinese-only checkpoint extension
+
+### Added files
+
+- `cognition-checkpoint-data.js`: six initial and six seven-day parallel-form Chinese sentence-production prompts, including known acceptable alternatives and explanations.
+- `cognition-checkpoint.html`: first-response Chinese generation without model text in the visible question, followed by explicit feedback and an optional **self-reported** alternate-expression flag.
+- Linked from `explore.html` and `cognition-transfer.html`.
+
+### Storage and privacy
+
+- Key: `progress.csl_cognition_checkpoint_v1` in the existing Chinese `CSLStorage` profile.
+- Records: only prompt IDs, the known-answer-string match flag, skip status, self-reported alternate-expression status, and timestamps. **Raw Chinese input is not saved**.
+- Optional `learning.events`: `cognition_checkpoint_attempt` and `cognition_checkpoint_alternative_selfreport`. Each event contains structured metadata only.
+- After completion of the initial six questions, the distinct follow-up six-question form becomes available seven 24-hour periods later.
+- Existing profile keys are preserved; no other app's storage is accessed.
+- Comparison is descriptive only. The prompt pairs are not psychometrically calibrated, alternatives are not exhaustively recognized, and no controlled comparison group exists.
+
+### Validation performed (2026-11-08)
+
+1. Both six-item forms pass content-data validation; canonical answers are among accepted strings.
+2. All 12 items have distinct IDs, and each phase has the same ordered topic categories.
+3. The inline JavaScript parsed successfully, with no missing or duplicate referenced element IDs.
+4. DOM-simulated smoke test executed the **actual page inline script** using the real data and engine modules, with a mock of `CSLStorage`:
+   - Initial phase rendered; six responses saved; five known-form matches and one nonmatch were correctly represented.
+   - An alternative-expression self-report was persisted separately.
+   - Follow-up form remained inaccessible before the seven-day wait and became accessible after eight simulated days.
+   - Six follow-up form responses were saved; completion view rendered.
+   - An unrelated existing progress key remained intact.
+   - A deliberately unique incorrect answer string was absent from serialized storage (no raw-text retention).
+5. The separate `cognition-transfer.html` module and its eight existing lessons were previously checked for valid lesson IDs, known-answer normalization and basic scheduling. No changes were made to other language apps.
+
+**Not verified:** full behavior on an iPhone/iPad, live GitHub Pages rendering, quality of all accepted alternative Chinese forms by a second native-speaker reviewer, and long-term educational effectiveness. Attempted external open of the GitHub Pages URLs could not be completed by the available fetch tool. No claim of live-browser test success is warranted.
+
+### Educational validity safeguards
+
+- Say "known-answer-string match," not "grammatically correct/incorrect," whenever the answer matcher is used.
+- Do not automatically treat a learner's self-reported alternate expression as verified correct.
+- Initial assessment is **not** a true pretest for learners who already studied these structures.
+- The seven-day assessment probes somewhat different structures and lexical material; differences in scores cannot be attributed solely to learning, nor interpreted as proof of neural change.
+- The study is a learning self-check; a future research study requires difficulty calibration, independent human scoring and a suitable control/comparison design.
+
+### Allowed future work
+
+Keep improving only Chinese; inspect other languages read-only while they remain in repair. Do not copy or deploy this module to French, German, Russian, Spanish, or English without new explicit authorization.
