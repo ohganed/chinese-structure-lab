@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="ja"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f4f5ef">
+<title>初見の中国語を作る · Cognition Checkpoint</title>
+<style>
+:root{--paper:#f4f5ef;--ink:#25372c;--muted:#637568;--line:#dde8db;--green:#315d44;--soft:#edf4eb;--warn:#faf2e3}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.7 -apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif}
+main{max-width:790px;margin:auto;padding:20px 16px 95px}
+a{color:#32634b;text-decoration:none}a:hover{text-decoration:underline}
+h1{font-size:clamp(28px,5vw,40px);line-height:1.3;margin:25px 0 10px}
+h2{font-size:21px;line-height:1.4;margin:2px 0 12px}
+.top{display:flex;gap:12px;align-items:center;justify-content:space-between}
+.kicker{font-size:11px;font-weight:800;letter-spacing:.09em;color:#758675}
+.intro{color:#566c5b}
+.card{border:1px solid var(--line);background:#fff;border-radius:23px;padding:20px;margin:16px 0;box-shadow:0 8px 23px #182f1c08}
+.tag{display:inline-block;border-radius:999px;background:var(--soft);color:#467452;padding:4px 12px;font-size:12px;font-weight:800;margin-bottom:9px}
+.note{font-size:13px;color:var(--muted)}
+.context{background:linear-gradient(120deg,#e9f1e8,#f7f3e7);border-radius:17px;padding:18px;margin:12px 0}
+.context .jp{font-size:21px;font-weight:800}
+textarea,button{font:inherit}
+textarea{border:1px solid #bfcfc1;border-radius:15px;padding:14px;width:100%;background:#fff;color:var(--ink);min-height:120px;font-size:22px;resize:vertical}
+button{border:1px solid #cadcca;border-radius:13px;padding:12px 16px;background:#f0f5ef;color:#284e34;font-weight:750;cursor:pointer;min-height:46px}
+button.primary{background:var(--green);color:white;border-color:var(--green)}
+button:focus-visible,textarea:focus-visible,a:focus-visible{outline:3px solid #68a27a;outline-offset:3px}
+button[disabled]{opacity:.5;cursor:not-allowed}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin:13px 0}
+.feedback{background:#f0f4ed;border-radius:17px;padding:15px;margin-top:14px}
+.feedback .answer{font-size:23px;font-weight:750;margin-bottom:4px}
+.feedback .pinyin{font-size:14px;color:#526856}
+.report{width:100%;border-collapse:collapse;font-size:14px}
+.report th,.report td{text-align:left;padding:10px 7px;border-bottom:1px solid #e3e9e1}
+.report th{font-size:12px;color:#567060}
+.report tr:last-child td{border:0}
+.value{font-weight:800;font-variant-numeric:tabular-nums}
+.metric{display:flex;align-items:baseline;gap:10px;margin:12px 0}
+.metric b{font-size:27px}
+.progress-track{height:8px;border-radius:99px;background:#e1e9df;overflow:hidden}
+.progress-fill{height:100%;background:#578768;width:0;transition:width .2s}
+[hidden]{display:none!important}
+</style></head><body><main>
+<header class="top"><a href="./cognition-transfer.html">‹ Cognition Transfer Lab</a><span class="kicker">COGNITION CHECKPOINT · v1</span></header>
+<h1>見たことのない場面で、文を作れるか。</h1>
+<p class="intro">中国語の6種類の文構造について、例文を表示せずに状況から文を作ります。初回の記録と、7日後の別の問題を比較します。学習効果の科学的な証明ではなく、まず自分の学習変化を見るための診断です。</p>
+<section class="card">
+<div class="tag">DIAGNOSTIC · いまの力</div><h2 id="phaseTitle">診断を読み込み中</h2>
+<p id="phaseDescription" class="note"></p>
+<div class="metric"><b id="phaseCount">—</b><span class="note" id="phaseCountText">6問中の進捗</span></div>
+<div class="progress-track"><div class="progress-fill" id="phaseBar"></div></div>
+<p id="waiting" class="note" aria-live="polite" hidden></p>
+</section>
+<section id="questionPanel" class="card">
+<div class="tag" id="categoryLabel">STRUCTURE</div>
+<h2>まず、自分の中国語で伝える</h2>
+<div class="context"><div class="note">伝えたいこと</div><div class="jp" id="jpPrompt"></div></div>
+<p class="note">中国語を自分で入力してください。iPhoneの中国語キーボードや音声入力も使えます。中国語の入力そのものは学習記録に保存しません。</p>
+<label for="answerBox">中国語の文</label>
+<textarea id="answerBox" lang="zh-CN" autocapitalize="off" autocomplete="off" spellcheck="false" placeholder="中国語の文を入力"></textarea>
+<div class="actions" id="answerActions">
+<button type="button" class="primary" id="submitAnswer">最初の答えを照合する</button>
+<button type="button" id="skipAnswer">分からないので模範例を見る</button>
+</div>
+<div id="hintBox" class="note" role="status" aria-live="polite"></div>
+<div id="answerResult" class="feedback" hidden>
+<div id="resultLabel" class="tag"></div>
+<div id="referenceAnswer" class="answer"></div>
+<div id="referencePinyin" class="pinyin"></div>
+<p id="referenceExplanation"></p>
+<p class="note">文字列の照合結果です。登録した別表現以外にも、自然な中国語の言い方があり得ます。</p>
+<div class="actions"><button id="hearAnswer" type="button">▶ 模範例の発音</button>
+<button id="alternateReport" type="button">私の別表現も自然だと思う（自己申告）</button>
+<button id="nextQuestion" class="primary" type="button">次の問題へ</button></div>
+<div id="alternateStatus" class="note" aria-live="polite"></div>
+</div>
+</section>
+<section class="card">
+<div class="tag">LEARNING RECORD</div><h2>構造ごとの記録</h2>
+<p class="note">「登録した模範表現との一致」だけを自動集計します。別表現の自己申告は別に記録し、厳密な正答数には加えません。</p>
+<div id="summaryLine"></div>
+<table class="report"><thead><tr><th>構造</th><th>初回診断</th><th>7日後</th></tr></thead><tbody id="reportBody"></tbody></table>
+<p class="note">診断の前後で問題が異なるため、難易度は完全には一致しません。得点の上昇だけから教材の因果的効果を判断することはできません。</p>
+</section>
+<section class="card">
+<h2>教材に戻って構造を確かめる</h2>
+<p>忘れた構造は、場面・目的・文のまとまりを再確認します。復習が予定されている教材は既存の Cognition Transfer Lab で扱えます。</p>
+<div class="actions"><a href="./cognition-transfer.html">8つの中国語教材を学習する</a><a href="./memory.html">学習記録を保存・確認する</a></div>
+<p class="note">この診断は中国語アプリ専用です。他の言語アプリのコードや学習記録は変更しません。</p>
+</section>
+</main>
+<script src="./storage-core.js"></script>
+<script src="./cognition-engine-core.js"></script>
+<script src="./cognition-checkpoint-data.js"></script>
+<script>
+(function(){
+'use strict';
+var $=function(id){return document.getElementById(id)};
+var core=window.CognitionCore,source=window.CognitionCheckpointData,storage=window.CSLStorage;
+var KEY='csl_cognition_checkpoint_v1',WEEK=7*24*60*60*1000;
+if(!core||!storage||!source||!source.validate().ok){
+ $('phaseTitle').textContent='診断ファイルを読み込めませんでした。';
+ $('questionPanel').hidden=true;return;
+}
+var active=null,submitted=false;
+function blankState(){
+ return {schemaVersion:1,initial:{records:{},completedAt:null},delayed:{records:{},completedAt:null}};
+}
+function read(){
+ try{
+  var p=storage.load(),v=p.progress&&p.progress[KEY];
+  if(!v||typeof v!=='object'||v.schemaVersion!==1)return blankState();
+  var initial=v.initial&&typeof v.initial==='object'?v.initial:{};
+  var delayed=v.delayed&&typeof v.delayed==='object'?v.delayed:{};
+  return {schemaVersion:1,initial:{records:initial.records&&typeof initial.records==='object'?initial.records:{},completedAt:initial.completedAt||null},
+    delayed:{records:delayed.records&&typeof delayed.records==='object'?delayed.records:{},completedAt:delayed.completedAt||null}};
+ }catch(e){return blankState()}
+}
+function store(data){
+ storage.setProgress(KEY,data);
+}
+function formatDate(stamp){
+ var d=new Date(stamp);if(!Number.isFinite(d.getTime()))return '日時不明';
+ return new Intl.DateTimeFormat('ja-JP',{year:'numeric',month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'}).format(d);
+}
+function countAnswered(phase,state){
+ return source.phases[phase].items.filter(function(item){return !!(state[phase].records[item.id])}).length;
+}
+function getPhase(state){
+ if(countAnswered('initial',state)<source.phases.initial.items.length)return 'initial';
+ if(!state.initial.completedAt)return null;
+ if(Date.now()<Date.parse(state.initial.completedAt)+WEEK)return null;
+ if(countAnswered('delayed',state)<source.phases.delayed.items.length)return 'delayed';
+ return null;
+}
+function createText(tag,content){
+ var el=document.createElement(tag);el.textContent=content;return el;
+}
+function summary(state){
+ var rows=$('reportBody');rows.replaceChildren();
+ var phases=['initial','delayed'];
+ source.phases.initial.items.forEach(function(first,i){
+  var tr=document.createElement('tr');tr.appendChild(createText('td',first.category));
+  phases.forEach(function(phase){
+   var item=source.phases[phase].items[i],r=state[phase].records[item.id],label='—';
+   if(r){
+    label=r.exact?'登録表現と一致':r.skipped?'未回答':'一致せず';
+    if(r.selfReportedAlternative)label+='（別表現・自己申告）';
+   }
+   tr.appendChild(createText('td',label));
+  });
+  rows.appendChild(tr);
+ });
+ var counts=phases.map(function(phase){
+  var items=source.phases[phase].items;
+  return {tried:countAnswered(phase,state),exact:items.filter(function(x){var r=state[phase].records[x.id];return r&&r.exact}).length};
+ });
+ var line=$('summaryLine');line.replaceChildren();
+ var p=createText('p','初回：'+counts[0].exact+' / '+counts[0].tried+' 題が登録表現と一致　｜　7日後：'+counts[1].exact+' / '+counts[1].tried+' 題が一致');
+ p.className='note';line.appendChild(p);
+}
+function render(){
+ var data=read();summary(data);
+ var phase=getPhase(data);active=null;submitted=false;
+ var total=6,answered=phase?countAnswered(phase,data):countAnswered('delayed',data)>0?countAnswered('delayed',data):countAnswered('initial',data);
+ $('phaseBar').style.width=(answered/total*100)+'%';$('phaseCount').textContent=answered+' / '+total;
+ $('phaseCountText').textContent=phase==='delayed'?'7日後の再診断':phase==='initial'?'初回診断':'記録した進捗';
+ $('answerBox').value='';$('hintBox').textContent='';$('answerResult').hidden=true;$('answerActions').hidden=false;
+ $('alternateStatus').textContent='';$('alternateReport').disabled=false;
+ if(!phase){
+  $('questionPanel').hidden=true;$('waiting').hidden=false;
+  if(data.delayed.completedAt||countAnswered('delayed',data)===6){
+   $('phaseTitle').textContent='2回の診断を完了しました。';
+   $('phaseDescription').textContent='表で2回の記録を比較できます。';
+   $('waiting').textContent='必要なら教材に戻って、未習の場面でも説明できるか試してみてください。';
+  }else if(data.initial.completedAt){
+   var due=new Date(Date.parse(data.initial.completedAt)+WEEK).toISOString();
+   $('phaseTitle').textContent='初回診断は完了しました。';
+   $('phaseDescription').textContent='7日後の別問題は '+formatDate(due)+' から解けます。';
+   $('waiting').textContent='結果を見る前に教材を復習できます。ページを再度開くと、予定日以降に再診断が始まります。';
+  }else{
+   $('phaseTitle').textContent='診断を準備できませんでした。';
+   $('phaseDescription').textContent='保存データを確認してください。';
+   $('waiting').textContent='復習記録が読み込めない場合は、Memory Weave からバックアップを確認できます。';
+  }
+  return;
+ }
+ $('waiting').hidden=true;$('questionPanel').hidden=false;
+ var items=source.phases[phase].items,unanswered=items.find(function(item){return !data[phase].records[item.id]});
+ if(!unanswered){$('questionPanel').hidden=true;return}
+ active={phase:phase,item:unanswered};
+ $('phaseTitle').textContent=source.phases[phase].title;
+ $('phaseDescription').textContent=source.phases[phase].description;
+ $('categoryLabel').textContent=unanswered.category;
+ $('jpPrompt').textContent=unanswered.ja;
+ $('answerBox').focus();
+}
+function finish(skipped){
+ if(!active||submitted)return;
+ var phrase=$('answerBox').value.trim();
+ if(!phrase&&!skipped){$('hintBox').textContent='まず中国語を入力するか、「分からない」を選んでください。';return}
+ var result=skipped?{match:false,empty:true}:core.evaluate(phrase,active.item.accepted,'zh');
+ var state=read(),phase=active.phase,item=active.item;
+ if(state[phase].records[item.id]){render();return}
+ var record={exact:!!result.match,skipped:!!skipped,selfReportedAlternative:false,recordedAt:new Date().toISOString()};
+ state[phase].records[item.id]=record;
+ if(countAnswered(phase,state)===source.phases[phase].items.length)state[phase].completedAt=new Date().toISOString();
+ try {
+  store(state);
+  if(typeof storage.addEvent==='function'){
+   try{storage.addEvent('cognition_checkpoint_attempt',{phase:phase,itemId:item.id,exact:record.exact,skipped:record.skipped,selfReportedAlternative:false})}catch(e){}
+  }
+ }catch(e){$('hintBox').textContent='記録の保存に失敗しました。端末の保存設定を確認してください。';return}
+ submitted=true;
+ $('hintBox').textContent='';
+ $('answerActions').hidden=true;
+ $('answerResult').hidden=false;
+ $('resultLabel').textContent=skipped?'未回答':result.match?'登録した表現と一致':'登録した表現には一致しません';
+ $('referenceAnswer').textContent=item.answer;
+ $('referencePinyin').textContent=item.pinyin;
+ $('referenceExplanation').textContent=item.explanation;
+ $('alternateReport').hidden=!!record.exact||!!skipped;
+ $('alternateStatus').textContent='';
+ summary(state);
+ $('phaseBar').style.width=(countAnswered(phase,state)/source.phases[phase].items.length*100)+'%';
+ $('phaseCount').textContent=countAnswered(phase,state)+' / '+source.phases[phase].items.length;
+}
+$('submitAnswer').addEventListener('click',function(){finish(false)});
+$('skipAnswer').addEventListener('click',function(){finish(true)});
+$('nextQuestion').addEventListener('click',function(){render()});
+$('alternateReport').addEventListener('click',function(){
+ if(!active||!submitted)return;
+ try{
+  var state=read(),record=state[active.phase].records[active.item.id];
+  if(!record||record.skipped||record.exact||record.selfReportedAlternative)return;
+  record.selfReportedAlternative=true;
+  store(state);
+  if(typeof storage.addEvent==='function'){
+   try{storage.addEvent('cognition_checkpoint_alternative_selfreport',{phase:active.phase,itemId:active.item.id})}catch(e){}
+  }
+  $('alternateReport').disabled=true;
+  $('alternateStatus').textContent='別表現の自己申告として保存しました。自動正解数には加えません。';
+  summary(state);
+ }catch(e){$('alternateStatus').textContent='保存できませんでした。'}
+});
+$('hearAnswer').addEventListener('click',function(){
+ if(!active||!submitted||!('speechSynthesis' in window))return;
+ speechSynthesis.cancel();
+ var utter=new SpeechSynthesisUtterance(active.item.answer);utter.lang='zh-CN';utter.rate=.84;
+ var voices=speechSynthesis.getVoices(),match=voices.find(function(v){return /^zh-(CN|SG)/i.test(v.lang)})||voices.find(function(v){return /^zh/i.test(v.lang)});
+ if(match)utter.voice=match;speechSynthesis.speak(utter);
+});
+render();
+})();
+</script>
+</body></html>
